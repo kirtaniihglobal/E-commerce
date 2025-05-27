@@ -1,10 +1,11 @@
 import { Grid, Typography, Box, Button } from "@mui/material";
-import GradeIcon from "@mui/icons-material/Grade";
+
 import { useTheme, useMediaQuery } from "@mui/material";
 import prod1 from "../assets/prod1.png";
 import prod2 from "../assets/prod2.png";
 import prod3 from "../assets/prod3.png";
 import prod4 from "../assets/prod4.png";
+import ProductCard from "../comon/productCard";
 function NewArrivalProduct() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -88,22 +89,7 @@ function NewArrivalProduct() {
             }}
           >
             {Products.map((product, index) => (
-              <Grid key={product.id}>
-                <Box>
-                  <img src={product.image} alt="" />
-                  <Box>
-                    <Typography variant="h6">{product.name}</Typography>
-                    <Typography variant="h5">
-                      <GradeIcon color="warning" />
-                      <GradeIcon color="warning" />
-                      <GradeIcon color="warning" />
-                      <GradeIcon />
-                      {product.rating}
-                    </Typography>
-                    <Typography variant="h5">{product.price}</Typography>
-                  </Box>
-                </Box>
-              </Grid>
+              <ProductCard key={index} product={product} />
             ))}
             <Grid
               sx={{

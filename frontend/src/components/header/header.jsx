@@ -5,11 +5,10 @@ import {
   Button,
   Box,
   useTheme,
-  useMediaQuery,
+  Menu,
+  MenuItem,
   Typography,
   Stack,
-  IconButton,
-  Drawer,
   Grid,
   Link,
   InputBase,
@@ -19,20 +18,35 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
 import { useNavigate } from "react-router";
-import logo from "../../assets/react.svg";
-import MenuIcon from "@mui/icons-material/Menu";
 
 export default function Header() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [mobileOpen, setMobileOpen] = useState(false);
+  // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  // const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
-  const handleNavigation = (path) => {
-    navigate(path);
+  const [anchorEl, setAnchorEl] = useState(null); // Main menu
+  const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null); // Submenu for "Men"
+
+  const open = Boolean(anchorEl);
+  const submenuOpen = Boolean(submenuAnchorEl);
+
+  const handleMainOpen = (event) => {
+    setAnchorEl(event.currentTarget);
   };
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+
+  const handleMainClose = () => {
+    setAnchorEl(null);
+    setSubmenuAnchorEl(null);
+  };
+
+  const handleSubmenuOpen = (event) => {
+    setSubmenuAnchorEl(event.currentTarget);
+  };
+
+  const handleSubmenuClose = () => {
+    setSubmenuAnchorEl(null);
   };
 
   return (
@@ -91,15 +105,73 @@ export default function Header() {
             gap={{ md: 3, lg: 4, xl: 2 }}
           >
             <Box>
-              <Typography variant="h2">SHOP.CO</Typography>
+              <Typography
+                variant="h2"
+                onClick={() => {
+                  window.location.href = "/";
+                }}
+              >
+                SHOP.CO
+              </Typography>
             </Box>
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <Button variant="text">
-                  shop
-                  <KeyboardArrowDownIcon />
+                <Button
+                  variant="text"
+                  onMouseOver={handleMainOpen}
+                  endIcon={<KeyboardArrowDownIcon />}
+                >
+                  Shop
                 </Button>
+
+                {/* Main Menu */}
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleMainClose}
+                  MenuListProps={{ onMouseLeave: handleMainClose }}
+                >
+                  {/* Nested Item: Men */}
+                  <MenuItem
+                    onMouseOver={handleSubmenuOpen}
+                    // onMouseLeave={handleSubmenuClose}
+                  >
+                    Men
+                    <KeyboardArrowDownIcon fontSize="small" />
+                  </MenuItem>
+
+                  {/* Submenu for "Men" */}
+                  <Menu
+                    anchorEl={submenuAnchorEl}
+                    open={submenuOpen}
+                    onClose={handleSubmenuClose}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    MenuListProps={{
+                      onMouseLeave: handleSubmenuClose,
+                    }}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        navigate("/productDetail");
+                        onClick = { handleMainClose };
+                      }}
+                    >
+                      T-Shirts
+                    </MenuItem>
+                    <MenuItem>Shoes</MenuItem>
+                  </Menu>
+
+                  <MenuItem onClick={handleMainClose}>Women</MenuItem>
+                  <MenuItem onClick={handleMainClose}>Kids</MenuItem>
+                </Menu>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Button variant="text">On Sale</Button>

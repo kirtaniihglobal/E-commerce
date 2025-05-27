@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import Header from "../components/header/header";
 import Footer from "../components/footer/footer";
 import hero from "../assets/hero.jpg";
@@ -18,10 +10,9 @@ import Frame1 from "../assets/Frame 1.png";
 import Frame2 from "../assets/Frame 2 (2).png";
 import Frame3 from "../assets/Frame 3.png";
 import Frame4 from "../assets/Frame 4.png";
-import GreenTik from "../assets/greentik.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import GradeIcon from "@mui/icons-material/Grade";
+import RatingCard from "../comon/ratingCard";
 
 function Home() {
   const theme = useTheme();
@@ -399,39 +390,7 @@ function Home() {
               }}
             >
               {Review.map((item) => (
-                <Grid
-                  key={item.id}
-                  sx={{
-                    height: "auto",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: "400px",
-                      height: "240px",
-                      borderRadius: "20px",
-                      border: "1px solid #ccc",
-                      p: 4,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      gap: 1,
-                    }}
-                  >
-                    <Typography>
-                      <GradeIcon color="warning" />
-                      <GradeIcon color="warning" />
-                      <GradeIcon color="warning" />
-                      <GradeIcon color="warning" />
-                      <GradeIcon />
-                    </Typography>
-                    <Typography variant="h5">
-                      {item.name}
-                      <img src={GreenTik} alt="" />
-                    </Typography>
-                    <Typography variant="body1">{item.review}</Typography>
-                  </Box>
-                </Grid>
+                <RatingCard key={item.id} item={item} />
               ))}
             </Grid>
           </Grid>
