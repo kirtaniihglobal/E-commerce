@@ -5,6 +5,7 @@ import prod5 from "../assets/prod5.png";
 import prod6 from "../assets/prod6.png";
 import prod7 from "../assets/prod7.png";
 import prod8 from "../assets/prod8.png";
+import ProductCard from "../comon/productCard";
 function TopSellingProduct() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -88,22 +89,7 @@ function TopSellingProduct() {
             }}
           >
             {Products.map((product, index) => (
-              <Grid key={product.id}>
-                <Box>
-                  <img src={product.image} alt="" />
-                  <Box>
-                    <Typography variant="h6">{product.name}</Typography>
-                    <Typography variant="h5">
-                      <GradeIcon color="warning" />
-                      <GradeIcon color="warning" />
-                      <GradeIcon color="warning" />
-                      <GradeIcon />
-                      {product.rating}
-                    </Typography>
-                    <Typography variant="h5">{product.price}</Typography>
-                  </Box>
-                </Box>
-              </Grid>
+              <ProductCard key={index} product={product} />
             ))}
             <Grid
               sx={{
