@@ -1,5 +1,14 @@
-import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
 import Header from "../components/header/header";
+import Footer from "../components/footer/footer";
 import hero from "../assets/hero.jpg";
 import { useTheme } from "@mui/material";
 import star from "../assets/Vector.png";
@@ -47,7 +56,7 @@ function Home() {
   return (
     <>
       <Header />
-      <Grid container>
+      <Grid container sx={{ height: "auto" }}>
         <Grid
           container
           spacing={0}
@@ -426,6 +435,7 @@ function Home() {
               ))}
             </Grid>
           </Grid>
+          <Footer />
         </Grid>
       </Grid>
     </>

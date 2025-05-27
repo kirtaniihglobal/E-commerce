@@ -60,7 +60,7 @@ export default function Header() {
           Sign up and get 20% off to your first order.
           <Link
             sx={{
-              color: "white",
+              color: theme.palette.white.main,
             }}
           >
             Sign Up Now
