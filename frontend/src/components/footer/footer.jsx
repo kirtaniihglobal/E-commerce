@@ -7,13 +7,13 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
-// import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
-import RoomIcon from "@mui/icons-material/Room";
-import hero from "../../assets/hero.jpg";
+import paymenttype1 from "../../assets/paymenttype1.png";
+import paymenttype2 from "../../assets/paymenttype2.png";
+import paymenttype3 from "../../assets/paymenttype3.png";
+import paymenttype4 from "../../assets/paymenttype4.png";
+import paymenttype5 from "../../assets/paymenttype5.png";
 import { useTheme } from "@emotion/react";
-import { useMediaQuery } from "@mui/material";
+import { TextField, useMediaQuery, Button } from "@mui/material";
 import { Box } from "@mui/material";
 
 function Footer() {
@@ -23,25 +23,25 @@ function Footer() {
   return (
     <>
       <Container
-        maxWidth={isMobile ? "sm" : isTab ? "md" : "xl"}
+        maxWidth= "xl"
         sx={{
           height: "auto",
-          mt: 4,
+          mt: 20,
           mb: isMobile ? 0 : 4,
           backgroundColor: "#f0f0f0",
+          position: "relative",
         }}
       >
         <Grid
           container
           spacing={isMobile ? 1 : 2}
           sx={{
-            // backgroundColor  :"#f0f0f0",
             padding: isMobile ? "10px" : "50px",
             display: "flex",
             gap: isMobile ? "30px" : "",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            mt: "50px",
+            mt: "80px",
           }}
         >
           <Grid
@@ -62,7 +62,6 @@ function Footer() {
             <Grid>
               <Typography variant="body1">
                 {" "}
-                {/* <EmailIcon /> */}
                 We have clothes that suits your style <br />
                 and which you’re proud to wear. <br />
                 From women to men.
@@ -75,10 +74,6 @@ function Footer() {
                 gap: "10px",
               }}
             >
-              {/* <Typography variant="body1">
-                <PhoneIcon />
-                +91 9714022044
-              </Typography> */}
               <Avatar
                 sx={{
                   borderRadius: 10,
@@ -115,11 +110,6 @@ function Footer() {
               >
                 <GitHubIcon />
               </Avatar>
-            </Grid>
-            <Grid>
-              <Typography variant="body1">
-                <RoomIcon /> surat
-              </Typography>
             </Grid>
           </Grid>
           <Grid
@@ -160,7 +150,7 @@ function Footer() {
           >
             <Grid>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
-                HElP
+                HELP
               </Typography>
             </Grid>
             <Grid>
@@ -187,45 +177,51 @@ function Footer() {
           >
             <Grid>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
-                Social Profiles
+                FAQ
               </Typography>
             </Grid>
-            <Grid container>
-              <Avatar
-                sx={{
-                  borderRadius: 2,
-
-                  color: "#000",
-                }}
-              >
-                <InstagramIcon />
-              </Avatar>
-              <Grid>
-                <Avatar
-                  sx={{
-                    borderRadius: 2,
-
-                    color: "#000",
-                  }}
-                >
-                  <TwitterIcon />
-                </Avatar>
-              </Grid>
-              <Grid>
-                <Avatar
-                  sx={{
-                    borderRadius: 2,
-
-                    color: "#000",
-                  }}
-                >
-                  <GitHubIcon />
-                </Avatar>
-              </Grid>
-              <Grid></Grid>
+            <Grid>
+              <Typography varia> Account</Typography>
+            </Grid>
+            <Grid>
+              <Typography varia>Manage Deliveries</Typography>
+            </Grid>
+            <Grid>
+              <Typography varia> Orders</Typography>
+            </Grid>
+            <Grid>
+              <Typography varia>Payments</Typography>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              justifyContent: "center",
+            }}
+          >
+            <Grid>
+              <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
+                RESOURCES
+              </Typography>
+            </Grid>
+            <Grid>
+              <Typography varia> Free eBooks</Typography>
+            </Grid>
+            <Grid>
+              <Typography varia>Development Tutorial</Typography>
+            </Grid>
+            <Grid>
+              <Typography varia> How to - Blog</Typography>
+            </Grid>
+            <Grid>
+              <Typography varia>Youtube Playlist</Typography>
             </Grid>
           </Grid>
         </Grid>
+
         <Divider />
         <Grid
           container
@@ -233,13 +229,90 @@ function Footer() {
             display: "flex",
             p: 2,
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "space-between",
           }}
         >
           <Typography variant="body1">
-            © 2023 Skillbridge. All rights reserved.
+            Shop.co © 2000-2023, All Rights Reserved
           </Typography>
+          <Grid item>
+            <img src={paymenttype1} alt="" />
+            <img src={paymenttype2} alt="" />
+            <img src={paymenttype3} alt="" />
+            <img src={paymenttype4} alt="" />
+            <img src={paymenttype5} alt="" />
+          </Grid>
         </Grid>
+
+        <Box
+          sx={{
+            width: "1240px",
+            height: "180px",
+            borderRadius: "20px",
+            backgroundColor: "#000",
+            position: "absolute",
+            top: "-90px",
+            left: "150px",
+          }}
+        >
+          <Grid
+            container
+            sx={{
+              width: "100%",
+              p: 5,
+              justifyContent: "space-between",
+            }}
+          >
+            <Grid
+              item
+              xs={12}
+              sx={{
+                width: "40%",
+              }}
+            >
+              <Typography variant="h4" color="#fff">
+                STAY UPTO DATE ABOUT OUR LATEST OFFERS
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                width: "30%",
+                height: "48px",
+                color: "#fff",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              <TextField
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "#FFF",
+                  borderRadius: "62px",
+                }}
+                fullWidth
+                variant="outlined"
+                required
+                label="Enter your email address "
+              />
+              <Button
+                variant="outlined"
+                sx={{
+                  backgroundColor: "#fff",
+                  p: 1,
+                  width: "100%",
+                  borderRadius: "62px",
+                }}
+              >
+                {" "}
+                Subscribe to Newsletter
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
       </Container>
     </>
   );
