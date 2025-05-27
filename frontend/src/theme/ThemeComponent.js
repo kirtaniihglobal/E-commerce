@@ -29,7 +29,7 @@ export const MuiButton = {
           backgroundColor: "#fff",
           color: "#000",
           fontWeight: 500,
-          border: "1px solid #000",
+          border: "1 solid #000",
           "&:hover": {
             backgroundColor: "#000",
             color: "#fff",
