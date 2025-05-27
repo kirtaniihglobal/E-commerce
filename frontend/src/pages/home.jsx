@@ -116,7 +116,7 @@ function Home() {
             xs={12}
             sx={{
               width: "50%",
-              height: "663px",
+              height: "100%",
             }}
           >
             <Grid
@@ -153,6 +153,44 @@ function Home() {
                 alt=""
               />
             </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              width: "100%",
+              height: "122px",
+              backgroundColor: "#000",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent : "space-between",
+            }}
+          >
+            <Box className ="logoBox">
+              <Typography variant="h3" sx={{ color: "#fff" }}>
+                VERSACE
+              </Typography>
+            </Box>
+            <Box className ="logoBox">
+              <Typography variant="h3" sx={{ color: "#fff" }}>
+                ZARA
+              </Typography>
+            </Box>
+            <Box className ="logoBox">
+              <Typography variant="h3" sx={{ color: "#fff" }}>
+                GUCCI
+              </Typography>
+            </Box>
+            <Box className ="logoBox"> 
+              <Typography variant="h3" sx={{ color: "#fff" }}>
+                PRADA
+              </Typography>
+            </Box>
+            <Box className ="logoBox">
+              <Typography variant="h3" sx={{ color: "#fff" }}>
+                Calvin Klein
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </Grid>
