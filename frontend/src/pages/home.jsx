@@ -12,6 +12,7 @@ import hero from "../assets/hero.jpg";
 import { useTheme } from "@mui/material";
 import star from "../assets/Vector.png";
 import NewArrivalProduct from "../components/newArrivalProduct";
+import TopSellingProduct from "../components/topSellingProduct";
 
 function Home() {
   const theme = useTheme();
@@ -190,6 +191,7 @@ function Home() {
             </Box>
           </Grid>
           <NewArrivalProduct />
+          <TopSellingProduct/>
         </Grid>
       </Grid>
     </>
