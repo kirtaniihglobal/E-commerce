@@ -1,5 +1,11 @@
-.logoBox{
-  display:  flex;
+.Box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.logoBox {
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;

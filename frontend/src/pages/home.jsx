@@ -1,8 +1,17 @@
-import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
 import Header from "../components/header/header";
 import hero from "../assets/hero.jpg";
 import { useTheme } from "@mui/material";
 import star from "../assets/Vector.png";
+import NewArrivalProduct from "../components/newArrivalProduct";
 
 function Home() {
   const theme = useTheme();
@@ -10,36 +19,26 @@ function Home() {
   return (
     <>
       <Header />
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: "100%",
-        }}
-      >
+      <Grid container>
         <Grid
           container
           spacing={0}
           sx={{
             width: "100%",
-            height: "auto",
+            height: "633px",
             display: "flex",
             flexDirection: "row",
           }}
         >
           <Grid
             container
-            item
-            xs={12}
             sx={{
               width: "50%",
-              height: "100%",
               backgroundColor: "#F2F0F2",
               p: 10,
-              gap: 3,
             }}
           >
-            <Grid item xs={12}>
+            <Grid>
               <Typography variant="h2">
                 FIND CLOTHES THAT MATCHES YOUR STYLE
               </Typography>
@@ -73,8 +72,6 @@ function Home() {
             </Grid>
 
             <Grid
-              item
-              xs={12}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -82,7 +79,7 @@ function Home() {
                 width: "100%",
               }}
             >
-              <Box>
+              <Box className="Box">
                 <Typography variant="h4" sx={{ color: "primary.main" }}>
                   200 +
                 </Typography>
@@ -91,7 +88,7 @@ function Home() {
                 </Typography>
               </Box>
               <Divider orientation="vertical" flexItem />
-              <Box>
+              <Box className="Box">
                 <Typography variant="h4" sx={{ color: "primary.main" }}>
                   2,000 +
                 </Typography>
@@ -100,7 +97,7 @@ function Home() {
                 </Typography>
               </Box>
               <Divider orientation="vertical" flexItem />
-              <Box>
+              <Box className="Box">
                 <Typography variant="h4" sx={{ color: "primary.main" }}>
                   30,000 +
                 </Typography>
@@ -163,35 +160,36 @@ function Home() {
               backgroundColor: "#000",
               display: "flex",
               flexDirection: "row",
-              justifyContent : "space-between",
+              justifyContent: "space-between",
             }}
           >
-            <Box className ="logoBox">
+            <Box className="logoBox">
               <Typography variant="h3" sx={{ color: "#fff" }}>
                 VERSACE
               </Typography>
             </Box>
-            <Box className ="logoBox">
+            <Box className="logoBox">
               <Typography variant="h3" sx={{ color: "#fff" }}>
                 ZARA
               </Typography>
             </Box>
-            <Box className ="logoBox">
+            <Box className="logoBox">
               <Typography variant="h3" sx={{ color: "#fff" }}>
                 GUCCI
               </Typography>
             </Box>
-            <Box className ="logoBox"> 
+            <Box className="logoBox">
               <Typography variant="h3" sx={{ color: "#fff" }}>
                 PRADA
               </Typography>
             </Box>
-            <Box className ="logoBox">
+            <Box className="logoBox">
               <Typography variant="h3" sx={{ color: "#fff" }}>
                 Calvin Klein
               </Typography>
             </Box>
           </Grid>
+          <NewArrivalProduct />
         </Grid>
       </Grid>
     </>
