@@ -23,7 +23,7 @@ function Footer() {
   return (
     <>
       <Container
-        maxWidth= "xl"
+        maxWidth="xl"
         sx={{
           height: "auto",
           mt: 20,
@@ -235,7 +235,7 @@ function Footer() {
           <Typography variant="body1">
             Shop.co © 2000-2023, All Rights Reserved
           </Typography>
-          <Grid item>
+          <Grid>
             <img src={paymenttype1} alt="" />
             <img src={paymenttype2} alt="" />
             <img src={paymenttype3} alt="" />
