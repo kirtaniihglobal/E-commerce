@@ -1,22 +1,49 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Divider, Grid, Typography } from "@mui/material";
 import Header from "../components/header/header";
 import hero from "../assets/hero.jpg";
 import { useTheme } from "@mui/material";
 import star from "../assets/Vector.png";
 import NewArrivalProduct from "../components/newArrivalProduct";
 import TopSellingProduct from "../components/topSellingProduct";
+import Frame1 from "../assets/Frame 1.png";
+import Frame2 from "../assets/Frame 2 (2).png";
+import Frame3 from "../assets/Frame 3.png";
+import Frame4 from "../assets/Frame 4.png";
+import GreenTik from "../assets/greentik.png";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import GradeIcon from "@mui/icons-material/Grade";
 
 function Home() {
   const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const Review = [
+    {
+      id: 1,
+      name: "Sarah M.",
+      review:
+        "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.",
+    },
+    {
+      id: 2,
+      name: "Alex K.",
+      review:
+        "Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.",
+    },
+    {
+      id: 3,
+      name: "James L.",
+      review:
+        "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.",
+    },
+    // {
+    //   id: 4,
+    //   name: "Sarah M.",
+    //   review:
+    //     "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.",
+    // },
+  ];
   return (
     <>
       <Header />
@@ -191,7 +218,214 @@ function Home() {
             </Box>
           </Grid>
           <NewArrivalProduct />
-          <TopSellingProduct/>
+          <TopSellingProduct />
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                width: "1239px",
+                height: "866px",
+                backgroundColor: "#f0f0f0",
+                borderRadius: "40px",
+                mt: 6,
+              }}
+            >
+              <Grid Container sx={{ width: "100%", height: "100%" }}>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "25%",
+                  }}
+                >
+                  <Typography variant="h3" sx={{ color: "#000" }}>
+                    BROWSE BY DRESS STYLE
+                  </Typography>
+                </Grid>
+                <Grid
+                  container
+                  spacing={0}
+                  sx={{
+                    width: "100%",
+                    height: "70%",
+                  }}
+                >
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      width: "100%",
+                      height: "289px",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      gap: "15px",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: "407px",
+                        height: "100%",
+                      }}
+                    >
+                      <img
+                        src={Frame1}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        alt=""
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        width: "684px",
+                        height: "100%",
+                      }}
+                    >
+                      <img
+                        src={Frame2}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        alt=""
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      width: "100%",
+                      height: "289px",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      gap: "15px",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: "684px",
+                        height: "100%",
+                      }}
+                    >
+                      <img
+                        src={Frame3}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        alt=""
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        width: "407px",
+                        height: "100%",
+                      }}
+                    >
+                      <img
+                        src={Frame4}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        alt=""
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
+          <Grid
+            container
+            spacing={5}
+            sx={{
+              width: "100%",
+              mt: 5,
+              justifyContent: "center",
+            }}
+          >
+            <Grid
+              item
+              xs={12}
+              sx={{
+                width: "90%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="h4">OUR HAPPY CUSTOMERS</Typography>
+              <Grid>
+                <Button>
+                  <ArrowBackIcon />
+                </Button>
+                <Button>
+                  <ArrowForwardIcon />
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                width: "95%",
+                height: "auto",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              {Review.map((item) => (
+                <Grid
+                  key={item.id}
+                  sx={{
+                    height: "auto",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "400px",
+                      height: "240px",
+                      borderRadius: "20px",
+                      border: "1px solid #ccc",
+                      p: 4,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <Typography>
+                      <GradeIcon color="warning" />
+                      <GradeIcon color="warning" />
+                      <GradeIcon color="warning" />
+                      <GradeIcon color="warning" />
+                      <GradeIcon />
+                    </Typography>
+                    <Typography variant="h5">
+                      {item.name}
+                      <img src={GreenTik} alt="" />
+                    </Typography>
+                    <Typography variant="body1">{item.review}</Typography>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>
