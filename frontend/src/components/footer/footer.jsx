@@ -27,7 +27,7 @@ function Footer() {
         sx={{
           height: "auto",
           mt: 20,
-          mb: isMobile ? 0 : 4,
+          // mb: isMobile ? 0 : 4,
           backgroundColor: "#f0f0f0",
           position: "relative",
         }}

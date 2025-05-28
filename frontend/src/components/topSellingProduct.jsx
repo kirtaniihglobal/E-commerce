@@ -1,5 +1,4 @@
-import { Grid, Typography, Box, Button } from "@mui/material";
-import GradeIcon from "@mui/icons-material/Grade";
+import { Grid, Typography, Box, Button } from "@mui/material";  
 import { useTheme, useMediaQuery } from "@mui/material";
 import prod5 from "../assets/prod5.png";
 import prod6 from "../assets/prod6.png";

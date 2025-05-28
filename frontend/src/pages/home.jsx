@@ -355,15 +355,14 @@ function Home() {
             spacing={5}
             sx={{
               width: "100%",
+              // height: "100%",
               mt: 5,
               justifyContent: "center",
             }}
           >
             <Grid
-              item
-              xs={12}
               sx={{
-                width: "90%",
+                // width: "90%",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
