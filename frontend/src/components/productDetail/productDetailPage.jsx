@@ -23,7 +23,7 @@ import img3 from "../../assets/image 3.png";
 import GradeIcon from "@mui/icons-material/Grade";
 
 function ProductDetailPage() {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(1);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -32,7 +32,7 @@ function ProductDetailPage() {
     const { children, value, index, ...other } = props;
 
     return (
-      <div role="tabpanel" hidden={value !== index} {...other}> 
+      <div role="tabpanel" hidden={value !== index} {...other}>
         {value === index && (
           <Box sx={{ p: 2 }}>
             <Typography>{children}</Typography>
@@ -307,7 +307,7 @@ function ProductDetailPage() {
               product info here.
             </TabPanel>
             <TabPanel value={value} index={1}>
-             <RatingPage/>
+              <RatingPage />
             </TabPanel>
             <TabPanel value={value} index={2}>
               This is the **FAQs** section. Display questions and answers here.
