@@ -1,7 +1,6 @@
-// RegisterPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/header/header";
+
 import {
   Box,
   Button,
@@ -15,119 +14,58 @@ import {
   Paper,
   Link,
 } from "@mui/material";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
-import LinearProgress from "@mui/material/LinearProgress";
-import { useEffect } from "react";
 import api from "../services/api";
-import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
+import { useContext } from "react";
 
 export default function LoginPage() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [massage, setMassage] = useState("");
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const [successMassage, setsuccessMassage] = useState("");
+
+  const validationSchema = yup.object().shape({
+    email: yup.string().email("Invalid email").required("Email is required"),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
   });
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  useEffect(() => {
-    if (openSnackbar) {
-      let timer;
-      let progressValue = 0;
-
-      const interval = setInterval(() => {
-        progressValue += 1;
-        setProgress(progressValue);
-        if (progressValue >= 100) {
-          clearInterval(interval);
-          timer = setTimeout(() => {
-            setOpenSnackbar(false);
-          }, 500); // Optional delay after bar completes
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await api.post("/login", values);
+        const { user } = response.data;
+        if (user.role === "admin") {
+          setsuccessMassage("Admin Login Successfull");
+          login(user);
+          setTimeout(() => {
+            navigate("/adminDashboard");
+          }, 2000);
+        } else {
+          setsuccessMassage("User Login Successfull");
+          login(user);
+          setTimeout(() => navigate("/"), 2000);
         }
-      }, 20); // 20ms * 100 = 2000ms = 2 seconds
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timer);
-      };
-    }
-  }, [openSnackbar]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await api.post("/login", formData, {
-        mathod: "POST",
-        headers: {
-          "Content-Type": " application/json",
-        },
-        data: formData,
-      });
-      setMassage(response.data.msg || "Login successfully!");
-      login(response.data.token);
-      setOpenSnackbar(true);
-      setTimeout(() => navigate("/"), 2000);
-    } catch (error) {
-      setMassage(error.response?.data?.msg || "Login failed");
-      setOpenSnackbar(true);
-    }
-  };
-
+      } catch (error) {
+        setMassage("Invalid email or password");
+        setTimeout(() => setMassage(""), 2000);
+      }
+    },
+  });
   return (
     <>
-      <Header />
-      <Snackbar
-        open={openSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        sx={{ width: "500px", height: "200px" }}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="standard"
-          severity="success"
-          sx={{
-            width: "100%",
-            color: "#000",
-            backgroundColor: "#f0f0f0",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {massage}
-          <LinearProgress
-            variant="determinate"
-            value={progress}
-            color="success"
-            sx={{
-              width: "500px",
-              mt: 1,
-              height: 10,
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              zIndex: 1,
-            }}
-          />
-        </MuiAlert>
-      </Snackbar>
-
       <Container component="main" maxWidth="xl">
         <CssBaseline />
 
@@ -154,11 +92,6 @@ export default function LoginPage() {
           >
             <Grid item xs={12}>
               <Typography variant="h2">SHOP.CO</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5">
-                "Welcome back! Please log in to continue."
-              </Typography>
             </Grid>
           </Grid>
           <Grid
@@ -190,7 +123,7 @@ export default function LoginPage() {
                   <Typography component="h1" variant="h4">
                     Login
                   </Typography>
-                  <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                  <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                       <Grid
                         item
@@ -199,14 +132,49 @@ export default function LoginPage() {
                           width: "100%",
                         }}
                       >
+                        <Grid
+                          sx={{
+                            mb: 2,
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {massage ? (
+                            <Typography
+                              variant=""
+                              sx={{
+                                fontSize: "23px",
+                                fontWeight: "bold",
+                              }}
+                              color="error"
+                            >
+                              {massage}
+                            </Typography>
+                          ) : (
+                            <Typography
+                              variant=""
+                              sx={{
+                                fontSize: "23px",
+                                fontWeight: "bold",
+                              }}
+                              color="success"
+                            >
+                              {successMassage}
+                            </Typography>
+                          )}
+                        </Grid>
                         <TextField
                           name="email"
                           type="email"
-                          required
                           fullWidth
                           label="Email Address"
-                          value={formData.email}
-                          onChange={handleChange}
+                          value={formik.values.email}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={formik.touched.email && formik.errors.email}
+                          helperText={
+                            formik.touched.email && formik.errors.email
+                          }
                         />
                       </Grid>
                       <Grid
@@ -219,11 +187,17 @@ export default function LoginPage() {
                         <TextField
                           name="password"
                           type={showPassword ? "text" : "password"}
-                          required
                           fullWidth
                           label="Password"
-                          value={formData.password}
-                          onChange={handleChange}
+                          value={formik.values.password}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched.password && formik.errors.password
+                          }
+                          helperText={
+                            formik.touched.password && formik.errors.password
+                          }
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
@@ -248,31 +222,32 @@ export default function LoginPage() {
                           Forgot Password?
                         </Link>
                       </Grid>
+                      <Button
+                        className="black"
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2, py: 1.5 }}
+                      >
+                        Login
+                      </Button>
                     </Grid>
-                    <Button
-                      className="black"
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      sx={{ mt: 3, mb: 2, py: 1.5 }}
-                    >
-                      Login
-                    </Button>
-                    <Grid>
-                      <Typography textAlign="center" variant="body1">
-                        Don’t have an account?{" "}
-                        <Link
-                          href="register"
-                          underline="hover"
-                          fontWeight="bold"
-                          sx={{}}
-                        >
-                          Register Now
-                        </Link>
-                      </Typography>
-                    </Grid>
-                  </Box>
+                  </form>
+                  <Grid>
+                    <Typography textAlign="center" variant="body1">
+                      Don’t have an account?{" "}
+                      <Link
+                        href="register"
+                        underline="hover"
+                        fontWeight="bold"
+                        sx={{}}
+                      >
+                        Register Now
+                      </Link>
+                    </Typography>
+                  </Grid>
                 </Box>
+                {/* </Box> */}
               </Paper>
             </Grid>
           </Grid>

@@ -2,13 +2,13 @@ const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
 const upload = require("../middleware/upload");
+const { verifyToken } = require("../controllers/auth");
 const {
   register,
   login,
-  verifyToken,
 } = require("../controllers/userController");
 
-router.post("/register", upload.single("profileImage"), register);
+router.post("/register", upload.none(), register);
 router.post("/login", login);
 router.get("/profile", verifyToken, async (req, res) => {
   try {

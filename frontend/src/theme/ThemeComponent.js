@@ -59,8 +59,12 @@ export const MuiTypography = {
         fontSize: "64px",
         fontWeight: 700,
         color: "#000",
+        "&.success": {
+          color: "success",
+        },
       },
     },
+
     {
       props: { variant: "h3" },
       style: {

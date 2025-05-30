@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -18,9 +18,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
-import LinearProgress from "@mui/material/LinearProgress";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 
@@ -28,15 +25,12 @@ import { useNavigate } from "react-router";
 
 export default function Header() {
   const theme = useTheme();
-  const { token } = useContext(AuthContext);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [progress, setProgress] = useState(0);
+
+  const { user } = useContext(AuthContext);
   const [massage, setMassage] = useState("");
-  // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  // const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null); // Main menu
-  const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null); // Submenu for "Men"
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
   const submenuOpen = Boolean(submenuAnchorEl);
@@ -57,40 +51,13 @@ export default function Header() {
   const handleSubmenuClose = () => {
     setSubmenuAnchorEl(null);
   };
-  useEffect(() => {
-    if (openSnackbar) {
-      let timer;
-      let progressValue = 0;
 
-      const interval = setInterval(() => {
-        progressValue += 1;
-        setProgress(progressValue);
-        if (progressValue >= 100) {
-          clearInterval(interval);
-          timer = setTimeout(() => {
-            setOpenSnackbar(false);
-          }, 500);
-        }
-      }, 20);
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timer);
-      };
-    }
-  }, [openSnackbar]);
   const handelLogout = () => {
-    // navigate("/logout");
     try {
-      localStorage.removeItem("token");
-      // setUser(null);
       setMassage("Logout successfully!");
-      setOpenSnackbar(true);
-
-      setTimeout(() => navigate("/logout"), 2000);
+      navigate("/logout");
     } catch (error) {
       setMassage("Logout failed");
-      setOpenSnackbar(true);
     }
   };
   return (
@@ -264,14 +231,10 @@ export default function Header() {
                   }}
                 />
               </Box>
-              <Button
-                onClick={() => {
-                  // navigate("/register");
-                }}
-              >
+              <Button onClick={() => {}}>
                 <ShoppingCartIcon />
               </Button>
-              {token
+              {user
                 ? [
                     <Button
                       onClick={() => {
@@ -280,12 +243,13 @@ export default function Header() {
                     >
                       <AccountCircleIcon />
                     </Button>,
-                    <Button variant="outlined"
-                    className="white"
-                     sx={{
-                          borderRadius: "50px",
-                          p: "5px  40px",
-                        }}
+                    <Button
+                      variant="outlined"
+                      className="white"
+                      sx={{
+                        borderRadius: "50px",
+                        p: "5px  40px",
+                      }}
                       onClick={() => {
                         handelLogout();
                       }}
@@ -328,43 +292,6 @@ export default function Header() {
           </Toolbar>
         </AppBar>
       </Box>
-      <Snackbar
-        open={openSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        sx={{ width: "500px", height: "200px" }}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="standard"
-          severity="error"
-          sx={{
-            width: "100%",
-            color: "#000",
-            backgroundColor: "#f0f0f0",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {massage}
-          <LinearProgress
-            variant="determinate"
-            value={progress}
-            color="error"
-            sx={{
-              width: "500px",
-              mt: 1,
-              height: 10,
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}
-          />
-        </MuiAlert>
-      </Snackbar>
     </>
   );
 }
