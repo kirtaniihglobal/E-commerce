@@ -1,7 +1,5 @@
-// RegisterPage.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/header/header";
 import {
   Box,
   Button,
@@ -14,100 +12,79 @@ import {
   InputAdornment,
   Paper,
   Link,
-  Avatar,
 } from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
-import LinearProgress from "@mui/material/LinearProgress";
-import { useEffect } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import api from "../services/api";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [progress, setProgress] = useState(0);
-
   const [showPassword, setShowPassword] = useState(false);
+  const [showconfirmPassword, setShowconfirmPassword] = useState(false);
   const [massage, setMassage] = useState("");
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    number: "",
-    password: "",
-    confirmPassword: "",
-    profileImage: null,
-    imagePreview: "",
+  const [successMassage, setsuccessMassage] = useState("");
+
+  const validationSchema = yup.object({
+    fullName: yup
+      .string()
+      .required("Full name is required")
+      .min(3, "Full name must be at least 3 characters")
+      .max(50, "Full name must not exceed 50 characters"),
+    number: yup
+      .string()
+      .required("Number is required")
+      .matches("^.{10,}$", "Phone number must be not less than 10 numbers"),
+
+    email: yup
+      .string()
+      .email("Enter a valid email")
+      .required("Email is required")
+      .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/, "Invalid email address"),
+    password: yup
+      .string()
+      .min(8, "Password should be of minimum 8 characters length")
+      .required("Password is required"),
+
+    confirmPassword: yup
+      .string()
+      .min(8, "Password should be of minimum 8 characters length")
+      .required("Password is required"),
   });
-  useEffect(() => {
-    if (openSnackbar) {
-      let timer;
-      let progressValue = 0;
-
-      const interval = setInterval(() => {
-        progressValue += 1;
-        setProgress(progressValue);
-        if (progressValue >= 100) {
-          clearInterval(interval);
-          timer = setTimeout(() => {
-            setOpenSnackbar(false);
-          }, 500); // Optional delay after bar completes
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      number: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      const match = values.password === values.confirmPassword;
+      if (match) {
+        try {
+          const response = await api.post("/register", values);
+          setsuccessMassage("Registration successful");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        } catch (error) {
+          setMassage("Registration failed");
+          setTimeout(() => {
+            setMassage("");
+          }, 2000);
         }
-      }, 20); // 20ms * 100 = 2000ms = 2 seconds
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timer);
-      };
-    }
-  }, [openSnackbar]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setFormData((prev) => ({
-        ...prev,
-        profileImage: file,
-        imagePreview: imageUrl,
-      }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formSubmitData = new FormData();
-    formSubmitData.append("fullName", formData.fullName);
-    formSubmitData.append("number", formData.number);
-    formSubmitData.append("email", formData.email);
-    formSubmitData.append("password", formData.password);
-    formSubmitData.append("confirmPassword", formData.confirmPassword);
-    formSubmitData.append("profileImage", formData.profileImage);
-
-    try {
-      const response = await api.post("/register", formSubmitData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setMassage(response.data.msg || "Registered successfully!");
-      setOpenSnackbar(true);
-      setTimeout(() => navigate("/login"), 2000);
-    } catch (error) {
-      setMassage(error.response?.data?.msg || "Registration failed");
-      setOpenSnackbar(true);
-    }
-  };
+      } else {
+        setMassage("Passwords do not match");
+        setTimeout(() => setMassage(""), 2000);
+      }
+    },
+  });
 
   return (
     <>
-      <Header />
       <Container component="main" maxWidth="xl">
         <CssBaseline />
 
@@ -117,13 +94,14 @@ export default function RegisterPage() {
           sx={{
             display: "flex",
             flexDirection: "row",
+            justifyContent: "center",
             width: "100%",
           }}
         >
           <Grid
             Container
             sx={{
-              width: "35%",
+              width: "30%",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -133,11 +111,6 @@ export default function RegisterPage() {
           >
             <Grid item xs={12}>
               <Typography variant="h2">SHOP.CO</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5">
-                "Join us today — it’s quick and easy!"
-              </Typography>
             </Grid>
           </Grid>
           <Grid
@@ -156,7 +129,7 @@ export default function RegisterPage() {
                 width: "60%",
               }}
             >
-              <Paper elevation={3} sx={{ mt: 1, p: 3, borderRadius: 3 }}>
+              <Paper elevation={5} sx={{ mt: 3, p: 4, borderRadius: 3 }}>
                 <Box
                   sx={{
                     display: "flex",
@@ -167,54 +140,60 @@ export default function RegisterPage() {
                   <Typography component="h1" variant="h4">
                     Register
                   </Typography>
-                  <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+
+                  <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                       <Grid
                         item
                         xs={12}
-                        sx={{ width: "100%", textAlign: "center" }}
-                      >
-                        <input
-                          accept="image/*"
-                          style={{ display: "none" }}
-                          id="profile-image-upload"
-                          type="file"
-                          onChange={handleImageUpload}
-                        />
-                        <label htmlFor="profile-image-upload">
-                          <IconButton component="span">
-                            <Avatar
-                              src={formData.imagePreview || ""}
-                              sx={{ width: 80, height: 80 }}
-                            />
-                          </IconButton>
-                        </label>
-                        {formData.profileImage && (
-                          <Typography variant="caption" display="block">
-                            {formData.profileImage.name}
-                          </Typography>
-                        )}
-
-                        <Typography variant="caption" display="block">
-                          Upload Profile Image
-                        </Typography>
-                      </Grid>
-
-                      <Grid
-                        item
-                        xs={12}
                         sx={{
                           width: "100%",
                         }}
                       >
+                        <Grid
+                          sx={{
+                            mb: 2,
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {massage ? (
+                            <Typography
+                              variant=""
+                              sx={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                              }}
+                              color="error"
+                            >
+                              {massage}
+                            </Typography>
+                          ) : (
+                            <Typography
+                              variant=""
+                              sx={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                              }}
+                              color="success"
+                            >
+                              {successMassage}
+                            </Typography>
+                          )}
+                        </Grid>
                         <TextField
-                          name="fullName"
-                          required
                           fullWidth
+                          name="fullName"
                           label="Full Name"
-                          value={formData.fullName}
-                          onChange={handleChange}
-                          autoFocus
+                          value={formik.values.fullName}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched.fullName && formik.errors.fullName
+                          }
+                          helperText={
+                            formik.touched.fullName && formik.errors.fullName
+                          }
                         />
                       </Grid>
                       <Grid
@@ -225,13 +204,17 @@ export default function RegisterPage() {
                         }}
                       >
                         <TextField
+                          fullWidth
                           name="number"
                           type="number"
-                          required
-                          fullWidth
                           label="Mobile Number"
-                          value={formData.number}
-                          onChange={handleChange}
+                          value={formik.values.number}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={formik.touched.number && formik.errors.number}
+                          helperText={
+                            formik.touched.number && formik.errors.number
+                          }
                         />
                       </Grid>
                       <Grid
@@ -242,13 +225,17 @@ export default function RegisterPage() {
                         }}
                       >
                         <TextField
-                          name="email"
-                          type="email"
-                          required
                           fullWidth
+                          name="email"
                           label="Email Address"
-                          value={formData.email}
-                          onChange={handleChange}
+                          type="email"
+                          value={formik.values.email}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={formik.touched.email && formik.errors.email}
+                          helperText={
+                            formik.touched.email && formik.errors.email
+                          }
                         />
                       </Grid>
                       <Grid
@@ -259,13 +246,19 @@ export default function RegisterPage() {
                         }}
                       >
                         <TextField
+                          fullWidth
                           name="password"
                           type={showPassword ? "text" : "password"}
-                          required
-                          fullWidth
                           label="Password"
-                          value={formData.password}
-                          onChange={handleChange}
+                          value={formik.values.password}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched.password && formik.errors.password
+                          }
+                          helperText={
+                            formik.touched.password && formik.errors.password
+                          }
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
@@ -293,20 +286,30 @@ export default function RegisterPage() {
                       >
                         <TextField
                           name="confirmPassword"
-                          type={showPassword ? "text" : "password"}
-                          required
+                          type={showconfirmPassword ? "text" : "password"}
                           fullWidth
                           label="Confirm Password"
-                          value={formData.confirmPassword}
-                          onChange={handleChange}
+                          value={formik.values.confirmPassword}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched.confirmPassword &&
+                            formik.errors.confirmPassword
+                          }
+                          helperText={
+                            formik.touched.confirmPassword &&
+                            formik.errors.confirmPassword
+                          }
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={() => setShowPassword(!showPassword)}
+                                  onClick={() =>
+                                    setShowconfirmPassword(!showconfirmPassword)
+                                  }
                                   edge="end"
                                 >
-                                  {showPassword ? (
+                                  {showconfirmPassword ? (
                                     <VisibilityOff />
                                   ) : (
                                     <Visibility />
@@ -322,74 +325,40 @@ export default function RegisterPage() {
                           Forgot Password?
                         </Link>
                       </Grid>
+
+                      <Button
+                        className="black"
+                        type="submit"
+                        // onSubmit={formik.handleSubmit}
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2, py: 1.5 }}
+                      >
+                        Register
+                      </Button>
                     </Grid>
-                    <Button
-                      className="black"
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      sx={{ mt: 3, mb: 2, py: 1.5 }}
-                    >
-                      Register
-                    </Button>
-                    <Grid>
-                      <Typography textAlign="center" variant="body1">
-                        Already have an account?{" "}
-                        <Link
-                          href="Login"
-                          underline="hover"
-                          fontWeight="bold"
-                          sx={{}}
-                        >
-                          Login
-                        </Link>
-                      </Typography>
-                    </Grid>
-                  </Box>
+                  </form>
+
+                  <Grid>
+                    <Typography textAlign="center" variant="body1">
+                      Already have an account?{" "}
+                      <Link
+                        href="Login"
+                        underline="hover"
+                        fontWeight="bold"
+                        sx={{}}
+                      >
+                        Login
+                      </Link>
+                    </Typography>
+                  </Grid>
                 </Box>
+                {/* </Box> */}
               </Paper>
             </Grid>
           </Grid>
         </Grid>
       </Container>
-       <Snackbar
-              open={openSnackbar}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-              sx={{ width: "500px", height: "200px", }}
-            >
-              <MuiAlert
-                elevation={6}
-                variant="standard"
-                severity="success"
-                sx={{
-                  width: "100%",
-                  color: "#000",
-                  backgroundColor: "#f0f0f0",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {massage}
-                <LinearProgress
-                  variant="determinate"
-                  value={progress}
-                  color="success"
-                  sx={{
-                    width: "500px",
-                    mt: 1,
-                    height: 10,
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    zIndex: 1,
-                  }}
-                />
-              </MuiAlert>
-            </Snackbar>
     </>
   );
 }

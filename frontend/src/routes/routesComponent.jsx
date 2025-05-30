@@ -9,6 +9,7 @@ import RegisterPage from "../pages/register";
 import { AuthProvider } from "../context/authContext";
 import PrivateRoute from "./privateRoute";
 import Logout from "../pages/logout";
+import AdminDashboard from "../pages/adminDashboard";
 
 const RoutesComponent = () => {
   return (
@@ -20,6 +21,7 @@ const RoutesComponent = () => {
         <Route path="cart" element={<Cart />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
+        <Route path="adminDashboard" element={<AdminDashboard />} />
         <Route
           path="profile"
           element={

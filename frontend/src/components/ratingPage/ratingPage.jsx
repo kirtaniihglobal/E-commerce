@@ -1,5 +1,7 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Chip, Button } from "@mui/material";
 import RatingCard from "../../comon/ratingCard";
+import filter from "../../assets/filter.png";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import GreenTik from "../assets/greentik.png";
 // import GradeIcon from "@mui/icons-material/Grade";
 
@@ -76,7 +78,55 @@ function RatingPage() {
             <Typography variant="h5">All Reviews</Typography>
             <Typography variant="h6">(451)</Typography>
           </Grid>
-          <Grid></Grid>
+          <Grid
+            sx={{
+              width: "45%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Grid
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <img
+                src={filter}
+                style={{
+                  width: "100%",
+                }}
+                alt=""
+              />
+            </Grid>
+            <Grid>
+              <Chip
+                sx={{
+                  px: 3,
+                  py: 3,
+                  borderRadius: 6,
+                }}
+                label="Latest"
+                deleteIcon={<KeyboardArrowDownIcon />}
+              />
+            </Grid>
+            <Grid>
+              <Button
+                sx={{
+                  px: 3,
+                  py: 1.5,
+                  borderRadius: 6,
+                }}
+                variant="contained"
+                className="black"
+              >
+                Write a Review
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid
           container
