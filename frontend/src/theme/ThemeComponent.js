@@ -11,7 +11,7 @@ export const MuiButton = {
       props: { variant: "contained" },
       style: ({ theme, ownerState }) => ({
         "&.black": {
-          backgroundColor: "#000000",
+          backgroundColor: "#000",
           color: "#fff",
           fontWeight: 500,
           "&:hover": {
@@ -29,7 +29,7 @@ export const MuiButton = {
           backgroundColor: "#fff",
           color: "#000",
           fontWeight: 500,
-          border: "1px solid #000",
+          border: "1 solid #000",
           "&:hover": {
             backgroundColor: "#000",
             color: "#fff",
@@ -50,7 +50,7 @@ export const MuiTypography = {
       style: {
         fontSize: "70px",
         fontWeight: 700,
-        color: "#000000",
+        color: "#000",
       },
     },
     {
@@ -58,23 +58,27 @@ export const MuiTypography = {
       style: {
         fontSize: "64px",
         fontWeight: 700,
-        color: "#000000",
+        color: "#000",
+        "&.success": {
+          color: "success",
+        },
       },
     },
+
     {
       props: { variant: "h3" },
       style: {
         fontSize: "50px",
         fontWeight: 600,
-        color: "#000000",
+        color: "#000",
       },
     },
     {
       props: { variant: "h4" },
       style: {
-        fontSize: "40px",
-        fontWeight: 700,
-        color: "#000000",
+        fontSize: "35px",
+        fontWeight: 500,
+        color: "#000",
       },
     },
     {
@@ -106,7 +110,7 @@ export const MuiTypography = {
       style: {
         fontSize: "14px",
         fontWeight: 400,
-        color: "#fffff",
+        color: "#fff",
       },
     },
   ],
