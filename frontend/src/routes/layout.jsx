@@ -21,14 +21,14 @@ function Layout() {
         container
         sx={{
           width: "100%",
-          height: "100vh",
+          height: "800px",
           display: "flex",
           flexDirection: "row",
         }}
       >
         <Box
           sx={{
-            width: "25%",
+            // width: "25%",
             backgroundColor: "black",
             height: "100%",
             boxSizing: "border-box",
@@ -38,6 +38,9 @@ function Layout() {
             flexDirection: "column",
             gap: 6,
             color: "#fff",
+            position: "fixed",
+            left: 0,
+            top: 0,
           }}
         >
           <Box>
@@ -114,6 +117,7 @@ function Layout() {
         </Box>
         <Box
           sx={{
+            ml: 40,
             width: "75%",
           }}
         >

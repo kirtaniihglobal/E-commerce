@@ -75,7 +75,7 @@ export default function RegisterPage() {
       const match = values.password === values.confirmPassword;
       if (match) {
         try {
-          const response = await api.post("/register", values);
+          const response = await api.post("auth/register", values);
           setSnackMessage("Registration successful");
           setSnackOpen(true);
           setSnackSeverity("success");

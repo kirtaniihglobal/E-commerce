@@ -55,7 +55,7 @@ export default function LoginPage() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/login", values);
+        const response = await api.post("auth/login", values);
         const { user, token } = response.data;
         localStorage.setItem("token", token);
         dispatch(login({ user, token }));
