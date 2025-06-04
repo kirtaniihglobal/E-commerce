@@ -10,27 +10,31 @@ import {
   Typography,
   Stack,
   Grid,
-  Link,
   InputBase,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import SnackBar from "../../comon/snackBar";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useContext } from "react";
-import { AuthContext } from "../../context/authContext";
 
 import { useNavigate } from "react-router";
 
 export default function Header() {
   const theme = useTheme();
-
-  const { user } = useContext(AuthContext);
-  const [massage, setMassage] = useState("");
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
+  const [snackMessage, setSnackMessage] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackSeverity, setSnackSeverity] = useState("success");
+
+  const handleSnackClose = () => {
+    console.log("snack close");
+    setSnackOpen(false);
+  };
 
   const open = Boolean(anchorEl);
   const submenuOpen = Boolean(submenuAnchorEl);
@@ -51,15 +55,6 @@ export default function Header() {
   const handleSubmenuClose = () => {
     setSubmenuAnchorEl(null);
   };
-
-  const handelLogout = () => {
-    try {
-      setMassage("Logout successfully!");
-      navigate("/logout");
-    } catch (error) {
-      setMassage("Logout failed");
-    }
-  };
   return (
     <>
       <Box
@@ -69,7 +64,7 @@ export default function Header() {
           zIndex: 1000,
         }}
       >
-        <Box
+        {/* <Box
           sx={{
             backgroundColor: theme.palette.primary.main,
             color: "white",
@@ -94,7 +89,7 @@ export default function Header() {
             </Link>
           </Typography>
           <ArrowForwardIcon fontSize="small" />
-        </Box>
+        </Box> */}
 
         <AppBar
           position="static"
@@ -121,7 +116,7 @@ export default function Header() {
                 <Typography
                   variant="h3"
                   onClick={() => {
-                    window.location.href = "/";
+                    navigate("/");
                   }}
                 >
                   SHOP.CO
@@ -137,24 +132,17 @@ export default function Header() {
                   >
                     Shop
                   </Button>
-
-                  {/* Main Menu */}
                   <Menu
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleMainClose}
                     MenuListProps={{ onMouseLeave: handleMainClose }}
                   >
-                    {/* Nested Item: Men */}
-                    <MenuItem
-                      onMouseOver={handleSubmenuOpen}
-                      // onMouseLeave={handleSubmenuClose}
-                    >
+                    <MenuItem onMouseOver={handleSubmenuOpen}>
                       Men
                       <KeyboardArrowDownIcon fontSize="small" />
                     </MenuItem>
 
-                    {/* Submenu for "Men" */}
                     <Menu
                       anchorEl={submenuAnchorEl}
                       open={submenuOpen}
@@ -231,10 +219,14 @@ export default function Header() {
                   }}
                 />
               </Box>
-              <Button onClick={() => {}}>
+              <Button
+                onClick={() => {
+                  navigate("/Cart");
+                }}
+              >
                 <ShoppingCartIcon />
               </Button>
-              {user
+              {token
                 ? [
                     <Button
                       onClick={() => {
@@ -251,7 +243,13 @@ export default function Header() {
                         p: "5px  40px",
                       }}
                       onClick={() => {
-                        handelLogout();
+                        setSnackMessage("Logout SuccessFully");
+                        setSnackSeverity("error");
+                        setSnackOpen(true);
+                        localStorage.removeItem("token");
+                        setTimeout(() => {
+                          navigate("/login");
+                        }, 500);
                       }}
                     >
                       Logout
@@ -259,39 +257,52 @@ export default function Header() {
                   ]
                 : [
                     <>
-                      <Button
-                        variant="outlined"
-                        className="white"
+                      <Grid
                         sx={{
-                          borderRadius: "50px",
-                          p: "5px  40px",
-                        }}
-                        onClick={() => {
-                          navigate("/register");
+                          display: "flex",
+                          gap: 2,
                         }}
                       >
-                        Register
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        className="white"
-                        sx={{
-                          borderRadius: "50px",
-                          p: "5px 40px",
-                        }}
-                        onClick={() => {
-                          navigate("/login");
-                        }}
-                      >
-                        {" "}
-                        Login
-                      </Button>
+                        <Button
+                          variant="outlined"
+                          className="white"
+                          sx={{
+                            borderRadius: "50px",
+                            p: "5px  50px",
+                          }}
+                          onClick={() => {
+                            navigate("/register");
+                          }}
+                        >
+                          Register
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          className="white"
+                          sx={{
+                            borderRadius: "50px",
+                            p: "5px 40px",
+                          }}
+                          onClick={() => {
+                            navigate("/login");
+                          }}
+                        >
+                          {" "}
+                          Login
+                        </Button>
+                      </Grid>
                     </>,
                   ]}
             </Stack>
           </Toolbar>
         </AppBar>
       </Box>
+      <SnackBar
+        open={snackOpen}
+        message={snackMessage}
+        severity={snackSeverity}
+        handleClose={handleSnackClose}
+      />
     </>
   );
 }

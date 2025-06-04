@@ -1,21 +1,20 @@
 const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
-const upload = require("../middleware/upload");
-const { verifyToken } = require("../controllers/auth");
+const { verifyToken } = require("../middleware/auth");
 const {
   register,
   login,
 } = require("../controllers/userController");
 
-router.post("/register", upload.none(), register);
+router.post("/register", register);
 router.post("/login", login);
-router.get("/profile", verifyToken, async (req, res) => {
+router.get("/me", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     res.json(user);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching user" });
+    res.status(500).json({ status: 500, message: "Error fetching user" });
   }
 });
 

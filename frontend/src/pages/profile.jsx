@@ -6,69 +6,33 @@ import {
   Typography,
   Button,
   Box,
-  Grid,
 } from "@mui/material";
-
-import api from "../services/api";
 import Header from "../components/header/header";
-import { AuthContext } from "../context/authContext";
-import { useContext } from "react";
+import SnackBar from "../comon/snackBar";
+import { fetchUser } from "../redux/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function ProfilePage() {
-  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const [snackMessage, setSnackMessage] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackSeverity, setSnackSeverity] = useState("success");
 
-  const [massage, setMassage] = useState("");
-  const [successMassage, setsuccessMassage] = useState("");
+  const handleSnackClose = () => {
+    setSnackOpen(false);
+  };
 
   useEffect(() => {
-    api.get("/profile");
-  }, []);
-
-  const handleLogout = () => {
-    try {
-      logout();
-      setsuccessMassage("Logout Success");
-    } catch (error) {
-      setMassage("Logout failed");
-    }
-  };
+    dispatch(fetchUser());
+  }, [dispatch]);
 
   return (
     <>
       <Header />
       <Container maxWidth="md" sx={{ mt: 10 }}>
-        <Grid
-          sx={{
-            mb: 2,
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          {massage ? (
-            <Typography
-              variant=""
-              sx={{
-                color: "red",
-                fontSize: "50px",
-                fontWeight: "bold",
-              }}
-              color="error"
-            >
-              {massage}
-            </Typography>
-          ) : (
-            <Typography
-              variant=""
-              sx={{
-                color: "green",
-                fontSize: "50px",
-                fontWeight: "bold",
-              }}
-            >
-              {successMassage}
-            </Typography>
-          )}
-        </Grid>
         {user && (
           <Card sx={{ p: 4, textAlign: "center", boxShadow: 3 }}>
             <CardContent>
@@ -83,7 +47,15 @@ export default function ProfilePage() {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={handleLogout}
+                  onClick={() => {
+                    setSnackMessage("Logout SuccessFully");
+                    setSnackSeverity("error");
+                    setSnackOpen(true);
+                    localStorage.removeItem("token");
+                    setTimeout(() => {
+                      navigate("/login");
+                    }, 500);
+                  }}
                 >
                   Logout
                 </Button>
@@ -92,6 +64,12 @@ export default function ProfilePage() {
           </Card>
         )}
       </Container>
+      <SnackBar
+        open={snackOpen}
+        message={snackMessage}
+        severity={snackSeverity}
+        handleClose={handleSnackClose}
+      />
     </>
   );
 }

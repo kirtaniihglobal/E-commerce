@@ -76,8 +76,8 @@ export const MuiTypography = {
     {
       props: { variant: "h4" },
       style: {
-        fontSize: "40px",
-        fontWeight: 700,
+        fontSize: "35px",
+        fontWeight: 500,
         color: "#000",
       },
     },

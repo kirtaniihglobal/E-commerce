@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -10,22 +10,32 @@ import {
   Typography,
   IconButton,
   InputAdornment,
-  Paper,
-  Link,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import api from "../services/api";
+import SnackBar from "../comon/snackBar";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
-  const [massage, setMassage] = useState("");
-  const [successMassage, setsuccessMassage] = useState("");
+  const [snackMessage, setSnackMessage] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackSeverity, setSnackSeverity] = useState("success");
 
+  const handleSnackClose = () => {
+    setSnackOpen(false);
+  };
   const validationSchema = yup.object({
     fullName: yup
       .string()
@@ -66,70 +76,81 @@ export default function RegisterPage() {
       if (match) {
         try {
           const response = await api.post("/register", values);
-          setsuccessMassage("Registration successful");
+          setSnackMessage("Registration successful");
+          setSnackOpen(true);
+          setSnackSeverity("success");
           setTimeout(() => {
             navigate("/login");
-          }, 2000);
+          }, 1000);
         } catch (error) {
-          setMassage("Registration failed");
+          setSnackMessage("Registration failed");
+          setSnackOpen(true);
+          setSnackSeverity("error");
           setTimeout(() => {
-            setMassage("");
+            setSnackMessage("");
           }, 2000);
         }
       } else {
-        setMassage("Passwords do not match");
-        setTimeout(() => setMassage(""), 2000);
+        setSnackMessage("Passwords do not match");
+        setSnackOpen(true);
+        setSnackSeverity("error");
+        setTimeout(() => setSnackMessage(""), 2000);
       }
     },
   });
 
   return (
     <>
-      <Container component="main" maxWidth="xl">
+      <Container
+        component="main"
+        maxWidth={isMobile ? "sm" : isTab ? "md" : "xl"}
+      >
         <CssBaseline />
+        <SnackBar
+          open={snackOpen}
+          message={snackMessage}
+          severity={snackSeverity}
+          handleClose={handleSnackClose}
+        />
 
         <Grid
           container
-          spacing={2}
+          spacing={4}
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
             width: "100%",
           }}
         >
-          <Grid
-            Container
+          <Box
             sx={{
-              width: "30%",
+              width: "100%",
               display: "flex",
-              flexDirection: "column",
               justifyContent: "center",
-              alignItems: "flex-end",
-              gap: "20px",
+              alignItems: "center",
             }}
           >
-            <Grid item xs={12}>
-              <Typography variant="h2">SHOP.CO</Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={2}
+            <Typography variant="h3">SHOP.CO</Typography>
+          </Box>
+          <Box
             sx={{
-              width: "50%",
+              width: "100%",
               display: "flex",
               justifyContent: "center",
             }}
           >
-            <Grid
-              item
+            <Box
               xs={12}
               sx={{
-                width: "60%",
+                width: isMobile ? "90%" : isTab ? "60%" : "35%",
               }}
             >
-              <Paper elevation={5} sx={{ mt: 3, p: 4, borderRadius: 3 }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  border: "2px solid black",
+                  borderRadius: 3,
+                  p: isMobile ? 2 : isTab ? 2 : 4,
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -137,57 +158,24 @@ export default function RegisterPage() {
                     alignItems: "center",
                   }}
                 >
-                  <Typography component="h1" variant="h4">
+                  <Typography variant={isMobile ? "h5" : "h4"}>
                     Register
                   </Typography>
 
                   <form onSubmit={formik.handleSubmit}>
-                    <Grid container spacing={2}>
-                      <Grid
-                        item
-                        xs={12}
+                    <Grid container spacing={isMobile ? 1 : 2}>
+                      <Box
                         sx={{
                           width: "100%",
+                          mt: 3,
                         }}
                       >
-                        <Grid
-                          sx={{
-                            mb: 2,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {massage ? (
-                            <Typography
-                              variant=""
-                              sx={{
-                                fontSize: "20px",
-                                fontWeight: "bold",
-                              }}
-                              color="error"
-                            >
-                              {massage}
-                            </Typography>
-                          ) : (
-                            <Typography
-                              variant=""
-                              sx={{
-                                fontSize: "20px",
-                                fontWeight: "bold",
-                              }}
-                              color="success"
-                            >
-                              {successMassage}
-                            </Typography>
-                          )}
-                        </Grid>
                         <TextField
                           fullWidth
                           name="fullName"
                           label="Full Name"
                           value={formik.values.fullName}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
                           error={
                             formik.touched.fullName && formik.errors.fullName
                           }
@@ -195,10 +183,8 @@ export default function RegisterPage() {
                             formik.touched.fullName && formik.errors.fullName
                           }
                         />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
+                      </Box>
+                      <Box
                         sx={{
                           width: "100%",
                         }}
@@ -210,16 +196,13 @@ export default function RegisterPage() {
                           label="Mobile Number"
                           value={formik.values.number}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
                           error={formik.touched.number && formik.errors.number}
                           helperText={
                             formik.touched.number && formik.errors.number
                           }
                         />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
+                      </Box>
+                      <Box
                         sx={{
                           width: "100%",
                         }}
@@ -231,16 +214,13 @@ export default function RegisterPage() {
                           type="email"
                           value={formik.values.email}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
                           error={formik.touched.email && formik.errors.email}
                           helperText={
                             formik.touched.email && formik.errors.email
                           }
                         />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
+                      </Box>
+                      <Box
                         sx={{
                           width: "100%",
                         }}
@@ -252,7 +232,6 @@ export default function RegisterPage() {
                           label="Password"
                           value={formik.values.password}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
                           error={
                             formik.touched.password && formik.errors.password
                           }
@@ -276,10 +255,8 @@ export default function RegisterPage() {
                             ),
                           }}
                         />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
+                      </Box>
+                      <Box
                         sx={{
                           width: "100%",
                         }}
@@ -291,7 +268,6 @@ export default function RegisterPage() {
                           label="Confirm Password"
                           value={formik.values.confirmPassword}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
                           error={
                             formik.touched.confirmPassword &&
                             formik.errors.confirmPassword
@@ -319,31 +295,26 @@ export default function RegisterPage() {
                             ),
                           }}
                         />
-                      </Grid>
-                      <Grid>
-                        <Link href="#" underline="hover" sx={{}}>
-                          Forgot Password?
-                        </Link>
-                      </Grid>
+                      </Box>
 
                       <Button
                         className="black"
                         type="submit"
-                        // onSubmit={formik.handleSubmit}
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, py: 1.5 }}
+                        sx={{ mt: 2, mb: 2, py: 1.5 }}
                       >
                         Register
                       </Button>
                     </Grid>
                   </form>
 
-                  <Grid>
+                  <Box>
                     <Typography textAlign="center" variant="body1">
                       Already have an account?{" "}
                       <Link
-                        href="Login"
+                        component={RouterLink}
+                        to="/login"
                         underline="hover"
                         fontWeight="bold"
                         sx={{}}
@@ -351,12 +322,11 @@ export default function RegisterPage() {
                         Login
                       </Link>
                     </Typography>
-                  </Grid>
+                  </Box>
                 </Box>
-                {/* </Box> */}
-              </Paper>
-            </Grid>
-          </Grid>
+              </Box>
+            </Box>
+          </Box>
         </Grid>
       </Container>
     </>

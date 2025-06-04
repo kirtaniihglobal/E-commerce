@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -11,24 +11,34 @@ import {
   Typography,
   IconButton,
   InputAdornment,
-  Paper,
-  Link,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import api from "../services/api";
-import { AuthContext } from "../context/authContext";
-import { useContext } from "react";
+import SnackBar from "../comon/snackBar";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
 
 export default function LoginPage() {
-  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const [showPassword, setShowPassword] = useState(false);
-  const [massage, setMassage] = useState("");
-  const [successMassage, setsuccessMassage] = useState("");
+  const [snackMessage, setSnackMessage] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackSeverity, setSnackSeverity] = useState("success");
 
+  const handleSnackClose = () => {
+    console.log("snack close");
+    setSnackOpen(false);
+  };
   const validationSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Email is required"),
     password: yup
@@ -46,73 +56,80 @@ export default function LoginPage() {
     onSubmit: async (values) => {
       try {
         const response = await api.post("/login", values);
-        const { user } = response.data;
+        const { user, token } = response.data;
+        localStorage.setItem("token", token);
+        dispatch(login({ user, token }));
         if (user.role === "admin") {
-          setsuccessMassage("Admin Login Successfull");
-          login(user);
+          setSnackMessage("Admin Login Successful");
+          setSnackSeverity("success");
+          setSnackOpen(true);
           setTimeout(() => {
             navigate("/adminDashboard");
-          }, 2000);
+          }, 500);
         } else {
-          setsuccessMassage("User Login Successfull");
-          login(user);
-          setTimeout(() => navigate("/"), 2000);
+          setSnackMessage("User Login Successful");
+          setSnackSeverity("success");
+          setSnackOpen(true);
+          setTimeout(() => {
+            navigate("/");
+          }, 500);
         }
       } catch (error) {
-        setMassage("Invalid email or password");
-        setTimeout(() => setMassage(""), 2000);
+        console.log(error);
+        setSnackMessage("Invalid Credentials");
+        setSnackSeverity("error");
+        setSnackOpen(true);
       }
     },
   });
   return (
     <>
-      <Container component="main" maxWidth="xl">
+      <Container
+        component="main"
+        maxWidth={isMobile ? "sm" : isTab ? "md" : "xl"}
+      >
         <CssBaseline />
 
         <Grid
           container
-          spacing={2}
+          spacing={0}
           sx={{
-            display: "flex",
-            flexDirection: "row",
             width: "100%",
-            height: "590px",
           }}
         >
-          <Grid
-            Container
+          <Box
             sx={{
-              width: "35%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-end",
-              gap: "20px",
-            }}
-          >
-            <Grid item xs={12}>
-              <Typography variant="h2">SHOP.CO</Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              width: "50%",
-              height: "auto",
+              width: "100%",
+              height: "100px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Grid
-              item
-              xs={12}
+            <Typography variant="h3">SHOP.CO</Typography>
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              height: isMobile ? "400px" : "600px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Box
               sx={{
-                width: "60%",
+                width: isMobile ? "80%" : isTab ? "50%" : "30%",
               }}
             >
-              <Paper elevation={3} sx={{ mt: 1, p: 3, borderRadius: 3 }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  border: "2px solid black",
+                  borderRadius: 3,
+                  p: isMobile ? 2 : isTab ? 2 : 4,
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -120,49 +137,17 @@ export default function LoginPage() {
                     alignItems: "center",
                   }}
                 >
-                  <Typography component="h1" variant="h4">
+                  <Typography component="h1" variant={isMobile ? "h5" : "h4"}>
                     Login
                   </Typography>
                   <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
-                      <Grid
-                        item
-                        xs={12}
+                      <Box
                         sx={{
                           width: "100%",
+                          mt: 3,
                         }}
                       >
-                        <Grid
-                          sx={{
-                            mb: 2,
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {massage ? (
-                            <Typography
-                              variant=""
-                              sx={{
-                                fontSize: "23px",
-                                fontWeight: "bold",
-                              }}
-                              color="error"
-                            >
-                              {massage}
-                            </Typography>
-                          ) : (
-                            <Typography
-                              variant=""
-                              sx={{
-                                fontSize: "23px",
-                                fontWeight: "bold",
-                              }}
-                              color="success"
-                            >
-                              {successMassage}
-                            </Typography>
-                          )}
-                        </Grid>
                         <TextField
                           name="email"
                           type="email"
@@ -170,16 +155,13 @@ export default function LoginPage() {
                           label="Email Address"
                           value={formik.values.email}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
                           error={formik.touched.email && formik.errors.email}
                           helperText={
                             formik.touched.email && formik.errors.email
                           }
                         />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
+                      </Box>
+                      <Box
                         sx={{
                           width: "100%",
                         }}
@@ -191,7 +173,6 @@ export default function LoginPage() {
                           label="Password"
                           value={formik.values.password}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
                           error={
                             formik.touched.password && formik.errors.password
                           }
@@ -215,13 +196,8 @@ export default function LoginPage() {
                             ),
                           }}
                         />
-                      </Grid>
+                      </Box>
 
-                      <Grid>
-                        <Link href="#" underline="hover" sx={{}}>
-                          Forgot Password?
-                        </Link>
-                      </Grid>
                       <Button
                         className="black"
                         type="submit"
@@ -233,26 +209,32 @@ export default function LoginPage() {
                       </Button>
                     </Grid>
                   </form>
-                  <Grid>
+                  <Box>
                     <Typography textAlign="center" variant="body1">
                       Don’t have an account?{" "}
                       <Link
-                        href="register"
+                        component={RouterLink}
+                        to="/register"
                         underline="hover"
                         fontWeight="bold"
                         sx={{}}
                       >
-                        Register Now
+                        RegisterNow
                       </Link>
                     </Typography>
-                  </Grid>
+                  </Box>
                 </Box>
-                {/* </Box> */}
-              </Paper>
-            </Grid>
-          </Grid>
+              </Box>
+            </Box>
+          </Box>
         </Grid>
       </Container>
+      <SnackBar
+        open={snackOpen}
+        message={snackMessage}
+        severity={snackSeverity}
+        handleClose={handleSnackClose}
+      />
     </>
   );
 }
