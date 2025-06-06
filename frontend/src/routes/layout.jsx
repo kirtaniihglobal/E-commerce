@@ -38,9 +38,9 @@ function Layout() {
             flexDirection: "column",
             gap: 6,
             color: "#fff",
-            position: "fixed",
-            left: 0,
-            top: 0,
+            // position: "fixed",
+            // left: 0,
+            // top: 0,
           }}
         >
           <Box>
@@ -117,8 +117,7 @@ function Layout() {
         </Box>
         <Box
           sx={{
-            ml: 40,
-            width: "75%",
+            width: "80%",
           }}
         >
           <Outlet />

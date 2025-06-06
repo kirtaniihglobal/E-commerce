@@ -6,6 +6,8 @@ import api from "../services/api";
 export const fetchProduct = createAsyncThunk('product/fetchProduct', async () => {
     const products = await api.get('products/',);
     return products.data;
+
+    const addProduct = await api.post('products/',);
 });
 
 const initialState = {

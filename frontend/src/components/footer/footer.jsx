@@ -27,7 +27,6 @@ function Footer() {
         sx={{
           height: "auto",
           mt: 20,
-          // mb: isMobile ? 0 : 4,
           backgroundColor: "#f0f0f0",
           position: "relative",
         }}
@@ -44,8 +43,7 @@ function Footer() {
             mt: "80px",
           }}
         >
-          <Grid
-            container
+          <Box
             sx={{
               display: "flex",
 
@@ -54,20 +52,20 @@ function Footer() {
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Box>
                 <Typography variant="h4">SHOP.CO</Typography>
               </Box>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">
                 {" "}
                 We have clothes that suits your style <br />
                 and which you’re proud to wear. <br />
                 From women to men.
               </Typography>
-            </Grid>
-            <Grid
+            </Box>
+            <Box
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -110,10 +108,9 @@ function Footer() {
               >
                 <GitHubIcon />
               </Avatar>
-            </Grid>
-          </Grid>
-          <Grid
-            container
+            </Box>
+          </Box>
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -121,24 +118,24 @@ function Footer() {
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 COMPANY
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">About</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">Features</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">Works </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1"> Career </Typography>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
           <Grid
             container
             sx={{
