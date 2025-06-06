@@ -11,7 +11,7 @@ const register = async (req, res) => {
       email,
       password,
       confirmPassword,
-      role = "user",
+      role = "user"
     } = req.body;
 
     if (!fullName || !number || !email || !password || !confirmPassword) {
