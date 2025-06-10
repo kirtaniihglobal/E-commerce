@@ -16,7 +16,11 @@ function Layout() {
           height: "1200px",
         }}
       >
-        <Grid>
+        <Grid
+          sx={{
+            width: "20%",
+          }}
+        >
           <Box
             sx={{
               backgroundColor: "black",
@@ -102,7 +106,7 @@ function Layout() {
             </Box>
           </Box>
         </Grid>
-        <Grid>
+        <Grid sx={{ width: "80%" }}>
           <Box
             sx={{
               width: "100%",

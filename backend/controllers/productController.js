@@ -5,8 +5,8 @@ const Product = require("../models/product");
 const createProduct = async (req, res) => {
     try {
 
-        const { name, price, description, stock, size, color } = req.body;
-        if (!name || !price || !stock || !size || !color) {
+        const { name, price, description, stock, size, color, rating } = req.body;
+        if (!name || !price || !stock || !size || !color || !rating) {
             return res.status(400).json({ msg: "All fields are required", status: 400 });
         }
         if (!req.file) {
@@ -19,6 +19,7 @@ const createProduct = async (req, res) => {
             price,
             description,
             stock,
+            rating,
             image,
             size,
             color
@@ -45,10 +46,8 @@ const getAllproducts = async (req, res) => {
 const getOneproduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
-        // console.log(product)
         return res.status(200).json({ status: 200, msg: "one product selected", product });
     } catch (error) {
-        console.log("product error", error);
         return res.status(500).json({ status: 500, msg: "product fetch errorr" });
     }
 }
@@ -57,7 +56,6 @@ const deleteProduct = async (req, res) => {
         await Product.findByIdAndDelete(req.params.id);
         return res.status(200).json({ status: 200, msg: "delete successfully" })
     } catch (error) {
-        console.error("delete error", error);
         return res.status(500).json({ status: 500, msg: "delete error" })
     }
 }
@@ -68,6 +66,7 @@ const editProduct = async (req, res) => {
             price: req.body.price,
             description: req.body.description,
             stock: req.body.stock,
+            rating: req.body.rating,
             size: req.body.size,
             color: req.body.color,
         };
@@ -92,7 +91,6 @@ const editProduct = async (req, res) => {
             product,
         });
     } catch (error) {
-        console.error("Update error:", error);
         return res.status(500).json({ msg: "Update failed" });
     }
 };

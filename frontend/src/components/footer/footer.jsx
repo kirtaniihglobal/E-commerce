@@ -276,24 +276,22 @@ function Footer() {
               xs={12}
               sx={{
                 width: "30%",
-                height: "48px",
+                height: "100px",
                 color: "#fff",
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
               }}
             >
-              <TextField
-                sx={{
+              <input
+                type="email"
+                style={{
                   width: "100%",
                   height: "100%",
                   backgroundColor: "#FFF",
                   borderRadius: "62px",
                 }}
-                fullWidth
-                variant="outlined"
                 required
-                label="Enter your email address "
               />
               <Button
                 variant="outlined"

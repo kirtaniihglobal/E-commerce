@@ -31,9 +31,6 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
 
-  const handleSnackClose = () => {
-    setSnackOpen(false);
-  };
   const validationSchema = yup.object({
     fullName: yup
       .string()

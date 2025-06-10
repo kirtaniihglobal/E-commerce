@@ -30,11 +30,7 @@ export const addProductAPI = async (values) => {
 export const updateProductAPI = async (id, values) => {
     try {
         console.log(values);
-        const response = await api.put(`products/${id}`, values, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await api.put(`products/${id}`, values,);
         return response.data;
     } catch (error) {
         throw error;
