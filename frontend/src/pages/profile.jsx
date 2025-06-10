@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Container,
   Card,
@@ -8,22 +8,15 @@ import {
   Box,
 } from "@mui/material";
 import Header from "../components/header/header";
-import SnackBar from "../comon/snackBar";
 import { fetchUser } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { openSnackbar } from "../redux/snackBarSlice";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackOpen, setSnackOpen] = useState(false);
-  const [snackSeverity, setSnackSeverity] = useState("success");
-
-  const handleSnackClose = () => {
-    setSnackOpen(false);
-  };
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -48,13 +41,14 @@ export default function ProfilePage() {
                   variant="contained"
                   color="error"
                   onClick={() => {
-                    setSnackMessage("Logout SuccessFully");
-                    setSnackSeverity("error");
-                    setSnackOpen(true);
+                    dispatch(
+                      openSnackbar({
+                        massage: "Logout Successfully",
+                        severity: "success",
+                      })
+                    );
                     localStorage.removeItem("token");
-                    setTimeout(() => {
-                      navigate("/login");
-                    }, 500);
+                    navigate("/login");
                   }}
                 >
                   Logout
@@ -64,12 +58,6 @@ export default function ProfilePage() {
           </Card>
         )}
       </Container>
-      <SnackBar
-        open={snackOpen}
-        message={snackMessage}
-        severity={snackSeverity}
-        handleClose={handleSnackClose}
-      />
     </>
   );
 }

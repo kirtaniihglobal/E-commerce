@@ -66,7 +66,7 @@ const editProduct = async (req, res) => {
             name: req.body.name,
             price: req.body.price,
             description: req.body.description,
-            stock: req.body.stock,
+            stock: req.body.stock,  
             size: req.body.size,
             color: req.body.color,
         };

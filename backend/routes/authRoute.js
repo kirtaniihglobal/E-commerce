@@ -6,17 +6,12 @@ const { verifyToken } = require("../middleware/auth");
 const {
   register,
   login,
+  profileDetail
 } = require("../controllers/userController");
 
 router.post("/register", upload.single("image"), register);
 router.post("/login", login);
-router.get("/me", verifyToken, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ status: 500, message: "Error fetching user" });
-  }
-});
+router.get("/UserDetail", verifyToken, profileDetail);
+
 
 module.exports = router;

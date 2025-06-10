@@ -29,7 +29,12 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import SnackBar from "../comon/snackBar";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { fetchProduct } from "../redux/productSlice";
+import {
+  getAllproductsData,
+  addProductData,
+  updateProductData,
+  deleteProductData,
+} from "../Thunk/productThunk";
 import { useSelector, useDispatch } from "react-redux";
 import api from "../services/api";
 import { OutlinedInput } from "@mui/material";
@@ -59,17 +64,19 @@ const colors = [
 
 function ManageProducts() {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product.products);
+  const { products } = useSelector((state) => state.products);
+
+  // console.log(products);
   const [open, setOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackOpen, setSnackOpen] = useState(false);
-  const [snackSeverity, setSnackSeverity] = useState("success");
+  // const [snackMessage, setSnackMessage] = useState("");
+  // const [snackOpen, setSnackOpen] = useState(false);
+  // const [snackSeverity, setSnackSeverity] = useState("success");
   const [editMode, setEditmode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState("");
   useEffect(() => {
-    dispatch(fetchProduct());
+    dispatch(getAllproductsData());
   }, [dispatch]);
 
   const handleSnackClose = () => {
@@ -130,70 +137,56 @@ function ManageProducts() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("price", values.price);
       formData.append("description", values.description);
       formData.append("stock", values.stock);
-      values.size.forEach((name) => {
-        formData.append("size[]", name);
-      });
-      values.color.forEach((color) => {
-        formData.append("color[]", color);
-      });
-      if (imageFile) formData.append("image", imageFile);
-      // console.log(formData);
-      if (editMode) {
-        try {
-          const response = await api.put(`products/${editId}`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
-          dispatch(fetchProduct());
-          setSnackMessage(response.data.msg || "Product Add Successfully");
-          setSnackSeverity("success");
-          setSnackOpen(true);
-          setEditmode(false);
-          handaleClose();
-        } catch (error) {
-          setSnackMessage(
-            !imageFile ? "Image is required" : "Product Add error"
-          );
-          setSnackSeverity("error");
-          setSnackOpen(true);
-        }
-      } else {
-        try {
-          // console.log(formData, "form");
-          const response = await api.post("products/", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
-          dispatch(fetchProduct());
-          setSnackMessage(response.data.msg || "Product Add Successfully");
-          setSnackSeverity("success");
-          setSnackOpen(true);
-          setEditmode(false);
+      values.size.forEach((size) => formData.append("size[]", size));
+      values.color.forEach((color) => formData.append("color[]", color));
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+      // if (!editMode && !imageFile) {
+      //   setSnackMessage("Image is required");
+      //   setSnackSeverity("error");
+      //   setSnackOpen(true);
+      //   return;
+      // }
 
+      try {
+        if (editMode) {
+          console.log(values);
+          await dispatch(updateProductData({ id: editId, values })).unwrap();
+          // setSnackMessage("Product updated successfully");
+          // setSnackSeverity("success");
+          // setSnackOpen(true);
           handaleClose();
-        } catch (error) {
-          setSnackMessage(
-            !imageFile ? "Image is required" : "Product Add error"
-          );
-          setSnackSeverity("error");
-          setSnackOpen(true);
+        } else {
+          await dispatch(addProductData(formData)).unwrap();
+          // setSnackMessage("Product added successfully");
+          // setSnackSeverity("success");
+          // setSnackOpen(true);
+          handaleClose();
         }
+
+        dispatch(getAllproductsData());
+      } catch (error) {
+        console.error(error);
+        // setSnackMessage(
+        //   error?.response?.data?.msg || error?.message || "Something went wrong"
+        // );
+        // setSnackSeverity("error");
+        // setSnackOpen(true);
       }
     },
   });
+
   const handleDelete = async (id) => {
     try {
-      const response = await api.delete(`products/${id}`);
-      dispatch(fetchProduct());
-      setSnackMessage(response.data.msg || "delete successfully!");
+      const response = await dispatch(deleteProductData(id)).unwrap();
+      dispatch(getAllproductsData());
+      setSnackMessage("delete successfully!");
       setSnackOpen(true);
       setSnackSeverity("success");
     } catch (error) {
@@ -241,7 +234,7 @@ function ManageProducts() {
                     <input
                       type="file"
                       accept="image/*"
-                      required={!editMode}
+                      // required={!editMode}
                       onChange={(e) => setImageFile(e.target.files[0])}
                     />
                     <Box
@@ -566,12 +559,12 @@ function ManageProducts() {
           </Box>
         </Grid>
       </Container>
-      <SnackBar
+      {/* <SnackBar
         open={snackOpen}
         message={snackMessage}
         severity={snackSeverity}
         handleClose={handleSnackClose}
-      />
+      /> */}
     </>
   );
 }

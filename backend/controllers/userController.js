@@ -69,7 +69,15 @@ const login = async (req, res) => {
     res.status(500).json({ status: 500, msg: "Login Failed" });
   }
 };
+const profileDetail = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ status: 500, message: "Error fetching user" });
+  }
+}
 
 
 
-module.exports = { register, login };
+module.exports = { register, login, profileDetail };
