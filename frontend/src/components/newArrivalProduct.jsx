@@ -1,11 +1,7 @@
-import { Grid, Typography, Box, Button } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 import { getAllproductsData } from "../Thunk/productThunk";
 import { useEffect, useState } from "react";
 import { useTheme, useMediaQuery } from "@mui/material";
-import prod1 from "../assets/prod1.png";
-import prod2 from "../assets/prod2.png";
-import prod3 from "../assets/prod3.png";
-import prod4 from "../assets/prod4.png";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 function NewArrivalProduct() {
@@ -23,42 +19,6 @@ function NewArrivalProduct() {
   };
 
   const displayProducts = products.slice(0, visible);
-
-  // const Products = [
-  //   {
-  //     id: 1,
-  //     image: prod1,
-  //     name: "T-SHIRT WITH TAPE DETAILS",
-  //     rating: 4.5,
-  //     price: "$120",
-  //     description: "This is a description of product 1",
-  //   },
-  //   {
-  //     id: 2,
-  //     image: prod2,
-  //     name: "SKINNY FIT JEANS",
-  //     rating: 4.5,
-  //     price: "$240",
-  //     description: "This is a description of product 1",
-  //   },
-  //   {
-  //     id: 3,
-  //     image: prod3,
-  //     name: "CHECKERED SHIRT",
-  //     rating: 4.5,
-  //     price: "$180",
-  //     description: "This is a description of product 1",
-  //   },
-  //   {
-  //     id: 4,
-  //     image: prod4,
-  //     name: "SLEEVE STRIPED T-SHIRT",
-  //     rating: 4.5,
-  //     price: "$130",
-  //     description: "This is a description of product 1",
-  //   },
-  // ];
-
   return (
     <>
       <Grid

@@ -1,9 +1,9 @@
-import { Box, Button, Card, Container, Grid, Typography } from "@mui/material";
+import { Box, Card, Container, Grid, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <Container maxWidth="xl">
       <Grid
@@ -135,14 +135,6 @@ function AdminDashboard() {
             </Box>
           </Card>
         </Box>
-        <Box
-          sx={{
-            position: "absolute",
-            // bottom : 0,
-            top: 20,
-            right: 0,
-          }}
-        ></Box>
       </Grid>
     </Container>
   );

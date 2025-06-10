@@ -1,8 +1,6 @@
 import { getAllproductsData, addProductData, updateProductData, deleteProductData, getOneproductData } from "../Thunk/productThunk";
 import { createSlice } from "@reduxjs/toolkit";
 
-
-
 const initialState = {
     products: [],
     loading: false,
@@ -17,6 +15,7 @@ const productSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            /*******************************getAllProductData*****************************/
             .addCase(getAllproductsData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -31,8 +30,7 @@ const productSlice = createSlice({
             })
 
 
-
-
+            /*********************************addProductData******************************/
 
             .addCase(addProductData.pending, (state) => {
                 state.loading = true;
@@ -47,7 +45,7 @@ const productSlice = createSlice({
             })
 
 
-
+            /***********************************updateProductData***************************/
             .addCase(updateProductData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -61,7 +59,7 @@ const productSlice = createSlice({
                 state.error = action.payload || "Error fetching Products";
             })
 
-
+            /*************************************deleteProductData*************************/
 
             .addCase(deleteProductData.pending, (state) => {
                 state.loading = true;
@@ -76,7 +74,7 @@ const productSlice = createSlice({
                 state.error = action.payload || "Error fetching Products";
             })
 
-
+            /*************************************getOneProductData**************************/
 
 
             .addCase(getOneproductData.pending, (state) => {

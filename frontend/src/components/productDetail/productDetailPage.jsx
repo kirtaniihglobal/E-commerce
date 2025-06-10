@@ -12,6 +12,8 @@ import {
   Button,
   Tab,
   Tabs,
+  Skeleton,
+  Avatar,
 } from "@mui/material";
 import {
   getAllproductsData,
@@ -37,7 +39,7 @@ function ProductDetailPage() {
   const dispatch = useDispatch();
   const [value, setValue] = useState(1);
   const product = useSelector((state) => state.products.selectedProduct);
-  const { products } = useSelector((state) => state.products);
+  const { products, loading } = useSelector((state) => state.products);
   console.log(products);
   console.log(product);
   const { id } = useParams();
@@ -206,9 +208,7 @@ function ProductDetailPage() {
                   <GradeIcon color="warning" />
                   <GradeIcon color="warning" />
                   <GradeIcon color="warning" />
-                  <Typography variant="h5" sx={{ color: "warning" }}>
-                    4.5
-                  </Typography>
+                  <Typography variant="h5">{product.rating}</Typography>
                 </Grid>
                 <Grid
                   item
@@ -268,33 +268,6 @@ function ProductDetailPage() {
                       ></Box>
                     ))}
                   </Box>
-
-                  {/* <Box
-                    sx={{
-                      backgroundColor: "#4F4631",
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
-
-                  <Box
-                    sx={{
-                      backgroundColor: "#314F4A",
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  />
-
-                  <Box
-                    sx={{
-                      backgroundColor: "#31344F",
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                    }}
-                  /> */}
                 </Grid>
                 <Divider />
                 <Grid item xs={12}>
@@ -309,10 +282,6 @@ function ProductDetailPage() {
                   {product.size?.map((name, index) => (
                     <Chip key={index} label={name} />
                   ))}
-                  {/* <Chip label="Small" variant="outlined" color="primary" />
-                  <Chip label="Medium" variant="outlined" color="primary" />
-                  <Chip label="Large" variant="filled" color="primary" />
-                  <Chip label="X-Large" variant="outlined" color="primary" /> */}
                 </Grid>
                 <Divider />
                 <Grid
@@ -363,7 +332,52 @@ function ProductDetailPage() {
               </Grid>
             </Grid>
           ) : (
-            <div>Loading...</div>
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  width: "100%",
+                  gap: 2,
+                }}
+              >
+                <Box sx={{ width: "50%" }}>
+                  <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    sx={{
+                      borderRadius: 7,
+                    }}
+                  >
+                    <div style={{ height: "550PX" }} />
+                  </Skeleton>
+                </Box>
+                <Box sx={{ width: "60%" }}>
+                  <Skeleton width="100%">
+                    <div style={{ height: "80PX" }} />
+                  </Skeleton>
+                  <Skeleton width="30%">
+                    <div style={{ height: "50PX" }} />
+                  </Skeleton>
+                  <Skeleton width="40%">
+                    <div style={{ height: "70PX" }} />
+                  </Skeleton>
+                  <Skeleton width="70%">
+                    <div style={{ height: "50PX" }} />
+                  </Skeleton>
+                  <Skeleton width="30%">
+                    <div style={{ height: "70PX" }} />
+                  </Skeleton>
+                  <Skeleton width="60%">
+                    <div style={{ height: "70PX" }} />
+                  </Skeleton>
+                  <Skeleton width="100%">
+                    <div style={{ height: "100PX" }} />
+                  </Skeleton>
+                </Box>
+              </Box>
+            </>
           )}
           <Grid container item xs={12} sx={{ width: "100%", mt: 2 }}>
             <Grid item xs={12} sx={{ width: "100%" }}>

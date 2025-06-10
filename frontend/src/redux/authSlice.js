@@ -3,7 +3,6 @@ import { openSnackbar } from "./snackBarSlice";
 import { loginUserAPI, userDetailAPI, registerUserAPI } from "../apis/authAPI";
 export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
     const user = await userDetailAPI();
-
     return user;
 });
 export const loginUser = createAsyncThunk('user/login', async (values, { dispatch, rejectWithValue }) => {
@@ -25,7 +24,6 @@ export const loginUser = createAsyncThunk('user/login', async (values, { dispatc
         );
         return rejectWithValue(response?.data.msg)
     }
-
 });
 export const registerUser = createAsyncThunk('user/register', async (values, { dispatch, rejectWithValue }) => {
     try {
@@ -47,19 +45,13 @@ export const registerUser = createAsyncThunk('user/register', async (values, { d
         );
         return rejectWithValue(response?.data.msg)
     }
-
 });
-
-
-
 const initialState = {
     user: null,
     loading: false,
     error: null,
     token: null,
 };
-
-
 const userSlice = createSlice({
     name: 'auth',
     initialState,
@@ -71,6 +63,7 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            /*********Fetch User***********/
             .addCase(fetchUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -86,7 +79,7 @@ const userSlice = createSlice({
             })
 
 
-
+            /*********Login User***********/
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -101,7 +94,7 @@ const userSlice = createSlice({
 
 
 
-
+            /*********Register User***********/
             .addCase(registerUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;

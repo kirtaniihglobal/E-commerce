@@ -91,6 +91,7 @@ function ManageProducts() {
         price: editData.price || "",
         description: editData.description || "",
         stock: editData.stock || "",
+        rating: editData.rating || "",
         size: editData.size || [],
         color: editData.color || [],
       });
@@ -102,6 +103,7 @@ function ManageProducts() {
       .string("Name must in string")
       .required("Product name is required"),
     price: yup.number("Price must in number").required("price is required"),
+    rating: yup.number("Rating must in number").required("Rating is required"),
     description: yup.string(),
     stock: yup.number("Stock must in number").required("stock is required"),
     size: yup
@@ -121,6 +123,7 @@ function ManageProducts() {
       price: "",
       description: "",
       stock: "",
+      rating: "",
       size: [],
       color: [],
     },
@@ -131,6 +134,7 @@ function ManageProducts() {
       formData.append("price", values.price);
       formData.append("description", values.description);
       formData.append("stock", values.stock);
+      formData.append("rating", values.rating);
       values.size.forEach((size) => formData.append("size[]", size));
       values.color.forEach((color) => formData.append("color[]", color));
       if (imageFile) {
@@ -156,7 +160,7 @@ function ManageProducts() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await dispatch(deleteProductData(id)).unwrap();
+      await dispatch(deleteProductData(id)).unwrap();
       dispatch(getAllproductsData());
     } catch (error) {}
   };
@@ -199,7 +203,6 @@ function ManageProducts() {
                     <input
                       type="file"
                       accept="image/*"
-                      // required={!editMode}
                       onChange={(e) => setImageFile(e.target.files[0])}
                     />
                     <Box
@@ -257,6 +260,15 @@ function ManageProducts() {
                         formik.touched.stock && Boolean(formik.errors.stock)
                       }
                       helperText={formik.touched.stock && formik.errors.stock}
+                    />
+                    <TextField
+                      type="number"
+                      label="Rating"
+                      name="rating"
+                      value={formik.values.rating}
+                      onChange={formik.handleChange}
+                      error={formik.touched.rating && formik.errors.rating}
+                      helperText={formik.touched.rating && formik.errors.rating}
                     />
                     <Box
                       sx={{
@@ -413,6 +425,7 @@ function ManageProducts() {
                   <TableCell>Description</TableCell>
                   <TableCell>Stock</TableCell>
                   <TableCell>Size</TableCell>
+                  <TableCell>Rating</TableCell>
                   <TableCell>colors</TableCell>
                   <TableCell align="center">Edit/Delete</TableCell>
                 </TableRow>
@@ -452,6 +465,7 @@ function ManageProducts() {
                           <Chip key={index} label={name} />
                         ))}
                       </TableCell>
+                      <TableCell>{prod.rating}</TableCell>
                       <TableCell>
                         <Box
                           sx={{

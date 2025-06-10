@@ -37,12 +37,6 @@ function Home() {
       review:
         "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.",
     },
-    // {
-    //   id: 4,
-    //   name: "Sarah M.",
-    //   review:
-    //     "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.",
-    // },
   ];
   return (
     <>
@@ -355,14 +349,12 @@ function Home() {
             spacing={5}
             sx={{
               width: "100%",
-              // height: "100%",
               mt: 5,
               justifyContent: "center",
             }}
           >
             <Grid
               sx={{
-                // width: "90%",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",

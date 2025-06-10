@@ -1,7 +1,7 @@
 import { Grid, Box, Typography } from "@mui/material";
 import GradeIcon from "@mui/icons-material/Grade";
 import { getOneproductData } from "../Thunk/productThunk";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
 
   const handleSelect = async (id) => {
     try {
-      const response = await dispatch(getOneproductData(id)).unwrap();
+      await dispatch(getOneproductData(id));
       navigate(`/productDetail/${id}`);
       window.scrollTo(0, 0);
     } catch (error) {}
@@ -30,8 +30,8 @@ const ProductCard = ({ product }) => {
             <GradeIcon color="warning" />
             <GradeIcon color="warning" />
             <GradeIcon />
+            {product.rating}
           </Typography>
-          {/* {product.description} */}
           <Typography variant="h5">${product.price}</Typography>
         </Box>
       </Box>

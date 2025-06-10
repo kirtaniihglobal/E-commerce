@@ -28,32 +28,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
-  const handleSnackClose = () => {
-    console.log("snack close");
-    setSnackOpen(false);
-  };
 
-  const open = Boolean(anchorEl);
-  const submenuOpen = Boolean(submenuAnchorEl);
-
-  const handleMainOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMainClose = () => {
-    setAnchorEl(null);
-    setSubmenuAnchorEl(null);
-  };
-
-  const handleSubmenuOpen = (event) => {
-    setSubmenuAnchorEl(event.currentTarget);
-  };
-
-  const handleSubmenuClose = () => {
-    setSubmenuAnchorEl(null);
-  };
   return (
     <>
       <Box
@@ -126,7 +101,6 @@ export default function Header() {
                 <Grid item xs={12} sm={6}>
                   <Button
                     variant="text"
-                    // onMouseOver={handleMainOpen}
                     onClick={() => {
                       navigate("/productDetail");
                     }}
