@@ -26,7 +26,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
-import SnackBar from "../comon/snackBar";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import {
@@ -36,7 +35,6 @@ import {
   deleteProductData,
 } from "../Thunk/productThunk";
 import { useSelector, useDispatch } from "react-redux";
-import api from "../services/api";
 import { OutlinedInput } from "@mui/material";
 const names = ["Small", "Medium", "Large", "X-Large"];
 const colors = [
@@ -65,23 +63,14 @@ const colors = [
 function ManageProducts() {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
-
-  // console.log(products);
   const [open, setOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
-  // const [snackMessage, setSnackMessage] = useState("");
-  // const [snackOpen, setSnackOpen] = useState(false);
-  // const [snackSeverity, setSnackSeverity] = useState("success");
   const [editMode, setEditmode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState("");
   useEffect(() => {
     dispatch(getAllproductsData());
   }, [dispatch]);
-
-  const handleSnackClose = () => {
-    setSnackOpen(false);
-  };
 
   const handaleOpen = () => {
     setOpen(true);
@@ -147,37 +136,20 @@ function ManageProducts() {
       if (imageFile) {
         formData.append("image", imageFile);
       }
-      // if (!editMode && !imageFile) {
-      //   setSnackMessage("Image is required");
-      //   setSnackSeverity("error");
-      //   setSnackOpen(true);
-      //   return;
-      // }
 
       try {
         if (editMode) {
           console.log(values);
           await dispatch(updateProductData({ id: editId, values })).unwrap();
-          // setSnackMessage("Product updated successfully");
-          // setSnackSeverity("success");
-          // setSnackOpen(true);
           handaleClose();
         } else {
           await dispatch(addProductData(formData)).unwrap();
-          // setSnackMessage("Product added successfully");
-          // setSnackSeverity("success");
-          // setSnackOpen(true);
           handaleClose();
         }
 
         dispatch(getAllproductsData());
       } catch (error) {
         console.error(error);
-        // setSnackMessage(
-        //   error?.response?.data?.msg || error?.message || "Something went wrong"
-        // );
-        // setSnackSeverity("error");
-        // setSnackOpen(true);
       }
     },
   });
@@ -186,14 +158,7 @@ function ManageProducts() {
     try {
       const response = await dispatch(deleteProductData(id)).unwrap();
       dispatch(getAllproductsData());
-      setSnackMessage("delete successfully!");
-      setSnackOpen(true);
-      setSnackSeverity("success");
-    } catch (error) {
-      setSnackMessage("Product not deleted");
-      setSnackOpen(true);
-      setSnackSeverity("error");
-    }
+    } catch (error) {}
   };
   return (
     <>
@@ -387,21 +352,6 @@ function ManageProducts() {
                                   }}
                                   key={value}
                                   label={value}
-                                  // onDelete={() =>
-                                  //   formik.setFieldValue(
-                                  //     "color",
-                                  //     formik.values.color.filter(
-                                  //       (item) => item !== value
-                                  //     )
-                                  //   )
-                                  // }
-                                  // deleteIcon={
-                                  //   <CancelIcon
-                                  //     onMouseDown={(event) =>
-                                  //       event.stopPropagation()
-                                  //     }
-                                  //   />
-                                  // }
                                 ></Box>
                               ))}
                             </Stack>
@@ -559,12 +509,6 @@ function ManageProducts() {
           </Box>
         </Grid>
       </Container>
-      {/* <SnackBar
-        open={snackOpen}
-        message={snackMessage}
-        severity={snackSeverity}
-        handleClose={handleSnackClose}
-      /> */}
     </>
   );
 }
