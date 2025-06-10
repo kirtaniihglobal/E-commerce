@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Breadcrumbs,
   Container,
@@ -13,7 +13,12 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-
+import {
+  getAllproductsData,
+  getOneproductData,
+} from "../../Thunk/productThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import prod9 from "../../assets/prod9.png";
 import prod10 from "../../assets/prod10.png";
 import prod11 from "../../assets/prod11.png";
@@ -29,8 +34,25 @@ import img3 from "../../assets/image 3.png";
 import GradeIcon from "@mui/icons-material/Grade";
 
 function ProductDetailPage() {
+  const dispatch = useDispatch();
   const [value, setValue] = useState(1);
-
+  const product = useSelector((state) => state.products.selectedProduct);
+  const { products } = useSelector((state) => state.products);
+  console.log(products);
+  console.log(product);
+  const { id } = useParams();
+  useEffect(() => {
+    dispatch(getAllproductsData());
+  }, [dispatch]);
+  useEffect(() => {
+    if (!product) {
+      const selectProd = products.find((product) => product._id === id);
+      console.log(selectProd);
+      if (selectProd) {
+        dispatch(getOneproductData(id));
+      }
+    }
+  }, [dispatch, id, products]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -116,209 +138,233 @@ function ProductDetailPage() {
               {breadcrumbs}
             </Breadcrumbs>
           </Grid>
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              width: "100%",
-              display: "flex",
-              gap: "20px",
-              mt: "30px",
-            }}
-          >
+          {product ? (
             <Grid
+              key={id}
               container
+              spacing={2}
               sx={{
-                width: "45%",
+                width: "100%",
+                display: "flex",
+                gap: "20px",
+                mt: "30px",
               }}
             >
               <Grid
-                item
-                xs={12}
+                container
                 sx={{
-                  width: "152px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
+                  width: "45%",
                 }}
               >
-                <img src={img1} alt="" />
-                <img src={img2} alt="" />
-                <img src={img3} alt="" />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  width: "70%",
-                }}
-              >
-                <img
-                  src={img2}
-                  style={{
-                    width: "100%",
-                  }}
-                  alt=""
-                />
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              sx={{ width: "50%", display: "flex", flexDirection: "column" }}
-            >
-              <Grid>
-                <Typography variant="h4">One Life Graphic T-shirt</Typography>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "10px",
-                }}
-              >
-                <GradeIcon color="warning" />
-                <GradeIcon color="warning" />
-                <GradeIcon color="warning" />
-                <GradeIcon color="warning" />
-                <Typography variant="h5" sx={{ color: "warning" }}>
-                  4.5
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "10px",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="h4">$260</Typography>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    textDecoration: "line-through",
-                    color: "text.disabled",
-                  }}
-                >
-                  $300
-                </Typography>
-
-                <Chip label="- 40%" color="error" />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body1">
-                  This graphic t-shirt which is perfect for any occasion.
-                  Crafted from a soft and breathable fabric, it offers superior
-                  comfort and style.
-                </Typography>
-              </Grid>
-              <Divider />
-              <Grid item xs={12}>
-                <Typography>Select Colors</Typography>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "10px",
-                }}
-              >
-                <Box
-                  sx={{
-                    backgroundColor: "#4F4631",
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                  }}
-                />
-
-                <Box
-                  sx={{
-                    backgroundColor: "#314F4A",
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                  }}
-                />
-
-                <Box
-                  sx={{
-                    backgroundColor: "#31344F",
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                  }}
-                />
-              </Grid>
-              <Divider />
-              <Grid item xs={12}>
-                <Typography variant="body1">Choose Size</Typography>
-              </Grid>
-              <Grid
-                sx={{
-                  display: "flex",
-                  gap: "10px",
-                }}
-              >
-                <Chip label="Small" variant="outlined" color="primary" />
-                <Chip label="Medium" variant="outlined" color="primary" />
-                <Chip label="Large" variant="filled" color="primary" />
-                <Chip label="X-Large" variant="outlined" color="primary" />
-              </Grid>
-              <Divider />
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "20px",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: "20%",
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    backgroundColor: "#f0f0f0",
-                    borderRadius: "62px",
-                    justifyContent: "space-between",
-                    p: 1,
-                  }}
-                >
-                  <Button>-</Button>
-                  <Typography variant="body1">1</Typography>
-                  <Button>+</Button>
-                </Box>
                 <Grid
                   item
                   xs={12}
                   sx={{
-                    width: "80%",
+                    width: "152px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    className="black"
-                    sx={{
+                  <img src={img1} alt="" />
+                  <img src={img2} alt="" />
+                  <img src={img3} alt="" />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    width: "70%",
+                  }}
+                >
+                  <img
+                    src={`http://192.168.2.222:5000/${product.image}`}
+                    style={{
                       width: "100%",
-                      height: "100%",
-                      borderRadius: "62px",
+                    }}
+                    alt=""
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                sx={{ width: "50%", display: "flex", flexDirection: "column" }}
+              >
+                <Grid>
+                  <Typography variant="h4">{product.name}</Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "10px",
+                  }}
+                >
+                  <GradeIcon color="warning" />
+                  <GradeIcon color="warning" />
+                  <GradeIcon color="warning" />
+                  <GradeIcon color="warning" />
+                  <Typography variant="h5" sx={{ color: "warning" }}>
+                    4.5
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "10px",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h4">${product.price}</Typography>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      textDecoration: "line-through",
+                      color: "text.disabled",
                     }}
                   >
-                    Add to Cart
-                  </Button>
+                    $300
+                  </Typography>
+
+                  <Chip label="- 40%" color="error" />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="body1">{product.description}</Typography>
+                </Grid>
+                <Divider />
+                <Grid item xs={12}>
+                  <Typography>Select Colors</Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "10px",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: 1,
+                    }}
+                  >
+                    {product.color?.map((color, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          backgroundColor: color,
+                          borderRadius: "50%",
+                          width: "30px",
+                          height: "30px",
+                        }}
+                      ></Box>
+                    ))}
+                  </Box>
+
+                  {/* <Box
+                    sx={{
+                      backgroundColor: "#4F4631",
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+
+                  <Box
+                    sx={{
+                      backgroundColor: "#314F4A",
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+
+                  <Box
+                    sx={{
+                      backgroundColor: "#31344F",
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  /> */}
+                </Grid>
+                <Divider />
+                <Grid item xs={12}>
+                  <Typography variant="body1">Choose Size</Typography>
+                </Grid>
+                <Grid
+                  sx={{
+                    display: "flex",
+                    gap: "10px",
+                  }}
+                >
+                  {product.size?.map((name, index) => (
+                    <Chip key={index} label={name} />
+                  ))}
+                  {/* <Chip label="Small" variant="outlined" color="primary" />
+                  <Chip label="Medium" variant="outlined" color="primary" />
+                  <Chip label="Large" variant="filled" color="primary" />
+                  <Chip label="X-Large" variant="outlined" color="primary" /> */}
+                </Grid>
+                <Divider />
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "20%",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: "#f0f0f0",
+                      borderRadius: "62px",
+                      justifyContent: "space-between",
+                      p: 1,
+                    }}
+                  >
+                    <Button>-</Button>
+                    <Typography variant="body1">1</Typography>
+                    <Button>+</Button>
+                  </Box>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      width: "80%",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      className="black"
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "62px",
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          ) : (
+            <div>Loading...</div>
+          )}
           <Grid container item xs={12} sx={{ width: "100%", mt: 2 }}>
             <Grid item xs={12} sx={{ width: "100%" }}>
               <Box

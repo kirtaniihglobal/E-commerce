@@ -1,4 +1,4 @@
-import { getAllproductsData, addProductData, updateProductData, deleteProductData } from "../Thunk/productThunk";
+import { getAllproductsData, addProductData, updateProductData, deleteProductData, getOneproductData } from "../Thunk/productThunk";
 import { createSlice } from "@reduxjs/toolkit";
 
 
@@ -7,6 +7,7 @@ const initialState = {
     products: [],
     loading: false,
     error: null,
+    selectedProduct: null,
 
 };
 const productSlice = createSlice({
@@ -71,6 +72,25 @@ const productSlice = createSlice({
 
             })
             .addCase(deleteProductData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
+
+
+
+
+            .addCase(getOneproductData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getOneproductData.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action)
+                state.selectedProduct = action.payload.product;
+                // console.log(state.selectedProduct);
+
+            })
+            .addCase(getOneproductData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Error fetching Products";
             });

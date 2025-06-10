@@ -45,7 +45,8 @@ const getAllproducts = async (req, res) => {
 const getOneproduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
-        return res.stauts(200).json({ status: 200, msg: "one product selected", product });
+        // console.log(product)
+        return res.status(200).json({ status: 200, msg: "one product selected", product });
     } catch (error) {
         console.log("product error", error);
         return res.status(500).json({ status: 500, msg: "product fetch errorr" });
@@ -66,7 +67,7 @@ const editProduct = async (req, res) => {
             name: req.body.name,
             price: req.body.price,
             description: req.body.description,
-            stock: req.body.stock,  
+            stock: req.body.stock,
             size: req.body.size,
             color: req.body.color,
         };

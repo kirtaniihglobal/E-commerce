@@ -126,52 +126,14 @@ export default function Header() {
                 <Grid item xs={12} sm={6}>
                   <Button
                     variant="text"
-                    onMouseOver={handleMainOpen}
+                    // onMouseOver={handleMainOpen}
+                    onClick={() => {
+                      navigate("/productDetail");
+                    }}
                     endIcon={<KeyboardArrowDownIcon />}
                   >
                     Shop
                   </Button>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleMainClose}
-                    MenuListProps={{ onMouseLeave: handleMainClose }}
-                  >
-                    <MenuItem onMouseOver={handleSubmenuOpen}>
-                      Men
-                      <KeyboardArrowDownIcon fontSize="small" />
-                    </MenuItem>
-
-                    <Menu
-                      anchorEl={submenuAnchorEl}
-                      open={submenuOpen}
-                      onClose={handleSubmenuClose}
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "left",
-                      }}
-                      MenuListProps={{
-                        onMouseLeave: handleSubmenuClose,
-                      }}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          navigate("/productDetail");
-                          onClick = { handleMainClose };
-                        }}
-                      >
-                        T-Shirts
-                      </MenuItem>
-                      <MenuItem>Shoes</MenuItem>
-                    </Menu>
-
-                    <MenuItem onClick={handleMainClose}>Women</MenuItem>
-                    <MenuItem onClick={handleMainClose}>Kids</MenuItem>
-                  </Menu>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Button variant="text">On Sale</Button>
