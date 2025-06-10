@@ -9,6 +9,16 @@ export const getAllproductsAPI = async () => {
         throw error;
     }
 }
+export const getOneproductAPI = async (id) => {
+    try {
+        // console.log(id)
+        const response = await api.get(`products/${id}`);
+        console.log(response);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
 export const addProductAPI = async (values) => {
     try {
         const response = await api.post(`products/`, values);
