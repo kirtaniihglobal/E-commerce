@@ -1,138 +1,119 @@
-import { Grid, Drawer, Box, Typography, Button } from "@mui/material";
+import { Grid, Box, Typography, Button } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import SnackBar from "../comon/snackBar";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/snackBarSlice";
 
 function Layout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackOpen, setSnackOpen] = useState(false);
-  const [snackSeverity, setSnackSeverity] = useState("success");
-
-  const handleSnackClose = () => {
-    console.log("snack close");
-    setSnackOpen(false);
-  };
   return (
     <>
       <Grid
         container
+        wrap="nowrap"
         sx={{
           width: "100%",
-          height: "800px",
-          display: "flex",
-          flexDirection: "row",
+          height: "1200px",
         }}
       >
-        <Box
-          sx={{
-            // width: "25%",
-            backgroundColor: "black",
-            height: "100%",
-            boxSizing: "border-box",
-            backgroundColor: "#000",
-            padding: 2,
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-            color: "#fff",
-            // position: "fixed",
-            // left: 0,
-            // top: 0,
-          }}
-        >
-          <Box>
-            <Typography
-              variant=""
+        <Grid>
+          <Box
+            sx={{
+              backgroundColor: "black",
+              height: "100%",
+              padding: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
+              color: "#fff",
+            }}
+          >
+            <Box>
+              <Typography
+                variant=""
+                sx={{
+                  color: "#fff",
+                  fontSize: 33,
+                  fontWeight: "bold",
+                }}
+              >
+                Admin Dashboard
+              </Typography>
+            </Box>
+            <Box
               sx={{
-                color: "#fff",
-                fontSize: 33,
-                fontWeight: "bold",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                gap: 4,
               }}
             >
-              Admin Dashboard
-            </Typography>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontSize: 20,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/adminDashboard");
+                }}
+              >
+                DashBoard
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontSize: 20,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/manageProducts");
+                }}
+              >
+                Products
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                position: "fixed",
+                bottom: "10px",
+              }}
+            >
+              <Button
+                onClick={() => {
+                  dispatch(
+                    openSnackbar({
+                      massage: "Logout SuccessFully",
+                      severity: "success",
+                    })
+                  );
+                  localStorage.removeItem("token");
+                  navigate("/login");
+                }}
+                variant="contained"
+                sx={{
+                  borderRadius: 10,
+                }}
+                color="error"
+              >
+                Logout
+              </Button>
+            </Box>
           </Box>
+        </Grid>
+        <Grid>
           <Box
             sx={{
               width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: 4,
+              height: "100%",
+              // p: 2,
             }}
           >
-            <Typography
-              sx={{
-                color: "#fff",
-                fontSize: 20,
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/adminDashboard");
-              }}
-            >
-              DashBoard
-            </Typography>
-            <Typography
-              sx={{
-                color: "#fff",
-                fontSize: 20,
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                navigate("/manageProducts");
-              }}
-            >
-              Products
-            </Typography>
+            <Outlet />
           </Box>
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: "10px",
-            }}
-          >
-            <Button
-              onClick={() => {
-                dispatch(
-                  openSnackbar({
-                    massage: "Logout SuccessFully",
-                    severity: "success",
-                  })
-                );
-                localStorage.removeItem("token");
-                navigate("/login");
-              }}
-              variant="contained"
-              sx={{
-                borderRadius: 10,
-              }}
-              color="error"
-            >
-              Logout
-            </Button>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            width: "80%",
-          }}
-        >
-          <Outlet />
-        </Box>
+        </Grid>
       </Grid>
-      {/* <SnackBar
-        open={snackOpen}
-        message={snackMessage}
-        severity={snackSeverity}
-        handleClose={handleSnackClose}
-      /> */}
     </>
   );
 }
