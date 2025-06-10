@@ -19,10 +19,9 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import api from "../services/api";
-import SnackBar from "../comon/snackBar";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/authSlice";
+
+import { login, loginUser } from "../redux/authSlice";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -31,14 +30,7 @@ export default function LoginPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const [showPassword, setShowPassword] = useState(false);
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackOpen, setSnackOpen] = useState(false);
-  const [snackSeverity, setSnackSeverity] = useState("success");
 
-  const handleSnackClose = () => {
-    console.log("snack close");
-    setSnackOpen(false);
-  };
   const validationSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Email is required"),
     password: yup
@@ -55,31 +47,16 @@ export default function LoginPage() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("auth/login", values);
-        const { user, token } = response.data;
+        const response = await dispatch(loginUser(values)).unwrap();
+        const { user, token } = response;
         localStorage.setItem("token", token);
         dispatch(login({ user, token }));
         if (user.role === "admin") {
-          setSnackMessage("Admin Login Successful");
-          setSnackSeverity("success");
-          setSnackOpen(true);
-          setTimeout(() => {
-            navigate("/adminDashboard");
-          }, 500);
+          navigate("/adminDashboard");
         } else {
-          setSnackMessage("User Login Successful");
-          setSnackSeverity("success");
-          setSnackOpen(true);
-          setTimeout(() => {
-            navigate("/");
-          }, 500);
+          navigate("/");
         }
-      } catch (error) {
-        console.log(error);
-        setSnackMessage("Invalid Credentials");
-        setSnackSeverity("error");
-        setSnackOpen(true);
-      }
+      } catch (error) {}
     },
   });
   return (
@@ -229,12 +206,6 @@ export default function LoginPage() {
           </Box>
         </Grid>
       </Container>
-      <SnackBar
-        open={snackOpen}
-        message={snackMessage}
-        severity={snackSeverity}
-        handleClose={handleSnackClose}
-      />
     </>
   );
 }

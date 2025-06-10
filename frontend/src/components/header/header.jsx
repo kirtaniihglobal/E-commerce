@@ -20,17 +20,16 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { openSnackbar } from "../../redux/snackBarSlice";
 
 export default function Header() {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackOpen, setSnackOpen] = useState(false);
-  const [snackSeverity, setSnackSeverity] = useState("success");
-
   const handleSnackClose = () => {
     console.log("snack close");
     setSnackOpen(false);
@@ -243,13 +242,14 @@ export default function Header() {
                         p: "5px  40px",
                       }}
                       onClick={() => {
-                        setSnackMessage("Logout SuccessFully");
-                        setSnackSeverity("error");
-                        setSnackOpen(true);
+                        dispatch(
+                          openSnackbar({
+                            massage: "Logout Successfully",
+                            severity: "success",
+                          })
+                        );
                         localStorage.removeItem("token");
-                        setTimeout(() => {
-                          navigate("/login");
-                        }, 500);
+                        navigate("/login");
                       }}
                     >
                       Logout
@@ -297,12 +297,6 @@ export default function Header() {
           </Toolbar>
         </AppBar>
       </Box>
-      <SnackBar
-        open={snackOpen}
-        message={snackMessage}
-        severity={snackSeverity}
-        handleClose={handleSnackClose}
-      />
     </>
   );
 }

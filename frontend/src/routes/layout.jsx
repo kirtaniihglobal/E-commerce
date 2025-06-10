@@ -4,8 +4,11 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SnackBar from "../comon/snackBar";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { openSnackbar } from "../redux/snackBarSlice";
 
 function Layout() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [snackMessage, setSnackMessage] = useState("");
   const [snackOpen, setSnackOpen] = useState(false);
@@ -97,13 +100,14 @@ function Layout() {
           >
             <Button
               onClick={() => {
-                setSnackMessage("Logout SuccessFully");
-                setSnackSeverity("error");
-                setSnackOpen(true);
+                dispatch(
+                  openSnackbar({
+                    massage: "Logout SuccessFully",
+                    severity: "success",
+                  })
+                );
                 localStorage.removeItem("token");
-                setTimeout(() => {
-                  navigate("/login");
-                }, 500);
+                navigate("/login");
               }}
               variant="contained"
               sx={{
@@ -123,12 +127,12 @@ function Layout() {
           <Outlet />
         </Box>
       </Grid>
-      <SnackBar
+      {/* <SnackBar
         open={snackOpen}
         message={snackMessage}
         severity={snackSeverity}
         handleClose={handleSnackClose}
-      />
+      /> */}
     </>
   );
 }

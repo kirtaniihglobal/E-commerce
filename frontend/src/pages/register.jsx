@@ -14,24 +14,22 @@ import {
   useTheme,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-
+import { registerUser } from "../redux/authSlice";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import api from "../services/api";
-import SnackBar from "../comon/snackBar";
+import { openSnackbar } from "../redux/snackBarSlice";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPassword, setShowconfirmPassword] = useState(false);
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackOpen, setSnackOpen] = useState(false);
-  const [snackSeverity, setSnackSeverity] = useState("success");
 
   const handleSnackClose = () => {
     setSnackOpen(false);
@@ -72,29 +70,20 @@ export default function RegisterPage() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log(values);
       const match = values.password === values.confirmPassword;
       if (match) {
         try {
-          const response = await api.post("auth/register", values);
-          setSnackMessage("Registration successful");
-          setSnackOpen(true);
-          setSnackSeverity("success");
-          setTimeout(() => {
-            navigate("/login");
-          }, 1000);
-        } catch (error) {
-          setSnackMessage("Registration failed");
-          setSnackOpen(true);
-          setSnackSeverity("error");
-          setTimeout(() => {
-            setSnackMessage("");
-          }, 2000);
-        }
+          await dispatch(registerUser(values)).unwrap();
+          navigate("/login");
+        } catch (error) {}
       } else {
-        setSnackMessage("Passwords do not match");
-        setSnackOpen(true);
-        setSnackSeverity("error");
-        setTimeout(() => setSnackMessage(""), 2000);
+        dispatch(
+          openSnackbar({
+            massage: "Passwords do not match",
+            severity: "error",
+          })
+        );
       }
     },
   });
@@ -106,12 +95,6 @@ export default function RegisterPage() {
         maxWidth={isMobile ? "sm" : isTab ? "md" : "xl"}
       >
         <CssBaseline />
-        <SnackBar
-          open={snackOpen}
-          message={snackMessage}
-          severity={snackSeverity}
-          handleClose={handleSnackClose}
-        />
 
         <Grid
           container
