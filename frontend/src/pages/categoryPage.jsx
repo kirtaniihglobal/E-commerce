@@ -1,4 +1,11 @@
-import { Box, Grid, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Button,
+  Pagination,
+  Stack,
+} from "@mui/material";
 import { getAllproductsData } from "../Thunk/productThunk";
 import { useEffect, useState } from "react";
 import { useTheme, useMediaQuery } from "@mui/material";
@@ -7,19 +14,24 @@ import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/header/header";
 function CategoryPage() {
   const dispatch = useDispatch();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productPerPage] = useState(9);
   const { products } = useSelector((state) => state.products);
-  // const [visible, setVisible] = useState(4);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const lastProduct = currentPage * productPerPage;
+  const firstProduct = lastProduct - productPerPage;
+  const currentProduct = products.slice(firstProduct, lastProduct);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   useEffect(() => {
     dispatch(getAllproductsData());
-  }, [dispatch]);
-  // const handleViewAll = () => {
-  //   setVisible(products.length);
-  // };
-
-  // const displayProducts = products.slice(0, visible);
+  }, [dispatch, currentPage]);
   return (
     <>
       <Header />
@@ -32,19 +44,6 @@ function CategoryPage() {
           flexDirection: "row",
         }}
       >
-        {/* <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "180px",
-          }}
-        >
-          <Typography variant="h2" component="h2">
-            NEW ARRIVALS
-          </Typography>
-        </Box> */}
         <Grid
           container
           sx={{
@@ -73,31 +72,18 @@ function CategoryPage() {
               gap: "20px",
             }}
           >
-            {products.map((product, index) => (
+            {currentProduct.map((product, index) => (
               <ProductCard key={index} product={product} />
             ))}
-            {/* <Grid
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              {/* {visible < products.length && ( */}
-            {/* <Button
-              variant="outlined"
-              className="white"
-              // onClick={handleViewAll}
-              sx={{
-                width: "20%",
-                p: 1.5,
-                borderRadius: 10,
-              }}
-            >
-              View All
-            </Button> */}
-            {/* )} */}
-            {/* </Grid> */}
+            <Stack spacing={2}>
+              <Pagination
+                count={10}
+                page={currentPage}
+                onChange={handleChange}
+                shape="rounded"
+                paginate={paginate}
+              />
+            </Stack>
           </Grid>
         </Grid>
       </Grid>

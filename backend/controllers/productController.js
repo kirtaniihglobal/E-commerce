@@ -5,8 +5,8 @@ const Product = require("../models/product");
 const createProduct = async (req, res) => {
     try {
 
-        const { name, price, description, stock, size, color, rating } = req.body;
-        if (!name || !price || !stock || !size || !color || !rating) {
+        const { name, price, description, stock, size, color } = req.body;
+        if (!name || !price || !stock || !size || !color) {
             return res.status(400).json({ msg: "All fields are required", status: 400 });
         }
         if (!req.file) {
@@ -19,7 +19,6 @@ const createProduct = async (req, res) => {
             price,
             description,
             stock,
-            rating,
             image,
             size,
             color
@@ -66,7 +65,6 @@ const editProduct = async (req, res) => {
             price: req.body.price,
             description: req.body.description,
             stock: req.body.stock,
-            rating: req.body.rating,
             size: req.body.size,
             color: req.body.color,
         };

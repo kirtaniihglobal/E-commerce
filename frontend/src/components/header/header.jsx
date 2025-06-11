@@ -29,7 +29,9 @@ export default function Header() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const location = useLocation();
-  const navBarHalf = location.pathname.startsWith("/productDetail");
+  const navBarHalf =
+    location.pathname.startsWith("/productDetail") ||
+    location.pathname.startsWith("/categoryPage");
 
   return (
     <>
@@ -255,7 +257,7 @@ export default function Header() {
                           className="white"
                           sx={{
                             borderRadius: "50px",
-                            p: "5px  40px",
+                            p: "5px  30px",
                           }}
                           onClick={() => {
                             dispatch(
