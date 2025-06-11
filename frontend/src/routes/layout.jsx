@@ -13,12 +13,15 @@ function Layout() {
         wrap="nowrap"
         sx={{
           width: "100%",
-          height: "1200px",
+          height: "600px",
         }}
       >
         <Grid
           sx={{
             width: "20%",
+            height: "100%",
+            position: "fixed",
+            left: 0,
           }}
         >
           <Box
@@ -106,7 +109,7 @@ function Layout() {
             </Box>
           </Box>
         </Grid>
-        <Grid sx={{ width: "80%" }}>
+        <Grid sx={{ width: "80%", position: "fixed", right: 0 }}>
           <Box
             sx={{
               width: "100%",

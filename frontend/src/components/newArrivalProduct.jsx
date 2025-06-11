@@ -4,21 +4,23 @@ import { useEffect, useState } from "react";
 import { useTheme, useMediaQuery } from "@mui/material";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 function NewArrivalProduct() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { products } = useSelector((state) => state.products);
-  const [visible, setVisible] = useState(4);
+  // const [visible, setVisible] = useState(4);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     dispatch(getAllproductsData());
   }, [dispatch]);
-  const handleViewAll = () => {
-    setVisible(products.length);
-  };
+  // const handleViewAll = () => {
+  //   setVisible(products.length);
+  // };
 
-  const displayProducts = products.slice(0, visible);
+  const displayProducts = products.slice(0, 4);
   return (
     <>
       <Grid
@@ -72,20 +74,23 @@ function NewArrivalProduct() {
                 justifyContent: "center",
               }}
             >
-              {visible < products.length && (
-                <Button
-                  variant="outlined"
-                  className="white"
-                  onClick={handleViewAll}
-                  sx={{
-                    width: "20%",
-                    p: 1.5,
-                    borderRadius: 10,
-                  }}
-                >
-                  View All
-                </Button>
-              )}
+              {/* {visible < products.length && ( */}
+              <Button
+                variant="outlined"
+                className="white"
+                onClick={() => {
+                  navigate("/categoryPage");
+                  window.scroll(0, 0);
+                }}
+                sx={{
+                  width: "20%",
+                  p: 1.5,
+                  borderRadius: 10,
+                }}
+              >
+                View All
+              </Button>
+              {/* )} */}
             </Grid>
           </Grid>
         </Grid>
