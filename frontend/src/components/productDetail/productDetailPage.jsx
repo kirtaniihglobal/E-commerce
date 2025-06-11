@@ -208,7 +208,7 @@ function ProductDetailPage() {
                   <GradeIcon color="warning" />
                   <GradeIcon color="warning" />
                   <GradeIcon color="warning" />
-                  <Typography variant="h5">{product.rating}</Typography>
+                  {/* <Typography variant="h5">{product.rating}</Typography> */}
                 </Grid>
                 <Grid
                   item
