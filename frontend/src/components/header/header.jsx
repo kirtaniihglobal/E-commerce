@@ -19,7 +19,7 @@ import SnackBar from "../../comon/snackBar";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../../redux/snackBarSlice";
 
@@ -28,6 +28,8 @@ export default function Header() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const location = useLocation();
+  const navBarHalf = location.pathname.startsWith("/productDetail");
 
   return (
     <>
@@ -38,33 +40,6 @@ export default function Header() {
           zIndex: 1000,
         }}
       >
-        {/* <Box
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: "white",
-            textAlign: "center",
-            borderRadius: "5px",
-            p: 1,
-            fontWeight: "500",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="body2" sx={{ mr: 1 }}>
-            Sign up and get 20% off to your first order.
-            <Link
-              onClick={() => navigate("/register")}
-              sx={{
-                color: theme.palette.white.main,
-              }}
-            >
-              Sign Up Now
-            </Link>
-          </Typography>
-          <ArrowForwardIcon fontSize="small" />
-        </Box> */}
-
         <AppBar
           position="static"
           sx={{
@@ -73,164 +48,271 @@ export default function Header() {
             p: 1,
           }}
         >
-          <Toolbar
-            sx={{
-              height: "50px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Stack
-              direction="row"
-              alignItems="center"
-              sx={{ width: "50%" }}
-              gap={{ md: 3, lg: 4, xl: 2 }}
+          {!navBarHalf ? (
+            <Toolbar
+              sx={{
+                height: "50px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
             >
-              <Box>
-                <Typography
-                  variant="h3"
-                  onClick={() => {
-                    navigate("/");
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ width: "50%" }}
+                gap={{ md: 3, lg: 4, xl: 2 }}
+              >
+                <Box>
+                  <Typography
+                    variant="h3"
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    SHOP.CO
+                  </Typography>
+                </Box>
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <Button
+                      variant="text"
+                      onClick={() => {
+                        navigate("/productDetail");
+                      }}
+                      endIcon={<KeyboardArrowDownIcon />}
+                    >
+                      Shop
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Button variant="text">On Sale</Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Button variant="text">New Arrivals</Button>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Button variant="text">Brands</Button>
+                  </Grid>
+                </Grid>
+              </Stack>
+
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{
+                  width: "50%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+                gap={{}}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    backgroundColor: "#f1f1f1",
+                    borderRadius: "50px",
+                    padding: "6px 16px",
+                    maxWidth: 500,
+                    width: "100%",
                   }}
                 >
-                  SHOP.CO
-                </Typography>
-              </Box>
-
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Button
-                    variant="text"
-                    onClick={() => {
-                      navigate("/productDetail");
+                  <SearchIcon sx={{ color: "#888", mr: 1 }} />
+                  <InputBase
+                    placeholder="Search for products..."
+                    fullWidth
+                    sx={{
+                      color: "#333",
+                      "& .MuiInputBase-input": {
+                        padding: 0,
+                      },
                     }}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  >
-                    Shop
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Button variant="text">On Sale</Button>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Button variant="text">New Arrivals</Button>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Button variant="text">Brands</Button>
-                </Grid>
-              </Grid>
-            </Stack>
-
-            <Stack
-              direction="row"
-              alignItems="center"
-              sx={{
-                width: "50%",
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-              gap={{}}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  backgroundColor: "#f1f1f1",
-                  borderRadius: "50px",
-                  padding: "6px 16px",
-                  maxWidth: 500,
-                  width: "100%",
-                }}
-              >
-                <SearchIcon sx={{ color: "#888", mr: 1 }} />
-                <InputBase
-                  placeholder="Search for products..."
-                  fullWidth
-                  sx={{
-                    color: "#333",
-                    "& .MuiInputBase-input": {
-                      padding: 0,
-                    },
+                  />
+                </Box>
+                <Button
+                  onClick={() => {
+                    navigate("/Cart");
                   }}
-                />
-              </Box>
-              <Button
-                onClick={() => {
-                  navigate("/Cart");
-                }}
-              >
-                <ShoppingCartIcon />
-              </Button>
-              {token
-                ? [
-                    <Button
-                      onClick={() => {
-                        navigate("/profile");
-                      }}
-                    >
-                      <AccountCircleIcon />
-                    </Button>,
-                    <Button
-                      variant="outlined"
-                      className="white"
-                      sx={{
-                        borderRadius: "50px",
-                        p: "5px  40px",
-                      }}
-                      onClick={() => {
-                        dispatch(
-                          openSnackbar({
-                            massage: "Logout Successfully",
-                            severity: "success",
-                          })
-                        );
-                        localStorage.removeItem("token");
-                        navigate("/login");
-                      }}
-                    >
-                      Logout
-                    </Button>,
-                  ]
-                : [
-                    <>
-                      <Grid
-                        sx={{
-                          display: "flex",
-                          gap: 2,
+                >
+                  <ShoppingCartIcon />
+                </Button>
+                {token
+                  ? [
+                      <Button
+                        onClick={() => {
+                          navigate("/profile");
                         }}
                       >
-                        <Button
-                          variant="outlined"
-                          className="white"
+                        <AccountCircleIcon />
+                      </Button>,
+                      <Button
+                        variant="outlined"
+                        className="white"
+                        sx={{
+                          borderRadius: "50px",
+                          p: "5px  40px",
+                        }}
+                        onClick={() => {
+                          dispatch(
+                            openSnackbar({
+                              massage: "Logout Successfully",
+                              severity: "success",
+                            })
+                          );
+                          localStorage.removeItem("token");
+                          navigate("/login");
+                        }}
+                      >
+                        Logout
+                      </Button>,
+                    ]
+                  : [
+                      <>
+                        <Grid
                           sx={{
-                            borderRadius: "50px",
-                            p: "5px  50px",
-                          }}
-                          onClick={() => {
-                            navigate("/register");
+                            display: "flex",
+                            gap: 2,
                           }}
                         >
-                          Register
-                        </Button>
+                          <Button
+                            variant="outlined"
+                            className="white"
+                            sx={{
+                              borderRadius: "50px",
+                              p: "5px  50px",
+                            }}
+                            onClick={() => {
+                              navigate("/register");
+                            }}
+                          >
+                            Register
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            className="white"
+                            sx={{
+                              borderRadius: "50px",
+                              p: "5px 40px",
+                            }}
+                            onClick={() => {
+                              navigate("/login");
+                            }}
+                          >
+                            {" "}
+                            Login
+                          </Button>
+                        </Grid>
+                      </>,
+                    ]}
+              </Stack>
+            </Toolbar>
+          ) : (
+            <Toolbar
+              sx={{
+                height: "50px",
+              }}
+            >
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+                gap={{ md: 3, lg: 4, xl: 2 }}
+              >
+                <Box>
+                  <Typography
+                    variant="h3"
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    SHOP.CO
+                  </Typography>
+                </Box>
+                <Box>
+                  <Button
+                    onClick={() => {
+                      navigate("/Cart");
+                    }}
+                  >
+                    <ShoppingCartIcon />
+                  </Button>
+                  {token
+                    ? [
+                        <Button
+                          onClick={() => {
+                            navigate("/profile");
+                          }}
+                        >
+                          <AccountCircleIcon />
+                        </Button>,
                         <Button
                           variant="outlined"
                           className="white"
                           sx={{
                             borderRadius: "50px",
-                            p: "5px 40px",
+                            p: "5px  40px",
                           }}
                           onClick={() => {
+                            dispatch(
+                              openSnackbar({
+                                massage: "Logout Successfully",
+                                severity: "success",
+                              })
+                            );
+                            localStorage.removeItem("token");
                             navigate("/login");
                           }}
                         >
-                          {" "}
-                          Login
-                        </Button>
-                      </Grid>
-                    </>,
-                  ]}
-            </Stack>
-          </Toolbar>
+                          Logout
+                        </Button>,
+                      ]
+                    : [
+                        <>
+                          <Grid
+                            sx={{
+                              display: "flex",
+                              gap: 2,
+                            }}
+                          >
+                            <Button
+                              variant="outlined"
+                              className="white"
+                              sx={{
+                                borderRadius: "50px",
+                                p: "5px  50px",
+                              }}
+                              onClick={() => {
+                                navigate("/register");
+                              }}
+                            >
+                              Register
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              className="white"
+                              sx={{
+                                borderRadius: "50px",
+                                p: "5px 40px",
+                              }}
+                              onClick={() => {
+                                navigate("/login");
+                              }}
+                            >
+                              {" "}
+                              Login
+                            </Button>
+                          </Grid>
+                        </>,
+                      ]}
+                </Box>
+              </Stack>
+            </Toolbar>
+          )}
         </AppBar>
       </Box>
     </>

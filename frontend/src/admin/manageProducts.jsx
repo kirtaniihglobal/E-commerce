@@ -21,6 +21,7 @@ import {
   Stack,
   Chip,
   FormHelperText,
+  TableContainer,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -89,12 +90,14 @@ function ManageProducts() {
       formik.setValues({
         name: editData.name || "",
         price: editData.price || "",
+        image: editData.image || "",
         description: editData.description || "",
         stock: editData.stock || "",
         rating: editData.rating || "",
         size: editData.size || [],
         color: editData.color || [],
       });
+      setImageFile(`http://192.168.2.222:5000/${editData.image}`);
     }
   }, [editMode, editData]);
 
@@ -137,14 +140,15 @@ function ManageProducts() {
       formData.append("rating", values.rating);
       values.size.forEach((size) => formData.append("size[]", size));
       values.color.forEach((color) => formData.append("color[]", color));
-      if (imageFile) {
+      if (imageFile && imageFile instanceof File) {
         formData.append("image", imageFile);
       }
 
       try {
         if (editMode) {
-          console.log(values);
-          await dispatch(updateProductData({ id: editId, values })).unwrap();
+          await dispatch(
+            updateProductData({ id: editId, values: formData })
+          ).unwrap();
           handaleClose();
         } else {
           await dispatch(addProductData(formData)).unwrap();
@@ -200,11 +204,32 @@ function ManageProducts() {
                 </DialogTitle>
                 <DialogContent>
                   <Box display="flex" flexDirection="column" gap={2}>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setImageFile(e.target.files[0])}
-                    />
+                    <Box>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setImageFile(e.target.files[0])}
+                      />
+                      {imageFile && typeof imageFile === "string" ? (
+                        <Box mt={1}>
+                          <img
+                            src={imageFile}
+                            alt="Preview"
+                            width={80}
+                            height={80}
+                          />
+                        </Box>
+                      ) : imageFile instanceof File ? (
+                        <Box mt={1}>
+                          <img
+                            src={URL.createObjectURL(imageFile)}
+                            alt="New Preview"
+                            width={80}
+                            height={80}
+                          />
+                        </Box>
+                      ) : null}
+                    </Box>
                     <Box
                       sx={{
                         display: "flex",
@@ -416,110 +441,117 @@ function ManageProducts() {
               width: "100%",
             }}
           >
-            <Table sx={{ Width: "100%" }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Image</TableCell>
-                  <TableCell>Price</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Stock</TableCell>
-                  <TableCell>Size</TableCell>
-                  <TableCell>Rating</TableCell>
-                  <TableCell>colors</TableCell>
-                  <TableCell align="center">Edit/Delete</TableCell>
-                </TableRow>
-              </TableHead>
-              {products?.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={4}>No products found</TableCell>
-                </TableRow>
-              ) : (
-                products?.map((prod) => (
-                  <TableBody key={prod._id}>
-                    <TableRow>
-                      <TableCell>{prod.name}</TableCell>
-                      <TableCell>
-                        {prod.image && (
-                          <img
-                            src={`http://192.168.2.222:5000/${prod.image}`}
-                            width="60"
-                            height="60"
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell>{prod.price}</TableCell>
-                      <TableCell
-                        style={{
-                          maxWidth: "100px",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {prod.description}
-                      </TableCell>
-                      <TableCell>{prod.stock}</TableCell>
-                      <TableCell>
-                        {prod.size?.map((name, index) => (
-                          <Chip key={index} label={name} />
-                        ))}
-                      </TableCell>
-                      <TableCell>{prod.rating}</TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: 1,
+            <TableContainer style={{ maxHeight: 500 }}>
+              <Table
+                stickyHeader
+                aria-label="sticky table"
+                sx={{ Width: "100%" }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Image</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Stock</TableCell>
+                    <TableCell>Size</TableCell>
+                    <TableCell>Rating</TableCell>
+                    <TableCell>colors</TableCell>
+                    <TableCell align="center">Edit/Delete</TableCell>
+                  </TableRow>
+                </TableHead>
+                {products?.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4}>No products found</TableCell>
+                  </TableRow>
+                ) : (
+                  products?.map((prod) => (
+                    <TableBody key={prod._id}>
+                      <TableRow>
+                        <TableCell>{prod.name}</TableCell>
+                        <TableCell>
+                          {prod.image && (
+                            <img
+                              src={`http://192.168.2.222:5000/${prod.image}`}
+                              width="60"
+                              height="60"
+                            />
+                          )}
+                        </TableCell>
+                        <TableCell>{prod.price}</TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "100px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
                           }}
                         >
-                          {prod.color?.map((color, index) => (
-                            <Box
-                              key={index}
-                              sx={{
-                                backgroundColor: color,
-                                borderRadius: "50%",
-                                width: "30px",
-                                height: "30px",
-                              }}
-                            ></Box>
+                          {prod.description}
+                        </TableCell>
+                        <TableCell>{prod.stock}</TableCell>
+                        <TableCell>
+                          {prod.size?.map((name, index) => (
+                            <Chip key={index} label={name} />
                           ))}
-                        </Box>
-                      </TableCell>
+                        </TableCell>
+                        <TableCell>{prod.rating}</TableCell>
+                        <TableCell>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              gap: 1,
+                            }}
+                          >
+                            {prod.color?.map((color, index) => (
+                              <Box
+                                key={index}
+                                sx={{
+                                  backgroundColor: color,
+                                  borderRadius: "50%",
+                                  width: "30px",
+                                  height: "30px",
+                                }}
+                              ></Box>
+                            ))}
+                          </Box>
+                        </TableCell>
 
-                      <TableCell align="center">
-                        <Box
-                          sx={{
-                            Width: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Button
-                            onClick={() => {
-                              handaleOpen();
-                              setEditmode(true);
-                              setEditId(prod._id);
-                              setEditData(prod);
+                        <TableCell align="center">
+                          <Box
+                            sx={{
+                              Width: "100%",
+                              display: "flex",
+                              justifyContent: "center",
                             }}
                           >
-                            <EditIcon color="info" />
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              handleDelete(prod._id);
-                            }}
-                          >
-                            <DeleteIcon color="error" />
-                          </Button>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                ))
-              )}
-            </Table>
+                            <Button
+                              onClick={() => {
+                                handaleOpen();
+                                setEditmode(true);
+                                setEditId(prod._id);
+                                setEditData(prod);
+                                console.log(prod);
+                              }}
+                            >
+                              <EditIcon color="info" />
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                handleDelete(prod._id);
+                              }}
+                            >
+                              <DeleteIcon color="error" />
+                            </Button>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  ))
+                )}
+              </Table>
+            </TableContainer>
           </Box>
         </Grid>
       </Container>
