@@ -13,12 +13,12 @@ import {
   Tab,
   Tabs,
   Skeleton,
-  Avatar,
 } from "@mui/material";
 import {
   getAllproductsData,
   getOneproductData,
 } from "../../Thunk/productThunk";
+import { addToCart, decrement, increment } from "../../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import prod9 from "../../assets/prod9.png";
@@ -34,15 +34,67 @@ import img1 from "../../assets/image 1.png";
 import img2 from "../../assets/image 2.png";
 import img3 from "../../assets/image 3.png";
 import GradeIcon from "@mui/icons-material/Grade";
+import { openSnackbar } from "../../redux/snackBarSlice";
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
-  const [value, setValue] = useState(1);
+  // const [value, setValue] = useState(1);
+  const [selectedColor, setSelectedColor] = useState("");
+  const [quntity, setQuntity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
   const product = useSelector((state) => state.products.selectedProduct);
-  const { products, loading } = useSelector((state) => state.products);
-  console.log(products);
-  console.log(product);
+  const { products } = useSelector((state) => state.products);
   const { id } = useParams();
+
+  const handlePlus = () => {
+    setQuntity((quntity) => quntity + 1);
+  };
+  const handleMins = () => {
+    setQuntity((quntity) => {
+      if (quntity == 1) {
+        return quntity;
+      } else {
+        return quntity - 1;
+      }
+    });
+  };
+  const handleSubmit = () => {
+    if (!selectedColor) {
+      dispatch(
+        openSnackbar({ massage: "Please select color", severity: "error" })
+      );
+    } else if (!selectedSize) {
+      dispatch(
+        openSnackbar({ massage: "Please select Size", severity: "error" })
+      );
+    } else {
+      dispatch(
+        openSnackbar({
+          massage: `${product.name}add to Cart`,
+          severity: "success",
+        })
+      );
+      dispatch(
+        addToCart({
+          ...product,
+          quntity,
+          size: selectedSize,
+          color: selectedColor,
+        })
+      );
+    }
+  };
+  const handleChangeColor = (color) => {
+    setSelectedColor(color);
+  };
+  // console.log(selectedColor);
+  const handleChangeSize = (name) => {
+    setSelectedSize(name);
+  };
+  // console.log(selectedSize);
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
   useEffect(() => {
     dispatch(getAllproductsData());
   }, [dispatch]);
@@ -55,22 +107,20 @@ function ProductDetailPage() {
       }
     }
   }, [dispatch, id, products]);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
 
-    return (
-      <div role="tabpanel" hidden={value !== index} {...other}>
-        {value === index && (
-          <Box sx={{ p: 2 }}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    );
-  }
+  // function TabPanel(props) {
+  //   const { children, value, index, ...other } = props;
+
+  //   return (
+  //     <div role="tabpanel" hidden={value !== index} {...other}>
+  //       {value === index && (
+  //         <Box sx={{ p: 2 }}>
+  //           <Typography>{children}</Typography>
+  //         </Box>
+  //       )}
+  //     </div>
+  //   );
+  // }
   const Products = [
     {
       id: 1,
@@ -258,12 +308,18 @@ function ProductDetailPage() {
                   >
                     {product.color?.map((color, index) => (
                       <Box
+                        value={selectedColor}
                         key={index}
+                        required
+                        onClick={() => handleChangeColor(color)}
                         sx={{
+                          border:
+                            selectedColor === color ? "2px solid black" : "",
                           backgroundColor: color,
                           borderRadius: "50%",
                           width: "30px",
                           height: "30px",
+                          cursor: "pointer",
                         }}
                       ></Box>
                     ))}
@@ -280,7 +336,14 @@ function ProductDetailPage() {
                   }}
                 >
                   {product.size?.map((name, index) => (
-                    <Chip key={index} label={name} />
+                    <Chip
+                      clickable
+                      onClick={() => handleChangeSize(name)}
+                      value={selectedSize}
+                      key={index}
+                      label={name}
+                      color={selectedSize === name ? "primary" : "default"}
+                    />
                   ))}
                 </Grid>
                 <Divider />
@@ -305,9 +368,23 @@ function ProductDetailPage() {
                       p: 1,
                     }}
                   >
-                    <Button>-</Button>
-                    <Typography variant="body1">1</Typography>
-                    <Button>+</Button>
+                    <Button
+                      onClick={() => {
+                        handleMins();
+                        // dispatch(decrement(product._id));
+                      }}
+                    >
+                      -
+                    </Button>
+                    <Typography variant="body1">{quntity}</Typography>
+                    <Button
+                      onClick={() => {
+                        handlePlus();
+                        // dispatch(increment(product._id));
+                      }}
+                    >
+                      +
+                    </Button>
                   </Box>
                   <Grid
                     item
@@ -319,6 +396,14 @@ function ProductDetailPage() {
                     <Button
                       variant="contained"
                       className="black"
+                      onClick={() => {
+                        handleSubmit();
+                        // console.log({
+                        //   ...product,
+                        //   size: selectedSize,
+                        //   color: selectedColor,
+                        // });
+                      }}
                       sx={{
                         width: "100%",
                         height: "100%",
@@ -384,7 +469,7 @@ function ProductDetailPage() {
               <Box
                 sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}
               >
-                <Tabs
+                {/* <Tabs
                   value={value}
                   onChange={handleChange}
                   aria-label="product tabs"
@@ -399,11 +484,11 @@ function ProductDetailPage() {
                   <Tab label="Product Details" sx={{ width: "100%" }} />
                   <Tab label="Rating & Reviews" sx={{ width: "100%" }} />
                   <Tab label="FAQs" sx={{ width: "100%" }} />
-                </Tabs>
+                </Tabs> */}
               </Box>
 
               {/* Tab Panels */}
-              <TabPanel value={value} index={0}>
+              {/* <TabPanel value={value} index={0}>
                 This is the **Product Details** section. You can place your
                 product info here.
               </TabPanel>
@@ -413,7 +498,7 @@ function ProductDetailPage() {
               <TabPanel value={value} index={2}>
                 This is the **FAQs** section. Display questions and answers
                 here.
-              </TabPanel>
+              </TabPanel> */}
             </Grid>
           </Grid>
           <Grid

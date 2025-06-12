@@ -11,6 +11,7 @@ import {
   Stack,
   Grid,
   InputBase,
+  Badge,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -20,11 +21,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import { useLocation, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openSnackbar } from "../../redux/snackBarSlice";
 
 export default function Header() {
   const theme = useTheme();
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -88,7 +90,14 @@ export default function Header() {
                     </Button>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Button variant="text">On Sale</Button>
+                    <Button
+                      variant="text"
+                      onClick={() => {
+                        navigate("/checkOut");
+                      }}
+                    >
+                      On Sale
+                    </Button>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Button variant="text">New Arrivals</Button>
@@ -137,7 +146,9 @@ export default function Header() {
                     navigate("/Cart");
                   }}
                 >
-                  <ShoppingCartIcon />
+                  <Badge badgeContent={cartItems.length} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
                 </Button>
                 {token
                   ? [
@@ -241,7 +252,9 @@ export default function Header() {
                       navigate("/Cart");
                     }}
                   >
-                    <ShoppingCartIcon />
+                    <Badge badgeContent={cartItems.length} color="error">
+                      <ShoppingCartIcon />
+                    </Badge>
                   </Button>
                   {token
                     ? [

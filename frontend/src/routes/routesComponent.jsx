@@ -3,6 +3,7 @@ import Home from "../pages/home";
 import ProductDetail from "../pages/productDetail";
 import CategoryPage from "../pages/categoryPage";
 import Cart from "../pages/cart";
+import CheckOut from "../pages/checkOut";
 import LoginPage from "../pages/login";
 import ProfilePage from "../pages/profile";
 import RegisterPage from "../pages/register";
@@ -26,6 +27,7 @@ const RoutesComponent = () => {
           <Route path="/productDetail/:id" element={<ProductDetail />} />
           <Route path="/categoryPage" element={<CategoryPage />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkOut" element={<CheckOut />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route element={<Layout />}>
             <Route path="/adminDashboard" element={<AdminDashboard />} />

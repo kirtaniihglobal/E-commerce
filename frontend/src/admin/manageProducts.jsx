@@ -22,6 +22,7 @@ import {
   Chip,
   FormHelperText,
   TableContainer,
+  Checkbox,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -41,23 +42,23 @@ const names = ["Small", "Medium", "Large", "X-Large"];
 const colors = [
   {
     id: "1",
-    value: "#FF0000",
+    value: "red",
   },
   {
     id: "2",
-    value: "#008000",
+    value: "green",
   },
   {
     id: "3",
-    value: "#0000FF",
+    value: "blue",
   },
   {
     id: "4",
-    value: "#000",
+    value: "black",
   },
   {
     id: "5",
-    value: "#f0f0f0",
+    value: "grey",
   },
 ];
 
@@ -381,16 +382,26 @@ function ManageProducts() {
                             </Stack>
                           )}
                         >
-                          {colors.map((color) => (
+                          {/* {colors.map((color) => (
                             <MenuItem
                               key={color.id}
                               value={color.value}
                               sx={{ justifyContent: "space-between" }}
                             >
                               {color.value}
-                              {formik.values.color.includes(color) ? (
+                              {formik.values.color.includes(color.value) ? (
                                 <CheckIcon color="info" />
                               ) : null}
+                            </MenuItem>
+                          ))} */}
+                          {colors.map((color) => (
+                            <MenuItem key={color.id} value={color.value}>
+                              <Checkbox
+                                checked={formik.values.color.includes(
+                                  color.value
+                                )}
+                              />
+                              {color.value}
                             </MenuItem>
                           ))}
                         </Select>

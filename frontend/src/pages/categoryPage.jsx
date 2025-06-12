@@ -25,7 +25,7 @@ function CategoryPage() {
   const currentProduct = products.slice(firstProduct, lastProduct);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleChange = (event, value) => {
+  const handleChange = (value) => {
     setCurrentPage(value);
   };
 
@@ -44,7 +44,7 @@ function CategoryPage() {
           flexDirection: "row",
         }}
       >
-        <Grid
+        {/* <Grid
           container
           sx={{
             width: "25%",
@@ -52,12 +52,12 @@ function CategoryPage() {
           }}
         >
           <Box></Box>
-        </Grid>
+        </Grid> */}
         <Grid
           container
-          spacing={0}
+          spacing={5}
           sx={{
-            width: "70%",
+            width: "100%",
             display: "flex",
             justifyContent: "center",
           }}
@@ -75,16 +75,16 @@ function CategoryPage() {
             {currentProduct.map((product, index) => (
               <ProductCard key={index} product={product} />
             ))}
-            <Stack spacing={2}>
-              <Pagination
-                count={10}
-                page={currentPage}
-                onChange={handleChange}
-                shape="rounded"
-                paginate={paginate}
-              />
-            </Stack>
           </Grid>
+          <Stack spacing={2}>
+            <Pagination
+              count={10}
+              page={currentPage}
+              onChange={handleChange}
+              shape="rounded"
+              paginate={paginate}
+            />
+          </Stack>
         </Grid>
       </Grid>
     </>

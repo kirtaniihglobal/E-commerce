@@ -6,22 +6,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
 import Header from "../components/header/header";
-import img from "../assets/prod9.png";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useSelector, useDispatch } from "react-redux";
+import { increment, decrement, removeCart } from "../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  console.log(cartItems);
   return (
     <>
       <Header />
-      <Grid
-        container
-        maxWidth="xl"
-        sx={{
-          // height: "10px",
-        }}
-      >
+      <Grid container maxWidth="xl">
         <Box
           sx={{
             width: "100%",
@@ -53,136 +52,97 @@ function Cart() {
               gap: 2,
             }}
           >
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                gap: 2,
-              }}
-            >
-              <Box sx={{ width: "20%" }}>
-                <img
-                  style={{
-                    width: "100%",
-                  }}
-                  src={img}
-                  alt=" "
-                />
-              </Box>
-              <Box
-                sx={{
-                  width: "60%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant="h5">Gradient Graphic T-shirt</Typography>
-                <Typography variant="body1">Size: Large</Typography>
-                <Typography variant="body1">Color: White</Typography>
-                <Typography variant="h5">$145</Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: "20%",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "flex-end",
-                  alignItems: "end",
-                  position: "relative",
-                }}
-              >
-                <Button sx={{ position: "absolute", top: 0, right: 0 }}>
-                  <DeleteIcon color="error" />
-                </Button>
+            {cartItems.map((prod) => {
+              console.log(cartItems);
+              return (
                 <Box
+                  key={prod._id}
                   sx={{
-                    width: "80%",
-                    height: "30%",
+                    width: "100%",
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 10,
-                    backgroundColor: "#f0f0f0",
-                    // border: "1px solid black",
+                    gap: 2,
                   }}
                 >
-                  <Button>-</Button>
-                  <Typography>1</Typography>
-                  <Button>+</Button>
+                  <Box sx={{ width: "20%" }}>
+                    <img
+                      style={{
+                        width: "100%",
+                      }}
+                      src={`http://192.168.2.222:5000/${prod.image}`}
+                      alt=" "
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      width: "60%",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant="h5">{prod.name}</Typography>
+                    <Typography variant="body2">Size: {prod.size}</Typography>
+                    <Typography variant="body2">Color:{prod.color}</Typography>
+                    <Typography variant="h5">
+                      ${prod.price} x {prod.quntity}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      width: "20%",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "flex-end",
+                      alignItems: "end",
+                      position: "relative",
+                    }}
+                  >
+                    <Button
+                      onClick={() => {
+                        dispatch(removeCart(prod._id));
+                      }}
+                      sx={{ position: "absolute", top: 0, right: 0 }}
+                    >
+                      <DeleteIcon color="error" />
+                    </Button>
+                    <Box
+                      sx={{
+                        width: "80%",
+                        height: "30%",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10,
+                        backgroundColor: "#f0f0f0",
+                      }}
+                    >
+                      <Button
+                        onClick={() => {
+                          dispatch(decrement(prod._id));
+                        }}
+                      >
+                        -
+                      </Button>
+                      <Typography>{prod.quntity}</Typography>
+                      <Button
+                        onClick={() => {
+                          dispatch(increment(prod._id));
+                        }}
+                      >
+                        +
+                      </Button>
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
-            </Box>
-
-            <Divider
-              sx={{
-                width: "100%",
-              }}
-            />
-            {/* <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                gap: 2,
-              }}
-            >
-              <Box sx={{ width: "20%" }}>
-                <img
-                  style={{
-                    width: "100%",
-                  }}
-                  src={img}
-                  alt=" "
-                />
-              </Box>
-              <Box
-                sx={{
-                  width: "60%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant="h5">Gradient Graphic T-shirt</Typography>
-                <Typography variant="body1">Size: Large</Typography>
-                <Typography variant="body1">Color: White</Typography>
-                <Typography variant="h5">$145</Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: "20%",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "flex-end",
-                  alignItems: "end",
-                  position: "relative",
-                }}
-              >
-                <Button sx={{ position: "absolute", top: 0, right: 0 }}>
-                  <DeleteIcon color="error" />
-                </Button>
-                <Box
-                  sx={{
-                    width: "80%",
-                    height: "30%",
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 10,
-                    backgroundColor: "#f0f0f0",
-                    // border: "1px solid black",
-                  }}
-                >
-                  <Button>-</Button>
-                  <Typography>1</Typography>
-                  <Button>+</Button>
-                </Box>
-              </Box>
-            </Box> */}
+              );
+              // <Divider
+              //   sx={{
+              //     width: "100%",
+              //   }}
+              // />
+            })}
           </Box>
 
           <Box
@@ -217,7 +177,15 @@ function Cart() {
                 }}
               >
                 <Typography variant="h5">Subtotal</Typography>
-                <Typography variant="h5">$565</Typography>
+                <Typography variant="h5">
+                  ${" "}
+                  {cartItems
+                    .reduce(
+                      (total, prod) => total + prod.price * prod.quntity,
+                      0
+                    )
+                    .toFixed(2)}
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -228,7 +196,16 @@ function Cart() {
                 }}
               >
                 <Typography variant="h5">Discount (-20%)</Typography>
-                <Typography variant="h5">-$113</Typography>
+                <Typography variant="h5">
+                  -${" "}
+                  {cartItems
+                    .reduce(
+                      (total, prod) =>
+                        total + prod.price * prod.quntity - (total / 100) * 20,
+                      0
+                    )
+                    .toFixed(2)}
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -255,7 +232,15 @@ function Cart() {
                 }}
               >
                 <Typography variant="h5">Total</Typography>
-                <Typography variant="h5">$467</Typography>
+                <Typography variant="h5">
+                  ${" "}
+                  {cartItems
+                    .reduce(
+                      (total, prod) => total + prod.price * prod.quntity,
+                      0
+                    )
+                    .toFixed(2)}
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -273,7 +258,12 @@ function Cart() {
                     textAlign: "center",
                   }}
                 >
-                  <Typography variant="h6">Add promo code</Typography>
+                  <TextField
+                    sx={{}}
+                    fullWidth
+                    name="code"
+                    label="Add promo code"
+                  />
                 </Box>
                 <Box
                   sx={{
@@ -303,6 +293,9 @@ function Cart() {
                 }}
               >
                 <Button
+                  onClick={() => {
+                    navigate("/checkOut");
+                  }}
                   sx={{
                     width: "100%",
                     borderRadius: 7,
