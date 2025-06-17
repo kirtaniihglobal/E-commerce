@@ -1,23 +1,26 @@
 import { Grid, Typography, Button } from "@mui/material";
 import { useTheme, useMediaQuery } from "@mui/material";
-import { getAllproductsData } from "../Thunk/productThunk";
+import {
+  getAllproductsData,
+  getTopSellingProductData,
+} from "../Thunk/productThunk";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../comon/productCard";
 import { useState, useEffect } from "react";
 function TopSellingProduct() {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.products);
+  const { topSelling } = useSelector((state) => state.products);
   const [visible, setVisible] = useState(4);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
-    dispatch(getAllproductsData());
+    dispatch(getTopSellingProductData());
   }, [dispatch]);
   const handleViewAll = () => {
-    setVisible(products.length);
+    setVisible(topSelling.length);
   };
 
-  const displayProducts = products.slice(0, visible);
+  const displayProducts = topSelling.slice(0, visible);
 
   return (
     <>
@@ -72,7 +75,7 @@ function TopSellingProduct() {
                 justifyContent: "center",
               }}
             >
-              {visible < products.length && (
+              {visible < topSelling.length && (
                 <Button
                   variant="outlined"
                   className="white"

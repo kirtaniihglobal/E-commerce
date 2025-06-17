@@ -5,7 +5,7 @@ const Product = require("../models/product");
 const createProduct = async (req, res) => {
     try {
 
-        const { name, price, description, stock, size, color } = req.body;
+        const { name, price, description, stock, size, color, productType } = req.body;
         if (!name || !price || !stock || !size || !color) {
             return res.status(400).json({ msg: "All fields are required", status: 400 });
         }
@@ -21,7 +21,8 @@ const createProduct = async (req, res) => {
             stock,
             image,
             size,
-            color
+            color,
+            productType
         })
         await newProduct.save();
         return res.status(201).json({ status: 201, msg: "product add successfully", product: newProduct })
@@ -35,6 +36,26 @@ const createProduct = async (req, res) => {
 const getAllproducts = async (req, res) => {
     try {
         const products = await Product.find();
+        return res.status(200).json({ status: 200, msg: "fetch all products", products })
+    }
+    catch (error) {
+        console.error("error to fetch product", error);
+        return res.status(500).json({ status: 500, msg: "error to fetch product" })
+    }
+}
+const getNewArrivalproducts = async (req, res) => {
+    try {
+        const products = await Product.find({ productType: "newArrival" });
+        return res.status(200).json({ status: 200, msg: "fetch all products", products })
+    }
+    catch (error) {
+        console.error("error to fetch product", error);
+        return res.status(500).json({ status: 500, msg: "error to fetch product" })
+    }
+}
+const getTopSellingproducts = async (req, res) => {
+    try {
+        const products = await Product.find({ productType: "topSelling" });
         return res.status(200).json({ status: 200, msg: "fetch all products", products })
     }
     catch (error) {
@@ -67,6 +88,7 @@ const editProduct = async (req, res) => {
             stock: req.body.stock,
             size: req.body.size,
             color: req.body.color,
+            productType: req.body.productType
         };
 
         if (req.file) {
@@ -95,10 +117,14 @@ const editProduct = async (req, res) => {
 
 
 
+
+
 module.exports = {
     createProduct,
     getAllproducts,
     getOneproduct,
     deleteProduct,
-    editProduct
+    editProduct,
+    getNewArrivalproducts,
+    getTopSellingproducts
 }

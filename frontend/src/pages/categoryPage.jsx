@@ -15,23 +15,23 @@ import Header from "../components/header/header";
 function CategoryPage() {
   const dispatch = useDispatch();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productPerPage] = useState(9);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [productPerPage] = useState(9);
   const { products } = useSelector((state) => state.products);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const lastProduct = currentPage * productPerPage;
-  const firstProduct = lastProduct - productPerPage;
-  const currentProduct = products.slice(firstProduct, lastProduct);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // const lastProduct = currentPage * productPerPage;
+  // const firstProduct = lastProduct - productPerPage;
+  // const currentProduct = products.slice(firstProduct, lastProduct);
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleChange = (event, value) => {
-    setCurrentPage(value);
-  };
+  // const handleChange = (value) => {
+  //   setCurrentPage(value);
+  // };
 
   useEffect(() => {
     dispatch(getAllproductsData());
-  }, [dispatch, currentPage]);
+  }, [dispatch]);
   return (
     <>
       <Header />
@@ -44,7 +44,7 @@ function CategoryPage() {
           flexDirection: "row",
         }}
       >
-        <Grid
+        {/* <Grid
           container
           sx={{
             width: "25%",
@@ -52,12 +52,12 @@ function CategoryPage() {
           }}
         >
           <Box></Box>
-        </Grid>
+        </Grid> */}
         <Grid
           container
-          spacing={0}
+          spacing={5}
           sx={{
-            width: "70%",
+            width: "100%",
             display: "flex",
             justifyContent: "center",
           }}
@@ -72,19 +72,19 @@ function CategoryPage() {
               gap: "20px",
             }}
           >
-            {currentProduct.map((product, index) => (
+            {products.map((product, index) => (
               <ProductCard key={index} product={product} />
             ))}
-            <Stack spacing={2}>
-              <Pagination
-                count={10}
-                page={currentPage}
-                onChange={handleChange}
-                shape="rounded"
-                paginate={paginate}
-              />
-            </Stack>
           </Grid>
+          <Stack spacing={2}>
+            {/* <Pagination
+              count={10}
+              page={currentPage}
+              onChange={handleChange}
+              shape="rounded"
+              paginate={paginate}
+            /> */}
+          </Stack>
         </Grid>
       </Grid>
     </>

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addProductAPI, getAllproductsAPI, updateProductAPI, deleteProductAPI, getOneproductAPI } from "../apis/productsAPI";
+import { addProductAPI, getAllproductsAPI, updateProductAPI, deleteProductAPI, getOneproductAPI, getNewArrivalproductsAPI, getTopSellingproductsAPI } from "../apis/productsAPI";
 import { openSnackbar } from "../redux/snackBarSlice";
 
 
@@ -70,6 +70,30 @@ export const deleteProductData = createAsyncThunk(
 
         } catch (error) {
             return rejectWithValue(error.response?.data.msg || "Failed to fetch Products");
+        }
+    }
+);
+export const getNewArrivalsProductData = createAsyncThunk(
+    "products/getNewArrivalProduct",
+    async () => {
+        try {
+            const response = await getNewArrivalproductsAPI();
+            return response;
+
+        } catch (error) {
+            return error.response?.data || "Failed to fetch Products";
+        }
+    }
+);
+export const getTopSellingProductData = createAsyncThunk(
+    "products/getTooSellingProduct",
+    async () => {
+        try {
+            const response = await getTopSellingproductsAPI();
+            return response;
+
+        } catch (error) {
+            return error.response?.data || "Failed to fetch Products";
         }
     }
 );

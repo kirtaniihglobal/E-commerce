@@ -41,141 +41,140 @@ function Home() {
   return (
     <>
       <Header />
-      <Grid container sx={{ height: "auto" }}>
-        <Grid
-          container
-          spacing={0}
+      <Grid container spacing={5} sx={{ height: "auto" }}>
+        <Box
           sx={{
             width: "100%",
             height: "633px",
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
           }}
         >
-          <Grid
-            container
+          <Box
             sx={{
-              width: "50%",
-              backgroundColor: "#F2F0F2",
-              p: 10,
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
             }}
           >
-            <Grid>
-              <Typography variant="h2">
-                FIND CLOTHES THAT MATCHES YOUR STYLE
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1">
-                Browse through our diverse range of meticulously crafted
-                garments, designed to bring out your individuality and cater to
-                your sense of style.
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
+            <Box
               sx={{
-                width: "100%",
-              }}
-            >
-              <Button
-                variant="contained"
-                className="black"
-                sx={{
-                  width: "30%",
-                  borderRadius: 10,
-                  p: 1.5,
-                }}
-                color="primary"
-              >
-                shop now
-              </Button>
-            </Grid>
-
-            <Grid
-              sx={{
+                width: "50%",
+                backgroundColor: "#F2F0F2",
+                p: 10,
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "100%",
+                flexDirection: "column",
+                gap: 4,
               }}
             >
-              <Box className="Box">
-                <Typography variant="h4" sx={{ color: "primary.main" }}>
-                  200 +
-                </Typography>
-                <Typography variant="body2" sx={{ color: "primary.main" }}>
-                  International Brands
+              <Box>
+                <Typography variant="h2">
+                  FIND CLOTHES THAT MATCHES YOUR STYLE
                 </Typography>
               </Box>
-              <Divider orientation="vertical" flexItem />
-              <Box className="Box">
-                <Typography variant="h4" sx={{ color: "primary.main" }}>
-                  2,000 +
-                </Typography>
-                <Typography variant="body2" sx={{ color: "primary.main" }}>
-                  High-Quality Products
+              <Box>
+                <Typography variant="body1">
+                  Browse through our diverse range of meticulously crafted
+                  garments, designed to bring out your individuality and cater
+                  to your sense of style.
                 </Typography>
               </Box>
-              <Divider orientation="vertical" flexItem />
-              <Box className="Box">
-                <Typography variant="h4" sx={{ color: "primary.main" }}>
-                  30,000 +
-                </Typography>
-                <Typography variant="body2" sx={{ color: "primary.main" }}>
-                  Happy Customers
-                </Typography>
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  className="black"
+                  sx={{
+                    width: "30%",
+                    borderRadius: 10,
+                    p: 1.5,
+                  }}
+                  color="primary"
+                >
+                  shop now
+                </Button>
               </Box>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            item
-            xs={12}
-            sx={{
-              width: "50%",
-              height: "100%",
-            }}
-          >
-            <Grid
-              item
-              xs={12}
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <Box className="Box">
+                  <Typography variant="h4" sx={{ color: "primary.main" }}>
+                    200 +
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "primary.main" }}>
+                    International Brands
+                  </Typography>
+                </Box>
+                <Divider orientation="vertical" flexItem />
+                <Box className="Box">
+                  <Typography variant="h4" sx={{ color: "primary.main" }}>
+                    2,000 +
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "primary.main" }}>
+                    High-Quality Products
+                  </Typography>
+                </Box>
+                <Divider orientation="vertical" flexItem />
+                <Box className="Box">
+                  <Typography variant="h4" sx={{ color: "primary.main" }}>
+                    30,000 +
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "primary.main" }}>
+                    Happy Customers
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+            <Box
               sx={{
-                width: "100%",
+                width: "40%",
                 height: "100%",
-                backgroundImage: `url(${hero})`,
-                backgroundSize: "cover",
-                position: "relative",
               }}
             >
-              <img
-                src={star}
-                style={{
-                  width: "15%",
-                  height: "15%",
-                  position: "absolute",
-                  top: "50px",
-                  right: "60px",
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: `url(${hero})`,
+                  backgroundSize: "cover",
+                  position: "relative",
                 }}
-                alt=""
-              />
-              <img
-                src={star}
-                style={{
-                  width: "10%",
-                  height: "10%",
-                  position: "absolute",
-                  bottom: "40%",
-                  left: "10px",
-                }}
-                alt=""
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            xs={12}
+              >
+                <img
+                  src={star}
+                  style={{
+                    width: "15%",
+                    height: "15%",
+                    position: "absolute",
+                    top: "50px",
+                    right: "60px",
+                  }}
+                  alt=""
+                />
+                <img
+                  src={star}
+                  style={{
+                    width: "10%",
+                    height: "10%",
+                    position: "absolute",
+                    bottom: "40%",
+                    left: "10px",
+                  }}
+                  alt=""
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Box
             sx={{
               width: "100%",
               height: "122px",
@@ -210,12 +209,10 @@ function Home() {
                 Calvin Klein
               </Typography>
             </Box>
-          </Grid>
+          </Box>
           <NewArrivalProduct />
           <TopSellingProduct />
-          <Grid
-            container
-            spacing={2}
+          <Box
             sx={{
               width: "100%",
               display: "flex",
@@ -231,10 +228,8 @@ function Home() {
                 mt: 6,
               }}
             >
-              <Grid Container sx={{ width: "100%", height: "100%" }}>
-                <Grid
-                  item
-                  xs={12}
+              <Box sx={{ width: "100%", height: "100%" }}>
+                <Box
                   sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -245,18 +240,17 @@ function Home() {
                   <Typography variant="h3" sx={{ color: "#000" }}>
                     BROWSE BY DRESS STYLE
                   </Typography>
-                </Grid>
-                <Grid
-                  container
-                  spacing={0}
+                </Box>
+                <Box
                   sx={{
                     width: "100%",
                     height: "70%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
                   }}
                 >
-                  <Grid
-                    item
-                    xs={12}
+                  <Box
                     sx={{
                       width: "100%",
                       height: "289px",
@@ -296,10 +290,8 @@ function Home() {
                         alt=""
                       />
                     </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
+                  </Box>
+                  <Box
                     sx={{
                       width: "100%",
                       height: "289px",
@@ -339,54 +331,52 @@ function Home() {
                         alt=""
                       />
                     </Box>
-                  </Grid>
-                </Grid>
-              </Grid>
+                  </Box>
+                </Box>
+              </Box>
             </Box>
-          </Grid>
-          <Grid
-            container
-            spacing={5}
+          </Box>
+          <Box
             sx={{
               width: "100%",
               mt: 5,
               justifyContent: "center",
             }}
           >
-            <Grid
+            <Box
               sx={{
+                width: "100%",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
               }}
             >
               <Typography variant="h4">OUR HAPPY CUSTOMERS</Typography>
-              <Grid>
+              <Box>
                 <Button>
                   <ArrowBackIcon />
                 </Button>
                 <Button>
                   <ArrowForwardIcon />
                 </Button>
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              spacing={2}
+              </Box>
+            </Box>
+            <Box
               sx={{
-                width: "95%",
-                height: "auto",
+                // width: "100%",
+                // height: "auto",
                 display: "flex",
                 flexDirection: "row",
+                gap: 4,
               }}
             >
               {Review.map((item) => (
                 <RatingCard key={item.id} item={item} />
               ))}
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
           <Footer />
-        </Grid>
+        </Box>
       </Grid>
     </>
   );

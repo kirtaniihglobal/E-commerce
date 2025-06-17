@@ -46,6 +46,7 @@ function Footer() {
           <Box
             sx={{
               display: "flex",
+              gap: 3,
 
               flexDirection: "column",
               alignItems: "flex-start",
@@ -113,6 +114,7 @@ function Footer() {
           <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
@@ -136,92 +138,91 @@ function Footer() {
               <Typography variant="body1"> Career </Typography>
             </Box>
           </Box>
-          <Grid
-            container
+          <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 HELP
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Customer Support</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Delivery Details</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Terms & Conditions</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Privacy Policy</Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
+            </Box>
+          </Box>
+          <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 FAQ
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Account</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Manage Deliveries</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Orders</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Payments</Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
+            </Box>
+          </Box>
+          <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 RESOURCES
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Free eBooks</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Development Tutorial</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> How to - Blog</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Youtube Playlist</Typography>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Grid>
 
         <Divider />
-        <Grid
-          container
+        <Box
           sx={{
             display: "flex",
             p: 2,
@@ -232,37 +233,34 @@ function Footer() {
           <Typography variant="body1">
             Shop.co © 2000-2023, All Rights Reserved
           </Typography>
-          <Grid>
+          <Box>
             <img src={paymenttype1} alt="" />
             <img src={paymenttype2} alt="" />
             <img src={paymenttype3} alt="" />
             <img src={paymenttype4} alt="" />
             <img src={paymenttype5} alt="" />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Box
           sx={{
-            width: "1240px",
+            width: "95%",
             height: "180px",
             borderRadius: "20px",
             backgroundColor: "#000",
             position: "absolute",
             top: "-90px",
-            left: "150px",
           }}
         >
-          <Grid
-            container
+          <Box
             sx={{
-              width: "100%",
+              width: "90%",
+              display: "flex",
               p: 5,
               justifyContent: "space-between",
             }}
           >
-            <Grid
-              item
-              xs={12}
+            <Box
               sx={{
                 width: "40%",
               }}
@@ -270,10 +268,8 @@ function Footer() {
               <Typography variant="h4" color="#fff">
                 STAY UPTO DATE ABOUT OUR LATEST OFFERS
               </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
+            </Box>
+            <Box
               sx={{
                 width: "30%",
                 height: "100px",
@@ -305,8 +301,8 @@ function Footer() {
                 {" "}
                 Subscribe to Newsletter
               </Button>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Box>
       </Container>
     </>

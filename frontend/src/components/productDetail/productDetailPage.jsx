@@ -13,12 +13,17 @@ import {
   Tab,
   Tabs,
   Skeleton,
-  Avatar,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import {
   getAllproductsData,
   getOneproductData,
 } from "../../Thunk/productThunk";
+import { fetchUser } from "../../redux/authSlice";
+import { addToCartData } from "../../Thunk/cartThunk";
+// import { addToCart, decrement, increment } from "../../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import prod9 from "../../assets/prod9.png";
@@ -34,15 +39,68 @@ import img1 from "../../assets/image 1.png";
 import img2 from "../../assets/image 2.png";
 import img3 from "../../assets/image 3.png";
 import GradeIcon from "@mui/icons-material/Grade";
+import { openSnackbar } from "../../redux/snackBarSlice";
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
-  const [value, setValue] = useState(1);
+  // const [value, setValue] = useState(1);
+  const [selectedColor, setSelectedColor] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
   const product = useSelector((state) => state.products.selectedProduct);
-  const { products, loading } = useSelector((state) => state.products);
-  console.log(products);
-  console.log(product);
+  const { products } = useSelector((state) => state.products);
   const { id } = useParams();
+  // const { user } = useSelector((state) => state.auth);
+  // // console.log(user);
+  // useEffect(() => {
+  //   dispatch(fetchUser());
+  // }, [dispatch]);
+
+  const handlePlus = () => {
+    setQuantity((quantity) => quantity + 1);
+  };
+  const handleMins = () => {
+    setQuantity((quantity) => {
+      if (quantity == 1) {
+        return quantity;
+      } else {
+        return quantity - 1;
+      }
+    });
+  };
+  const handleSubmit = () => {
+    if (!selectedColor) {
+      dispatch(
+        openSnackbar({ massage: "Please select color", severity: "error" })
+      );
+    } else if (!selectedSize) {
+      dispatch(
+        openSnackbar({ massage: "Please select Size", severity: "error" })
+      );
+    } else {
+      dispatch(
+        openSnackbar({
+          massage: `${product.name}add to Cart`,
+          severity: "success",
+        })
+      );
+      dispatch(
+        addToCartData({
+          productId: product._id,
+          quantity,
+          size: selectedSize,
+          color: selectedColor,
+        })
+      );
+    }
+  };
+  const handleChangeColor = (color) => {
+    setSelectedColor(color);
+  };
+  // console.log(selectedColor);
+  const handleChangeSize = (name) => {
+    setSelectedSize(name);
+  };
   useEffect(() => {
     dispatch(getAllproductsData());
   }, [dispatch]);
@@ -55,22 +113,7 @@ function ProductDetailPage() {
       }
     }
   }, [dispatch, id, products]);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
 
-    return (
-      <div role="tabpanel" hidden={value !== index} {...other}>
-        {value === index && (
-          <Box sx={{ p: 2 }}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    );
-  }
   const Products = [
     {
       id: 1,
@@ -125,10 +168,8 @@ function ProductDetailPage() {
     <>
       <Header />
       <Container maxWidth="xl">
-        <Grid Grid container>
-          <Grid
-            container
-            spacing={2}
+        <Grid container>
+          <Box
             sx={{
               width: "100%",
             }}
@@ -139,28 +180,26 @@ function ProductDetailPage() {
             >
               {breadcrumbs}
             </Breadcrumbs>
-          </Grid>
+          </Box>
           {product ? (
-            <Grid
-              key={id}
-              container
-              spacing={2}
+            <Box
               sx={{
                 width: "100%",
                 display: "flex",
+                flexWrap: "wrap",
                 gap: "20px",
                 mt: "30px",
               }}
             >
-              <Grid
-                container
+              <Box
                 sx={{
-                  width: "45%",
+                  width: "50%",
+                  display: "flex",
+                  // flexWrap:"wrap",
+                  gap: 3,
                 }}
               >
-                <Grid
-                  item
-                  xs={12}
+                <Box
                   sx={{
                     width: "152px",
                     display: "flex",
@@ -171,10 +210,8 @@ function ProductDetailPage() {
                   <img src={img1} alt="" />
                   <img src={img2} alt="" />
                   <img src={img3} alt="" />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
+                </Box>
+                <Box
                   sx={{
                     width: "70%",
                   }}
@@ -186,18 +223,20 @@ function ProductDetailPage() {
                     }}
                     alt=""
                   />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                sx={{ width: "50%", display: "flex", flexDirection: "column" }}
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  width: "40%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
               >
-                <Grid>
+                <Box>
                   <Typography variant="h4">{product.name}</Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
+                </Box>
+                <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -209,10 +248,8 @@ function ProductDetailPage() {
                   <GradeIcon color="warning" />
                   <GradeIcon color="warning" />
                   {/* <Typography variant="h5">{product.rating}</Typography> */}
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
+                </Box>
+                <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -232,17 +269,15 @@ function ProductDetailPage() {
                   </Typography>
 
                   <Chip label="- 40%" color="error" />
-                </Grid>
-                <Grid item xs={12}>
+                </Box>
+                <Box>
                   <Typography variant="body1">{product.description}</Typography>
-                </Grid>
+                </Box>
                 <Divider />
-                <Grid item xs={12}>
+                <Box>
                   <Typography>Select Colors</Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
+                </Box>
+                <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -258,35 +293,46 @@ function ProductDetailPage() {
                   >
                     {product.color?.map((color, index) => (
                       <Box
+                        value={selectedColor}
                         key={index}
+                        required
+                        onClick={() => handleChangeColor(color)}
                         sx={{
+                          border:
+                            selectedColor === color ? "2px solid black" : "",
                           backgroundColor: color,
                           borderRadius: "50%",
                           width: "30px",
                           height: "30px",
+                          cursor: "pointer",
                         }}
                       ></Box>
                     ))}
                   </Box>
-                </Grid>
+                </Box>
                 <Divider />
-                <Grid item xs={12}>
+                <Box>
                   <Typography variant="body1">Choose Size</Typography>
-                </Grid>
-                <Grid
+                </Box>
+                <Box
                   sx={{
                     display: "flex",
                     gap: "10px",
                   }}
                 >
                   {product.size?.map((name, index) => (
-                    <Chip key={index} label={name} />
+                    <Chip
+                      clickable
+                      onClick={() => handleChangeSize(name)}
+                      value={selectedSize}
+                      key={index}
+                      label={name}
+                      color={selectedSize === name ? "primary" : "default"}
+                    />
                   ))}
-                </Grid>
+                </Box>
                 <Divider />
-                <Grid
-                  item
-                  xs={12}
+                <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -305,13 +351,18 @@ function ProductDetailPage() {
                       p: 1,
                     }}
                   >
-                    <Button>-</Button>
-                    <Typography variant="body1">1</Typography>
-                    <Button>+</Button>
+                    <IconButton onClick={handleMins} size="small">
+                      <RemoveIcon />
+                    </IconButton>
+
+                    <Typography variant="body1">{quantity}</Typography>
+
+                    <IconButton onClick={handlePlus} size="small">
+                      <AddIcon />
+                    </IconButton>
                   </Box>
-                  <Grid
-                    item
-                    xs={12}
+
+                  <Box
                     sx={{
                       width: "80%",
                     }}
@@ -319,6 +370,14 @@ function ProductDetailPage() {
                     <Button
                       variant="contained"
                       className="black"
+                      onClick={() => {
+                        handleSubmit();
+                        // console.log({
+                        //   ...product,
+                        //   size: selectedSize,
+                        //   color: selectedColor,
+                        // });
+                      }}
                       sx={{
                         width: "100%",
                         height: "100%",
@@ -327,10 +386,10 @@ function ProductDetailPage() {
                     >
                       Add to Cart
                     </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
           ) : (
             <>
               <Box
@@ -379,12 +438,12 @@ function ProductDetailPage() {
               </Box>
             </>
           )}
-          <Grid container item xs={12} sx={{ width: "100%", mt: 2 }}>
-            <Grid item xs={12} sx={{ width: "100%" }}>
+          <Grid container sx={{ width: "100%", mt: 2 }}>
+            <Box sx={{ width: "100%" }}>
               <Box
                 sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}
               >
-                <Tabs
+                {/* <Tabs
                   value={value}
                   onChange={handleChange}
                   aria-label="product tabs"
@@ -399,11 +458,11 @@ function ProductDetailPage() {
                   <Tab label="Product Details" sx={{ width: "100%" }} />
                   <Tab label="Rating & Reviews" sx={{ width: "100%" }} />
                   <Tab label="FAQs" sx={{ width: "100%" }} />
-                </Tabs>
+                </Tabs> */}
               </Box>
 
               {/* Tab Panels */}
-              <TabPanel value={value} index={0}>
+              {/* <TabPanel value={value} index={0}>
                 This is the **Product Details** section. You can place your
                 product info here.
               </TabPanel>
@@ -413,19 +472,15 @@ function ProductDetailPage() {
               <TabPanel value={value} index={2}>
                 This is the **FAQs** section. Display questions and answers
                 here.
-              </TabPanel>
-            </Grid>
+              </TabPanel> */}
+            </Box>
           </Grid>
-          <Grid
-            container
-            spacing={2}
+          <Box
             sx={{
               width: "100%",
             }}
           >
-            <Grid
-              item
-              xs={12}
+            <Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
@@ -437,17 +492,15 @@ function ProductDetailPage() {
               <Typography variant="h2" component="h2">
                 You might also like
               </Typography>
-            </Grid>
-            <Grid
-              container
-              spacing={0}
+            </Box>
+            <Box
               sx={{
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
               }}
             >
-              <Grid
+              <Box
                 sx={{
                   width: "90%",
                   display: "flex",
@@ -460,7 +513,7 @@ function ProductDetailPage() {
                 {Products.map((product, index) => (
                   <ProductCard key={index} product={product} />
                 ))}
-                <Grid
+                <Box
                   sx={{
                     width: "100%",
                     display: "flex",
@@ -478,10 +531,10 @@ function ProductDetailPage() {
                   >
                     View All
                   </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </Grid>
       </Container>
       <Footer />

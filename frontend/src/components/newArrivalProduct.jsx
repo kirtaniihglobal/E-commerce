@@ -1,5 +1,5 @@
 import { Grid, Typography, Button } from "@mui/material";
-import { getAllproductsData } from "../Thunk/productThunk";
+import { getNewArrivalsProductData } from "../Thunk/productThunk";
 import { useEffect, useState } from "react";
 import { useTheme, useMediaQuery } from "@mui/material";
 import ProductCard from "../comon/productCard";
@@ -8,19 +8,19 @@ import { useNavigate } from "react-router-dom";
 function NewArrivalProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { products } = useSelector((state) => state.products);
+  const { newArrival } = useSelector((state) => state.products);
   // const [visible, setVisible] = useState(4);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    dispatch(getAllproductsData());
+    dispatch(getNewArrivalsProductData());
   }, [dispatch]);
   // const handleViewAll = () => {
   //   setVisible(products.length);
   // };
 
-  const displayProducts = products.slice(0, 4);
+  const displayProducts = newArrival.slice(0, 4);
   return (
     <>
       <Grid

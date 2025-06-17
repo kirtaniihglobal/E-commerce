@@ -17,6 +17,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  console.log(user)
 
   useEffect(() => {
     dispatch(fetchUser());
