@@ -5,6 +5,7 @@ import { addToCart } from "../redux/cartSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { openSnackbar } from "../redux/snackBarSlice";
+import { addToCartData } from "../Thunk/cartThunk";
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,10 +35,10 @@ const ProductCard = ({ product }) => {
             <GradeIcon color="warning" />
             <GradeIcon color="warning" />
             <GradeIcon />
-            {product.rating}
+            {/* {product.rating} */}
           </Typography>
           <Typography variant="h5">${product.price}</Typography>
-          {/* <Box
+          <Box
             sx={{
               width: "100%",
             }}
@@ -51,7 +52,15 @@ const ProductCard = ({ product }) => {
               variant="contained"
               className="black"
               onClick={() => {
-                dispatch(addToCart(product));
+                dispatch(
+                  addToCartData({
+                    // userId: user._id,
+                    productId: product._id,
+                    quantity: 1,
+                    size:"small",
+                    color:"red"
+                  })
+                );
                 dispatch(
                   openSnackbar({
                     massage: `${product.name} add in Cart`,
@@ -62,7 +71,7 @@ const ProductCard = ({ product }) => {
             >
               Add to Cart
             </Button>
-          </Box> */}
+          </Box>
         </Box>
       </Box>
     </Grid>

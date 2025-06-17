@@ -9,11 +9,13 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/header/header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllCartData } from "../Thunk/cartThunk";
 
 function CheckOut() {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -25,8 +27,9 @@ function CheckOut() {
     pincode: "",
   });
   console.log(formData);
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  console.log(cartItems);
+  const { cartData } = useSelector((state) => state.cart);
+  const total = useSelector((state) => state.cart.total);
+  // console.log(cartItems);
   const handaleOpen = () => {
     setOpen(true);
   };
@@ -43,6 +46,10 @@ function CheckOut() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    dispatch(getAllCartData());
+  }, [dispatch]);
 
   return (
     <>
@@ -232,9 +239,11 @@ function CheckOut() {
                 // border: "1px solid black",
               }}
             >
-              {cartItems.map((prod) => {
+              {cartData?.map((product) => {
+                console.log(product);
                 return (
                   <Box
+                    key={product.productId._id}
                     sx={{
                       width: "90%",
                       display: "flex",
@@ -251,7 +260,7 @@ function CheckOut() {
                         style={{
                           width: "100%",
                         }}
-                        src={`http://192.168.2.222:5000/${prod.image}`}
+                        src={`http://192.168.2.222:5000/${product.productId.image}`}
                         alt=""
                       />
                     </Box>
@@ -261,14 +270,17 @@ function CheckOut() {
                         p: 1,
                         display: "flex",
                         flexDirection: "row",
-                        gap: 15,
+                        justifyContent: "space-between",
+                        // gap: 15,
                         alignItems: "center",
                       }}
                     >
-                      <Typography variant="h5">{prod.name}</Typography>
+                      <Typography variant="h5">
+                        {product.productId.name}
+                      </Typography>
 
-                      <Typography variant="h6">
-                        ${prod.price}x{prod.quntity}
+                      <Typography variant="body1">
+                        ${product.productId.price} x {product.quantity}
                       </Typography>
                     </Box>
                   </Box>
@@ -304,17 +316,8 @@ function CheckOut() {
                 }}
               >
                 <Typography variant="h5">Subtotal</Typography>
-                <Typography variant="h5">
-                  ${" "}
-                  {cartItems
-                    .reduce(
-                      (total, prod) => total + prod.price * prod.quntity,
-                      0
-                    )
-                    .toFixed(2)}
-                </Typography>
+                <Typography variant="h5">${total}</Typography>
               </Box>
-
               <Box
                 sx={{
                   width: "100%",
@@ -323,8 +326,27 @@ function CheckOut() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h5">Delivery Fee</Typography>
-                <Typography variant="h5">$15</Typography>
+                <Typography variant="h5" color="red">
+                  Discount (-20%)
+                </Typography>
+                <Typography variant="h5" color="red">
+                  -$ {(total / 100) * (20).toFixed(2)}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h5" color="green">
+                  Delivery Free
+                </Typography>
+                <Typography variant="h5" color="green">
+                  $0
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -350,15 +372,9 @@ function CheckOut() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h5">Total</Typography>
-                <Typography variant="h5">
-                  ${" "}
-                  {cartItems
-                    .reduce(
-                      (total, prod) => total + prod.price * prod.quntity,
-                      0
-                    )
-                    .toFixed(2)}
+                <Typography variant="h4">Total</Typography>
+                <Typography variant="h4">
+                  $ {total - (total / 100) * (20).toFixed(2)}
                 </Typography>
               </Box>
             </Box>

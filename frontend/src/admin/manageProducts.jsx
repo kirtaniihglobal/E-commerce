@@ -23,6 +23,10 @@ import {
   FormHelperText,
   TableContainer,
   Checkbox,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -94,6 +98,7 @@ function ManageProducts() {
         image: editData.image || "",
         description: editData.description || "",
         stock: editData.stock || "",
+        productType: editData.productType || "",
         size: editData.size || [],
         color: editData.color || [],
       });
@@ -125,16 +130,19 @@ function ManageProducts() {
       price: "",
       description: "",
       stock: "",
+      productType: "",
       size: [],
       color: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log(values);
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("price", values.price);
       formData.append("description", values.description);
       formData.append("stock", values.stock);
+      formData.append("productType", values.productType);
       values.size.forEach((size) => formData.append("size[]", size));
       values.color.forEach((color) => formData.append("color[]", color));
       if (imageFile && imageFile instanceof File) {
@@ -288,6 +296,27 @@ function ManageProducts() {
                         width: "100%",
                       }}
                     >
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend">Product Type</FormLabel>
+                        <RadioGroup
+                          row
+                          name="productType"
+                          value={formik.values.productType}
+                          onChange={formik.handleChange}
+                        >
+                          <FormControlLabel
+                            value="newArrival"
+                            control={<Radio />}
+                            label="New Arrival"
+                          />
+                          <FormControlLabel
+                            value="topSelling"
+                            control={<Radio />}
+                            label="Top Selling"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+
                       <FormControl
                         sx={{ width: "100%" }}
                         error={
@@ -453,7 +482,7 @@ function ManageProducts() {
                     <TableCell>Description</TableCell>
                     <TableCell>Stock</TableCell>
                     <TableCell>Size</TableCell>
-                    {/* <TableCell>Rating</TableCell> */}
+                    <TableCell>ProductType</TableCell>
                     <TableCell>colors</TableCell>
                     <TableCell align="center">Edit/Delete</TableCell>
                   </TableRow>
@@ -493,7 +522,7 @@ function ManageProducts() {
                             <Chip key={index} label={name} />
                           ))}
                         </TableCell>
-                        {/* <TableCell>{prod.rating}</TableCell> */}
+                        <TableCell>{prod.productType}</TableCell>
                         <TableCell>
                           <Box
                             sx={{

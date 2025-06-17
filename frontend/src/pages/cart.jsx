@@ -6,17 +6,41 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useEffect } from "react";
 import Header from "../components/header/header";
+import { fetchUser } from "../redux/authSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, removeCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
+import {
+  clearCartData,
+  getAllCartData,
+  plusData,
+  minusData,
+  removeFromCartData,
+} from "../Thunk/cartThunk";
 
 function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  console.log(cartItems);
+  const { cartData } = useSelector((state) => state.cart);
+  const total = useSelector((state) => state.cart.total);
+  console.log(total);
+  // console.log(cartData);
+  // const { user } = useSelector((state) => state.auth);
+  // console.log(user);
+
+  // useEffect(() => {
+  //   dispatch(fetchUser());
+  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAllCartData());
+  }, [dispatch]);
+  // console.log(cartItems);
   return (
     <>
       <Header />
@@ -26,9 +50,33 @@ function Cart() {
             width: "100%",
             textAlign: "center",
             height: "100px",
+            position: "relative",
           }}
         >
           <Typography variant="h3">Your cart</Typography>
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 50,
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: 7,
+                px: 4,
+                py: 1,
+              }}
+              className="black"
+              onClick={() => {
+                dispatch(clearCartData());
+                // dispatch(getAllCartData());
+              }}
+            >
+              clear
+            </Button>
+          </Box>
         </Box>
         <Box
           sx={{
@@ -52,97 +100,123 @@ function Cart() {
               gap: 2,
             }}
           >
-            {cartItems.map((prod) => {
-              console.log(cartItems);
-              return (
-                <Box
-                  key={prod._id}
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: 2,
-                  }}
-                >
-                  <Box sx={{ width: "20%" }}>
-                    <img
-                      style={{
-                        width: "100%",
-                      }}
-                      src={`http://192.168.2.222:5000/${prod.image}`}
-                      alt=" "
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "60%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography variant="h5">{prod.name}</Typography>
-                    <Typography variant="body2">Size: {prod.size}</Typography>
-                    <Typography variant="body2">Color:{prod.color}</Typography>
-                    <Typography variant="h5">
-                      ${prod.price} x {prod.quntity}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "20%",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "flex-end",
-                      alignItems: "end",
-                      position: "relative",
-                    }}
-                  >
-                    <Button
-                      onClick={() => {
-                        dispatch(removeCart(prod._id));
-                      }}
-                      sx={{ position: "absolute", top: 0, right: 0 }}
-                    >
-                      <DeleteIcon color="error" />
-                    </Button>
+            {cartData?.length === 0 ? (
+              <Typography
+                variant="h4"
+                sx={{
+                  textAlign: "center",
+                }}
+              >
+                Cart is Empty
+              </Typography>
+            ) : (
+              <>
+                {cartData.map((product) => {
+                  // console.log(product);
+                  return (
                     <Box
+                      key={product.productId._id}
                       sx={{
-                        width: "80%",
-                        height: "30%",
+                        width: "100%",
                         display: "flex",
                         flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 10,
-                        backgroundColor: "#f0f0f0",
+                        gap: 2,
                       }}
                     >
-                      <Button
-                        onClick={() => {
-                          dispatch(decrement(prod._id));
+                      <Box sx={{ width: "20%" }}>
+                        <img
+                          style={{
+                            width: "100%",
+                          }}
+                          src={`http://192.168.2.222:5000/${product.productId.image}`}
+                          alt=" "
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "60%",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
                         }}
                       >
-                        -
-                      </Button>
-                      <Typography>{prod.quntity}</Typography>
-                      <Button
-                        onClick={() => {
-                          dispatch(increment(prod._id));
+                        <Typography variant="h5">
+                          {product.productId.name}
+                        </Typography>
+                        <Typography variant="body2">
+                          Size: {product.size}
+                        </Typography>
+                        <Typography variant="body2">
+                          Color: {product.color}
+                        </Typography>
+                        <Typography variant="h5">
+                          ${product.productId.price} x {product.quantity}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "20%",
+                          display: "flex",
+                          flexWrap: "wrap",
+                          justifyContent: "flex-end",
+                          alignItems: "end",
+                          position: "relative",
                         }}
                       >
-                        +
-                      </Button>
+                        <Button
+                          onClick={() => {
+                            dispatch(removeFromCartData(product._id));
+                          }}
+                          sx={{ position: "absolute", top: 0, right: 0 }}
+                        >
+                          <DeleteIcon color="error" />
+                        </Button>
+                        <Box
+                          sx={{
+                            width: "80%",
+                            height: "30%",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            backgroundColor: "#f0f0f0",
+                            borderRadius: "62px",
+                            justifyContent: "space-between",
+                            p: 1,
+                          }}
+                        >
+                          <IconButton
+                            onClick={() => {
+                              dispatch(minusData(product._id));
+                            }}
+                            size="small"
+                          >
+                            <RemoveIcon />
+                          </IconButton>
+
+                          <Typography variant="body1">
+                            {product.quantity}
+                          </Typography>
+
+                          <IconButton
+                            onClick={() => {
+                              dispatch(plusData(product._id));
+                            }}
+                            size="small"
+                          >
+                            <AddIcon />
+                          </IconButton>
+                        </Box>
+                      </Box>
                     </Box>
-                  </Box>
-                </Box>
-              );
-              // <Divider
-              //   sx={{
-              //     width: "100%",
-              //   }}
-              // />
-            })}
+                  );
+                  // <Divider
+                  //   sx={{
+                  //     width: "100%",
+                  //   }}
+                  // />
+                })}
+              </>
+            )}
           </Box>
 
           <Box
@@ -177,14 +251,21 @@ function Cart() {
                 }}
               >
                 <Typography variant="h5">Subtotal</Typography>
-                <Typography variant="h5">
-                  ${" "}
-                  {cartItems
-                    .reduce(
-                      (total, prod) => total + prod.price * prod.quntity,
-                      0
-                    )
-                    .toFixed(2)}
+                <Typography variant="h5">${total}</Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h5" color="red">
+                  Discount (-20%)
+                </Typography>
+                <Typography variant="h5" color="red">
+                  -$ {(total / 100) * (20).toFixed(2)}
                 </Typography>
               </Box>
               <Box
@@ -195,28 +276,12 @@ function Cart() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h5">Discount (-20%)</Typography>
-                <Typography variant="h5">
-                  -${" "}
-                  {cartItems
-                    .reduce(
-                      (total, prod) =>
-                        total + prod.price * prod.quntity - (total / 100) * 20,
-                      0
-                    )
-                    .toFixed(2)}
+                <Typography variant="h5" color="green">
+                  Delivery Free
                 </Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant="h5">Delivery Fee</Typography>
-                <Typography variant="h5">$15</Typography>
+                <Typography variant="h5" color="green">
+                  $0
+                </Typography>
               </Box>
               <Divider
                 sx={{
@@ -231,15 +296,9 @@ function Cart() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h5">Total</Typography>
-                <Typography variant="h5">
-                  ${" "}
-                  {cartItems
-                    .reduce(
-                      (total, prod) => total + prod.price * prod.quntity,
-                      0
-                    )
-                    .toFixed(2)}
+                <Typography variant="h4">Total</Typography>
+                <Typography variant="h4">
+                  ${total - (total / 100) * (20).toFixed(2)}
                 </Typography>
               </Box>
               <Box
@@ -255,16 +314,25 @@ function Cart() {
                     height: "50px",
                     backgroundColor: "#f0f0f0",
                     borderRadius: 7,
-                    textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    px: 2,
                   }}
                 >
                   <TextField
-                    sx={{}}
+                    variant="standard"
                     fullWidth
                     name="code"
-                    label="Add promo code"
+                    placeholder="Add promo code"
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                    sx={{
+                      backgroundColor: "transparent",
+                    }}
                   />
                 </Box>
+
                 <Box
                   sx={{
                     width: "25%",

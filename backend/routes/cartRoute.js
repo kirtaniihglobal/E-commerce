@@ -1,20 +1,22 @@
 
-// const express = require("express");
-// const router = express.Router();
-// const upload = require("../middleware/upload");
-// const { createCart, getAllCart, getOneCart, deleteCart} = require("../controllers/cartController");
+const express = require("express");
+const router = express.Router();
+const { verifyToken } = require("../middleware/auth")
+const { createCart, getAllCart, removeFromCart, clearCart, plusProduct, minusProduct } = require("../controllers/cartController");
 
 
 
 
-// router.post("/add", upload.single("image"), createCart)
-// router.get("/get", getAllCart)
-// router.get("/:id", getOneCart)
-// router.delete("/:id", deleteCart)
-// // router.put("/:id", upload.single("image"), editProduct)
+router.post("/add", verifyToken, createCart)
+router.get("/get", verifyToken, getAllCart)
+router.delete("/delete/:id", verifyToken, removeFromCart)
+router.delete("/clear/", verifyToken, clearCart)
+router.get("/plus/:id", verifyToken, plusProduct)
+router.get("/minus/:id", verifyToken, minusProduct)
 
 
 
 
 
-// module.exports = router
+
+module.exports = router

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -23,10 +23,11 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { openSnackbar } from "../../redux/snackBarSlice";
+import { getAllCartData } from "../../Thunk/cartThunk";
 
 export default function Header() {
   const theme = useTheme();
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const { cartData } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -34,6 +35,10 @@ export default function Header() {
   const navBarHalf =
     location.pathname.startsWith("/productDetail") ||
     location.pathname.startsWith("/categoryPage");
+
+  useEffect(() => {
+    dispatch(getAllCartData());
+  }, [dispatch]);
 
   return (
     <>
@@ -82,7 +87,7 @@ export default function Header() {
                     <Button
                       variant="text"
                       onClick={() => {
-                        navigate("/productDetail");
+                        navigate("/categoryPage");
                       }}
                       endIcon={<KeyboardArrowDownIcon />}
                     >
@@ -90,21 +95,21 @@ export default function Header() {
                     </Button>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Button
+                    {/* <Button
                       variant="text"
                       onClick={() => {
                         navigate("/checkOut");
                       }}
                     >
                       On Sale
-                    </Button>
+                    </Button> */}
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  {/* <Grid item xs={12} sm={6}>
                     <Button variant="text">New Arrivals</Button>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Button variant="text">Brands</Button>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Stack>
 
@@ -146,7 +151,7 @@ export default function Header() {
                     navigate("/Cart");
                   }}
                 >
-                  <Badge badgeContent={cartItems.length} color="error">
+                  <Badge badgeContent={cartData.length} color="error">
                     <ShoppingCartIcon />
                   </Badge>
                 </Button>
@@ -252,7 +257,7 @@ export default function Header() {
                       navigate("/Cart");
                     }}
                   >
-                    <Badge badgeContent={cartItems.length} color="error">
+                    <Badge badgeContent={cartData.length} color="error">
                       <ShoppingCartIcon />
                     </Badge>
                   </Button>

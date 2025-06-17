@@ -4,8 +4,8 @@ import GreenTik from "../assets/greentik.png";
 import GradeIcon from "@mui/icons-material/Grade";
 const RatingCard = ({ item, width }) => {
   return (
-    <Grid
-      key={item.id}
+    <Grid container
+  
       sx={{
         height: "auto",
       }}
