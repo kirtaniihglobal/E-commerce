@@ -88,7 +88,7 @@ function UserProfileLayout() {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  navigate("/profile/orderDetailPage");
+                  navigate("/profile/myOrders");
                 }}
               >
                 My Orders
