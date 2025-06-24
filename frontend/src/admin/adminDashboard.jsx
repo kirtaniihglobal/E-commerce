@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 function AdminDashboard() {
   // const navigate = useNavigate();
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" >
       <Grid
         container
         spacing={2}

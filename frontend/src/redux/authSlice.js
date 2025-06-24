@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { openSnackbar } from "./snackBarSlice";
-import { loginUserAPI, userDetailAPI, registerUserAPI } from "../apis/authAPI";
+import { loginUserAPI, userDetailAPI, registerUserAPI, updateUserAPI, addAddressAPI, getAddressAPI, deleteAddressAPI, updateAddressAPI } from "../apis/authAPI";
 export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
     const user = await userDetailAPI();
     return user;
@@ -46,11 +46,117 @@ export const registerUser = createAsyncThunk('user/register', async (values, { d
         return rejectWithValue(response?.data.msg)
     }
 });
+export const updateUser = createAsyncThunk('user/UserUpdate', async (values, { dispatch, rejectWithValue }) => {
+    try {
+        console.log(values)
+        const response = await updateUserAPI(values);
+        dispatch(
+            openSnackbar({
+                massage: "UserProfile update Successfully",
+                severity: "success",
+            })
+        );
+        return response;
+    } catch (error) {
+        console.log(error)
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "profile update failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
+export const addAddress = createAsyncThunk('user/addAddress', async (values, { dispatch, rejectWithValue }) => {
+    try {
+        console.log(values)
+        const response = await addAddressAPI(values);
+        dispatch(
+            openSnackbar({
+                massage: "Address added Successfully",
+                severity: "success",
+            })
+        );
+        return response;
+    } catch (error) {
+        console.log(error)
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "add  Address failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
+export const getAddress = createAsyncThunk('user/getAddress', async (_, { dispatch, rejectWithValue }) => {
+    try {
+        // console.log(values)
+        const response = await getAddressAPI();
+        return response;
+    } catch (error) {
+        console.log(error)
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "get address failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
+export const deleteAddress = createAsyncThunk('user/deleteAddress', async (id, { dispatch, rejectWithValue }) => {
+    try {
+        // console.log(values)
+        const response = await deleteAddressAPI(id);
+        dispatch(
+            openSnackbar({
+                massage: "address Deleted Successfully",
+                severity: "success",
+            })
+        );
+        return response;
+    } catch (error) {
+        console.log(error)
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "delete address failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
+export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id, values }, { dispatch, rejectWithValue }) => {
+    try {
+        // console.log(values)
+        // console.log(id)
+        const response = await updateAddressAPI(id, values);
+        dispatch(
+            openSnackbar({
+                massage: "Address Update Successfully",
+                severity: "success",
+            })
+        );
+        return response;
+    } catch (error) {
+        console.log(error)
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "update address failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
 const initialState = {
     user: null,
     loading: false,
     error: null,
     token: null,
+    address: []
 };
 const userSlice = createSlice({
     name: 'auth',
@@ -103,6 +209,95 @@ const userSlice = createSlice({
                 state.loading = false;
             })
             .addCase(registerUser.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+
+
+
+            /*********update UserProfile***********/
+            .addCase(updateUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action.payload.updateUser);
+                state.user = action.payload.updateUser;
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+
+
+
+            /*********add Address***********/
+            .addCase(addAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(addAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action.payload.data.addressData);
+                state.address = action.payload.data.addressData
+            })
+            .addCase(addAddress.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+
+
+
+            /*********get Address***********/
+            .addCase(getAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action.payload.data)
+                state.address = action.payload.data
+            })
+            .addCase(getAddress.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+
+
+
+
+            /*********delete Address***********/
+            .addCase(deleteAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action.payload.updatedAddress.addressData)
+                state.address = action.payload.updatedAddress.addressData
+            })
+            .addCase(deleteAddress.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+
+
+
+
+            /*********update Address***********/
+            .addCase(updateAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action.payload.addressUpdate.addressData)
+                // console.log(action.meta.arg.values)
+                // const newData = action.meta.arg.values
+                state.address = action.payload.updatedAddress.addressData
+            })
+            .addCase(updateAddress.rejected, (state, action) => {
                 state.error = action.error.message;
                 state.loading = false;
             });

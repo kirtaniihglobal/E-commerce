@@ -2,53 +2,90 @@ import {
   Box,
   Button,
   Grid,
-  TextField,
   Typography,
   Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
+  TextField,
+  Checkbox,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  IconButton,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
 import Header from "../components/header/header";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllCartData } from "../Thunk/cartThunk";
+import { addOrderData } from "../Thunk/orderThunk";
+import { deleteAddress, fetchUser } from "../redux/authSlice";
+import { useNavigate } from "react-router-dom";
+import { getAddress } from "../redux/authSlice";
+import AddAddress from "../components/addAddress/addAddress";
+import { openSnackbar } from "../redux/snackBarSlice";
 
 function CheckOut() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    number: "",
-    address: "",
-    city: "",
-    pincode: "",
-  });
-  console.log(formData);
-  const { cartData } = useSelector((state) => state.cart);
-  const total = useSelector((state) => state.cart.total);
-  // console.log(cartItems);
-  const handaleOpen = () => {
+  const [editAddMode, setEditAddMode] = useState(false);
+  const [editAddId, setEditAddId] = useState(null);
+  const [editAddData, setEditAddData] = useState("");
+  const [checked, setChecked] = useState(false);
+  const { cartData, total } = useSelector((state) => state.cart);
+  const { user, address } = useSelector((state) => state.auth);
+  console.log(address);
+
+  const handleChange = (event) => {
+    const selectId = event.target.value;
+    const fullAddress = address.find((a) => a._id === selectId);
+    setSelectedAddress(fullAddress);
+  };
+  const handlePaymentChange = (event) => {
+    setSelectedPayment(event.target.value);
+  };
+  const handlePayment = async () => {
+    if (!selectedAddress) {
+      dispatch(
+        openSnackbar({ massage: "Please select Address", severity: "error" })
+      );
+    } else {
+      setSelectedAddress(selectedAddress);
+      setChecked(true);
+    }
+  };
+  const handlePlaceOrder = async () => {
+    try {
+      const respons = await dispatch(
+        addOrderData({ ...selectedAddress })
+      ).unwrap();
+    } catch (error) {}
+  };
+  const handleDeleteAddress = async (id) => {
+    try {
+      await dispatch(deleteAddress(id)).unwrap();
+    } catch (error) {}
+  };
+  const handleEditAddress = (add) => {
     setOpen(true);
-  };
-  const handaleClose = () => {
-    setOpen(false);
-  };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    setEditAddMode(true);
+    setEditAddId(add._id);
+    // console.log(add._id);
+    setEditAddData(add);
+    // console.log(add);
   };
 
   useEffect(() => {
     dispatch(getAllCartData());
+    dispatch(getAddress());
+    dispatch(fetchUser());
   }, [dispatch]);
 
   return (
@@ -62,236 +99,400 @@ function CheckOut() {
             flexDirection: "row",
           }}
         >
-          <Dialog open={open} onClose={handaleClose}>
-            <DialogTitle>
-              <Typography variant="h4">Order Details</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      color: "green",
-                    }}
-                  >
-                    Your Order is Successfull!
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography>Name:{formData.firstName}</Typography>
-                  <Typography>Email:{formData.email}</Typography>
-                  <Typography>Number:{formData.number}</Typography>
-                  <Typography>Address:{formData.address}</Typography>
-                  <Typography>City:{formData.city}</Typography>
-                  <Typography>Pincode:{formData.pincode}</Typography>
-                  <Typography>Order Place Date:</Typography>
-                  <Typography>Order Amount:</Typography>
-                </Box>
-              </Box>
-            </DialogContent>
-          </Dialog>
-          <Box
-            sx={{
-              width: "60%",
-            }}
-          >
-            <Box
-              sx={{
-                width: "100%",
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="h4">DETAILS FORM</Typography>
-            </Box>
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                width: "100%",
-                display: "flex",
-                marginTop: "50px",
-                // flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
+          {checked ? (
+            <>
               <Box
                 sx={{
-                  width: "70%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 2,
+                  width: "60%",
                 }}
               >
-                <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    gap: 2,
-                  }}
-                >
-                  <TextField
-                    value={formData.firstName}
-                    fullWidth
-                    onChange={handleChange}
-                    label="firstName"
-                    name="firstName"
-                  />
-
-                  <TextField
-                    value={formData.lastName}
-                    fullWidth
-                    onChange={handleChange}
-                    label="lastName"
-                    name="lastName"
-                  />
+                <Box sx={{ width: "100%" }}>
+                  <Box
+                    sx={{
+                      textAlign: "center",
+                    }}
+                  >
+                    <Typography variant="h5">Select Payment Method</Typography>
+                  </Box>
                 </Box>
                 <Box
                   sx={{
                     width: "100%",
                     display: "flex",
-                    gap: 2,
+                    justifyContent: "center",
                   }}
                 >
-                  <TextField
-                    fullWidth
-                    onChange={handleChange}
-                    value={formData.email}
-                    label="Email"
-                    name="email"
-                  />
-                  <TextField
-                    fullWidth
-                    onChange={handleChange}
-                    value={formData.number}
-                    label="Number"
-                    name="number"
-                  />
+                  <Box
+                    sx={{
+                      width: "80%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+                    }}
+                  >
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ArrowDownwardIcon />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                      >
+                        <Typography component="span" variant="h5">
+                          Cash On Delivery
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Box>
+                          <FormControlLabel
+                            control={<Radio />}
+                            label={total - (total / 100) * (20).toFixed(2)}
+                          />
+                        </Box>
+                      </AccordionDetails>
+                    </Accordion>
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ArrowDownwardIcon />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                      >
+                        <Typography component="span" variant="h5">
+                          UPI
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <FormControl component="fieldset">
+                          <RadioGroup
+                            name="address"
+                            value={selectedPayment}
+                            onChange={handlePaymentChange}
+                          >
+                            <Box>
+                              <FormControlLabel
+                                control={<Radio />}
+                                value="googlePay"
+                                label="GooglePay"
+                              />
+                            </Box>
+                            <Box>
+                              <FormControlLabel
+                                value="PhonePay"
+                                control={<Radio />}
+                                label="PhonePay"
+                              />
+                            </Box>
+                            <Box>
+                              <FormControlLabel
+                                value="Paytm"
+                                control={<Radio />}
+                                label="Paytm"
+                              />
+                            </Box>
+                          </RadioGroup>
+                        </FormControl>
+                      </AccordionDetails>
+                    </Accordion>
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ArrowDownwardIcon />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                      >
+                        <Typography component="span" variant="h5">
+                          Card
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Box
+                          sx={{
+                            width: "100%",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 5,
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                width: "100%",
+                              }}
+                            >
+                              <TextField
+                                label="Card Number"
+                                name="cardNumber"
+                                fullWidth
+                              />
+                            </Box>
+                            <Box
+                              sx={{
+                                width: "100%",
+                                display: "flex",
+                                gap: 5,
+                              }}
+                            >
+                              <TextField
+                                label="Expiry Date"
+                                name="expiryDate"
+                                fullWidth
+                              />
+                              <TextField label="CVV" name="cvv" fullWidth />
+                            </Box>
+                            <Box>
+                              <Box>
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="save details"
+                                />
+                              </Box>
+                            </Box>
+                            <Box
+                              sx={{
+                                width: "100%",
+                              }}
+                            >
+                              <Button
+                                className="black"
+                                variant="contained"
+                                sx={{
+                                  width: "100%",
+                                  p: 1.5,
+                                }}
+                              >
+                                Pay
+                              </Button>
+                            </Box>
+                          </Box>
+                        </Box>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
                 </Box>
-
-                <TextField
-                  label="Address"
-                  name="address"
-                  onChange={handleChange}
-                  value={formData.address}
-                  fullWidth
-                  multiline
-                  rows={3}
-                />
-                <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    gap: 2,
-                  }}
-                >
-                  <TextField
-                    fullWidth
-                    onChange={handleChange}
-                    value={formData.city}
-                    label="City"
-                    name="city"
-                  />
-                  <TextField
-                    fullWidth
-                    onChange={handleChange}
-                    type="number"
-                    label="Pincode"
-                    value={formData.pincode}
-                    name="pincode"
-                  />
-                </Box>
-
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box
+                sx={{
+                  width: "60%",
+                }}
+              >
                 <Box
                   sx={{
                     width: "100%",
                     textAlign: "center",
                   }}
                 >
-                  <Button
-                    type="submit"
-                    onClick={() => {
-                      handaleOpen();
-                    }}
-                    sx={{
-                      width: "100%",
-                      borderRadius: 7,
-                      p: 1.5,
-                      mt: 5,
-                    }}
-                    variant="contained"
-                    className="black"
-                  >
-                    Place Order
-                  </Button>
+                  <Typography variant="h4"> PERSONAL DETAILS</Typography>
                 </Box>
+                {user && (
+                  <Box
+                    key={user._id}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      marginTop: "50px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: "70%",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          p: 2,
+                          flexDirection: "column",
+                          gap: 3,
+                          backgroundColor: "#f0f0f0",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: "100%",
+                            display: "flex",
+                            gap: 5,
+                          }}
+                        >
+                          <Typography variant="h5">{user.fullName}</Typography>
+                          <Typography variant="h5">{user.number}</Typography>
+                        </Box>
+                        <Box>
+                          <Typography variant="h5">{user.email}</Typography>
+                        </Box>
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          backgroundColor: "#f0f0f0",
+                          p: 2,
+                        }}
+                      >
+                        <FormControl component="fieldset">
+                          <RadioGroup
+                            name="address"
+                            value={selectedAddress?._id || ""}
+                            onChange={handleChange}
+                          >
+                            {address?.map((add) => (
+                              <FormControlLabel
+                                key={add._id}
+                                value={add._id}
+                                control={<Radio />}
+                                label={
+                                  <>
+                                    <Box
+                                      sx={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        gap: 5,
+                                      }}
+                                    >
+                                      <Box>
+                                        <Typography variant="h6">
+                                          {add.address}
+                                        </Typography>
+                                        <Typography variant="h6">
+                                          {add.city}, {add.pincode},{" "}
+                                          {add.country}
+                                        </Typography>
+                                      </Box>
+                                      <Box>
+                                        <Box>
+                                          <IconButton
+                                            onClick={() => {
+                                              handleDeleteAddress(add._id);
+                                            }}
+                                          >
+                                            <DeleteIcon color="error" />
+                                          </IconButton>
+                                        </Box>
+                                        <Box>
+                                          <IconButton
+                                            onClick={() => {
+                                              handleEditAddress(add);
+                                            }}
+                                          >
+                                            <EditIcon color="info" />
+                                          </IconButton>
+                                        </Box>
+                                      </Box>
+                                    </Box>
+                                  </>
+                                }
+                              />
+                            ))}
+                          </RadioGroup>
+                        </FormControl>
+                      </Box>
+                      <Box
+                        onClick={() => setOpen(true)}
+                        sx={{
+                          width: "100%",
+                          backgroundColor: "#f0f0f0",
+                          p: 2,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Typography variant="h6"> + Add New Address</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
               </Box>
-            </form>
-          </Box>
+            </>
+          )}
+
+          <AddAddress
+            open={open}
+            editAddMode={editAddMode}
+            editData={editAddData}
+            editId={editAddId}
+            onClose={() => {
+              setOpen(false);
+              setEditAddMode(false);
+            }}
+          />
           <Box
             sx={{
               width: "40%",
             }}
           >
-            <Box
-              sx={{
-                width: "90%",
-                mt: 5,
-                // border: "1px solid black",
-              }}
-            >
-              {cartData?.map((product) => {
-                console.log(product);
-                return (
-                  <Box
-                    key={product.productId._id}
-                    sx={{
-                      width: "90%",
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: "10%",
-                        p: 2,
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100%",
+            {checked ? (
+              <></>
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    width: "90%",
+                    mt: 5,
+                  }}
+                >
+                  {cartData?.map((product) => {
+                    // console.log(product);
+                    return (
+                      <Box
+                        key={product.productId._id}
+                        sx={{
+                          width: "90%",
+                          display: "flex",
+                          flexDirection: "row",
                         }}
-                        src={`http://192.168.2.222:5000/${product.productId.image}`}
-                        alt=""
-                      />
-                    </Box>
-                    <Box
-                      sx={{
-                        width: "80%",
-                        p: 1,
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        // gap: 15,
-                        alignItems: "center",
-                      }}
-                    >
-                      <Typography variant="h5">
-                        {product.productId.name}
-                      </Typography>
+                      >
+                        <Box
+                          sx={{
+                            width: "10%",
+                            p: 2,
+                          }}
+                        >
+                          <img
+                            style={{
+                              width: "100%",
+                            }}
+                            src={`http://192.168.2.222:5000/${product.productId.image}`}
+                            alt=""
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            width: "80%",
+                            p: 1,
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            // gap: 15,
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography variant="h5">
+                            {product.productId.name}
+                          </Typography>
 
-                      <Typography variant="body1">
-                        ${product.productId.price} x {product.quantity}
-                      </Typography>
-                    </Box>
-                  </Box>
-                );
-              })}
-            </Box>
-            <Divider
-              sx={{
-                width: "80%",
-              }}
-            />
+                          <Typography variant="body1">
+                            ${product.productId.price} x {product.quantity}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </Box>
+                <Divider
+                  sx={{
+                    width: "80%",
+                  }}
+                />
+              </>
+            )}
+
             <Box
               sx={{
                 width: "80%",
@@ -348,17 +549,6 @@ function CheckOut() {
                   $0
                 </Typography>
               </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant="h5">Payment Type</Typography>
-                <Typography variant="h5"></Typography>
-              </Box>
               <Divider
                 sx={{
                   width: "100%",
@@ -378,6 +568,42 @@ function CheckOut() {
                 </Typography>
               </Box>
             </Box>
+            {checked ? (
+              <Box sx={{ width: "100%" }}>
+                <Button
+                  onClick={() => {
+                    handlePlaceOrder();
+                  }}
+                  className="black"
+                  variant="contained"
+                  sx={{ width: "80%", p: 1.5, mt: 10, borderRadius: 7 }}
+                >
+                  Place Order
+                </Button>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    handlePayment();
+                  }}
+                  sx={{
+                    width: "80%",
+                    borderRadius: 7,
+                    p: 1.5,
+                    mt: 10,
+                  }}
+                  variant="contained"
+                  className="black"
+                >
+                  Make A Payment
+                </Button>
+              </Box>
+            )}
           </Box>
         </Grid>
       </Grid>

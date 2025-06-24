@@ -64,10 +64,10 @@ const productSlice = createSlice({
 
 
 
-        
 
 
-       
+
+
 
 
             /***********************************updateProductData***************************/
@@ -119,24 +119,6 @@ const productSlice = createSlice({
             })
 
 
-        // /*************************************getNewArrivalProductData**************************/
-
-
-        // .addCase(getNewArrivalsProductData.pending, (state) => {
-        //     state.loading = true;
-        //     state.error = null;
-        // })
-        // .addCase(getNewArrivalsProductData.fulfilled, (state, action) => {
-        //     state.loading = false;
-        //     // console.log(action)
-        //     state.newArrivalProducts = action.payload;
-        //     console.log(state.newArrivalProducts);
-
-        // })
-        // .addCase(getNewArrivalsProductData.rejected, (state, action) => {
-        //     state.loading = false;
-        //     state.error = action.payload || "Error fetching Products";
-        // });
     }
 });
 export default productSlice.reducer;
