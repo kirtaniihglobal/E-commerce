@@ -38,7 +38,7 @@ export const addProductData = createAsyncThunk(
             return response;
 
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             dispatch(openSnackbar({ massage: error.response.data.msg || "Failed to Add", severity: "error" }));
             return rejectWithValue(error.response?.data.msg);
         }

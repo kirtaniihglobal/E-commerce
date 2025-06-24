@@ -42,6 +42,7 @@ import {
 } from "../Thunk/productThunk";
 import { useSelector, useDispatch } from "react-redux";
 import { OutlinedInput } from "@mui/material";
+import LoadingPage from "../comon/loadingPage";
 const names = ["Small", "Medium", "Large", "X-Large"];
 const colors = [
   {
@@ -68,7 +69,7 @@ const colors = [
 
 function ManageProducts() {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.products);
+  const { products, loading } = useSelector((state) => state.products);
   const [open, setOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [editMode, setEditmode] = useState(false);
@@ -487,7 +488,11 @@ function ManageProducts() {
                     <TableCell align="center">Edit/Delete</TableCell>
                   </TableRow>
                 </TableHead>
-                {products?.length === 0 ? (
+                {loading ? (
+                  <>
+                    <LoadingPage />
+                  </>
+                ) : products?.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>No products found</TableCell>
                   </TableRow>

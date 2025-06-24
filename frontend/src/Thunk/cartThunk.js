@@ -11,7 +11,7 @@ export const addToCartData = createAsyncThunk(
         try {
             const response = await addToCartAPI(values);
             dispatch(openSnackbar({ massage: `Added To Cart Successfully`, severity: "success" }));
-            console.log(response);
+            // console.log(response);
             return response;
 
         } catch (error) {
@@ -44,7 +44,7 @@ export const removeFromCartData = createAsyncThunk(
             // console.log("hello")
             const response = await removeFromCartAPI(id);
             dispatch(openSnackbar({ massage: `Product remove from cart`, severity: "success" }));
-            console.log(response)
+            // console.log(response)
             return response;
 
         } catch (error) {
@@ -62,7 +62,7 @@ export const clearCartData = createAsyncThunk(
             const response = await clearCartAPI();
             dispatch(openSnackbar({ massage: `The Cart is Clear`, severity: "success" }));
 
-            console.log(response)
+            // console.log(response)
             return response;
 
         } catch (error) {
@@ -79,7 +79,7 @@ export const plusData = createAsyncThunk(
             const response = await plusAPI(id);
             dispatch(openSnackbar({ massage: `Quantity is Plus by 1`, severity: "success" }));
 
-            console.log(response)
+            // console.log(response)
             return response;
 
         } catch (error) {
@@ -96,7 +96,7 @@ export const minusData = createAsyncThunk(
             const response = await minusAPI(id);
             dispatch(openSnackbar({ massage: `Quantity is Minus by 1`, severity: "success" }));
 
-            console.log(response)
+            // console.log(response)
             return response;
 
         } catch (error) {

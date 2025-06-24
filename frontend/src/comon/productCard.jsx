@@ -1,7 +1,6 @@
 import { Grid, Box, Typography, Button } from "@mui/material";
 import GradeIcon from "@mui/icons-material/Grade";
 import { getOneproductData } from "../Thunk/productThunk";
-import { addToCart } from "../redux/cartSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { openSnackbar } from "../redux/snackBarSlice";

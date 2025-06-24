@@ -52,7 +52,7 @@ export default function LoginPage() {
         localStorage.setItem("token", token);
         dispatch(login({ user, token }));
         if (user.role === "admin") {
-          navigate("/adminDashboard");
+          navigate("/admin/adminDashboard");
         } else {
           navigate("/");
         }

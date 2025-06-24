@@ -77,7 +77,43 @@ const profileDetail = async (req, res) => {
     res.status(500).json({ status: 500, message: "Error fetching user" });
   }
 }
+const updateProfile = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const updateData = {
+      fullName: req.body.fullName,
+      number: req.body.number,
+      email: req.body.email,
+      address: req.body.address,
+
+    };
+
+    if (req.file) {
+      updateData.image = req.file.path;
+    }
+
+    const updateUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    if (!updateUser) {
+      return res
+        .status(400)
+        .json({ status: 400, msg: "User not found" });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      msg: "UserProfile updated successfully",
+      updateUser,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 500, msg: "ProfileUpdate Failed" });
+  }
+
+}
 
 
 
-module.exports = { register, login, profileDetail };
+module.exports = { register, login, profileDetail, updateProfile };

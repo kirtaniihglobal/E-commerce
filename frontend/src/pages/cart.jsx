@@ -11,10 +11,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useEffect } from "react";
 import Header from "../components/header/header";
-import { fetchUser } from "../redux/authSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement, removeCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import {
   clearCartData,
@@ -30,17 +28,10 @@ function Cart() {
   const { cartData } = useSelector((state) => state.cart);
   const total = useSelector((state) => state.cart.total);
   console.log(total);
-  // console.log(cartData);
-  // const { user } = useSelector((state) => state.auth);
-  // console.log(user);
-
-  // useEffect(() => {
-  //   dispatch(fetchUser());
-  // }, [dispatch]);
   useEffect(() => {
     dispatch(getAllCartData());
   }, [dispatch]);
-  // console.log(cartItems);
+
   return (
     <>
       <Header />
@@ -71,7 +62,6 @@ function Cart() {
               className="black"
               onClick={() => {
                 dispatch(clearCartData());
-                // dispatch(getAllCartData());
               }}
             >
               clear
@@ -81,7 +71,6 @@ function Cart() {
         <Box
           sx={{
             width: "100%",
-            // height: "auto",
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -91,7 +80,6 @@ function Cart() {
           <Box
             sx={{
               width: "45%",
-              // height: "auto",
               border: "2px solid #0000001A",
               borderRadius: 3,
               p: 3,
@@ -209,11 +197,6 @@ function Cart() {
                       </Box>
                     </Box>
                   );
-                  // <Divider
-                  //   sx={{
-                  //     width: "100%",
-                  //   }}
-                  // />
                 })}
               </>
             )}
@@ -222,7 +205,6 @@ function Cart() {
           <Box
             sx={{
               width: "30%",
-              // height: "auto",
               border: "2px solid #0000001A",
               borderRadius: 3,
               p: 3,
@@ -346,8 +328,6 @@ function Cart() {
                       borderRadius: 7,
                       width: "100%",
                       height: "100%",
-                      // px: 5,
-                      // py: 2,
                     }}
                   >
                     Apply

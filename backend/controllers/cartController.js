@@ -158,7 +158,7 @@ const minusProduct = async (req, res) => {
         }
         const product = cart.products.findIndex((prod) => prod.id === productId);
         // console.log(cart.products.color)
-        if (product !==1&&cart.products[product].quantity>1) {
+        if (product !== 1 && cart.products[product].quantity > 1) {
             cart.products[product].quantity -= 1;
             const price = cart.products[product].productId.price;
             cart.total -= price;

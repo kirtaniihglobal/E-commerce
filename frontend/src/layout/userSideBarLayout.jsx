@@ -2,18 +2,20 @@ import { Grid, Box, Typography, Button } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/snackBarSlice";
+import Header from "../components/header/header";
 
-function Layout() {
+function UserProfileLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <>
+      <Header />
       <Grid
         container
-        wrap="nowrap"
+        // wrap="nowrap"
         sx={{
           width: "100%",
-          height: "600px",
+          // height: "100%",
         }}
       >
         <Grid
@@ -26,25 +28,24 @@ function Layout() {
         >
           <Box
             sx={{
-              backgroundColor: "black",
+              backgroundColor: "#303030",
               height: "100%",
               padding: 2,
               display: "flex",
               flexDirection: "column",
-              gap: 6,
+              gap: 5,
               color: "#fff",
             }}
           >
             <Box>
               <Typography
-                variant=""
+                variant="h4"
                 sx={{
                   color: "#fff",
-                  fontSize: 33,
                   fontWeight: "bold",
                 }}
               >
-                Admin Dashboard
+                My Profile
               </Typography>
             </Box>
             <Box
@@ -53,7 +54,7 @@ function Layout() {
                 display: "flex",
                 justifyContent: "center",
                 flexDirection: "column",
-                gap: 4,
+                gap: 3,
               }}
             >
               <Typography
@@ -63,7 +64,7 @@ function Layout() {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  navigate("/adminDashboard");
+                  navigate("/profile");
                 }}
               >
                 DashBoard
@@ -75,19 +76,48 @@ function Layout() {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  navigate("/manageProducts");
+                  navigate("/profile/myAddress");
                 }}
               >
-                Products
+                My Address
               </Typography>
-            </Box>
-            <Box
-              sx={{
-                position: "fixed",
-                bottom: "10px",
-              }}
-            >
-              <Button
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontSize: 20,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/profile/orderDetailPage");
+                }}
+              >
+                My Orders
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontSize: 20,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/profile/myPayments");
+                }}
+              >
+                My Payments
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontSize: 20,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/profile/myWallet");
+                }}
+              >
+                My Wallet
+              </Typography>
+              <Typography
                 onClick={() => {
                   dispatch(
                     openSnackbar({
@@ -98,23 +128,23 @@ function Layout() {
                   localStorage.removeItem("token");
                   navigate("/login");
                 }}
-                variant="contained"
                 sx={{
-                  borderRadius: 10,
+                  color: "#fff",
+                  fontSize: 20,
+                  cursor: "pointer",
                 }}
-                color="error"
               >
                 Logout
-              </Button>
+              </Typography>
             </Box>
           </Box>
         </Grid>
-        <Grid sx={{ width: "80%", position: "fixed", right: 0 }}>
+        <Grid sx={{ width: "80%", right: 0 }}>
           <Box
             sx={{
+              ml: 35,
               width: "100%",
               height: "100%",
-              // p: 2,
             }}
           >
             <Outlet />
@@ -125,4 +155,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default UserProfileLayout;

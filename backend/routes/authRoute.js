@@ -6,12 +6,14 @@ const { verifyToken } = require("../middleware/auth");
 const {
   register,
   login,
-  profileDetail
+  profileDetail,
+  updateProfile
 } = require("../controllers/userController");
 
 router.post("/register", upload.single("image"), register);
 router.post("/login", login);
 router.get("/UserDetail", verifyToken, profileDetail);
+router.put("/UserUpdate", upload.single("image"), verifyToken, updateProfile);
 
 
 module.exports = router;

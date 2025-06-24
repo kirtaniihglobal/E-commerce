@@ -15,38 +15,9 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        addToCart: (state, action) => {
-            const product = action.payload;
-            const quntity = action.payload.quntity;
-            // console.log(product)
-            const existProduct = state.cartItems.find((item) => item._id === product._id);
-
-            // console.log(state.cartItems)
-            // console.log(existProduct)
-            if (existProduct) {
-
-                existProduct.quntity += quntity;
-            } else {
-                state.cartItems.push({ ...product, quntity });
-                // console.log(state.cartItems)
-            }
-        },
-        removeCart: (state, action) => {
-            state.cartData = state.cartData.filter((item) => item._id !== action.payload);
-        },
-        increment: (state, action) => {
-            const item = state.cartData.find((item) => item._id === action.payload);
-            if (item) {
-                item.quntity += 1;
-            }
-
-        },
-        decrement: (state, action) => {
-            const item = state.cartData.find((item) => item._id === action.payload);
-            console.log(item)
-            if (item && item.quntity > 1) {
-                item.quntity -= 1;
-            }
+        clearCart: (state, action) => {
+            state.cartData = [],
+                state.total = 0
         }
     },
     extraReducers: (builder) => {
@@ -59,7 +30,7 @@ const cartSlice = createSlice({
             .addCase(addToCartData.fulfilled, (state, action) => {
                 state.loading = false;
                 // console.log(action.payload.cart.products);
-                state.cartData=action.payload.cart.products
+                state.cartData = action.payload.cart.products
             })
             .addCase(addToCartData.rejected, (state, action) => {
                 state.loading = false;
@@ -97,7 +68,7 @@ const cartSlice = createSlice({
             })
             .addCase(removeFromCartData.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload.cart.products)
+                // console.log(action.payload.cart.products)
                 state.cartData = action.payload.cart.products
                 state.total = action.payload.cart.total;
             })
@@ -115,7 +86,7 @@ const cartSlice = createSlice({
             })
             .addCase(clearCartData.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload.cart.products)
+                // console.log(action.payload.cart.products)
                 state.cartData = action.payload.cart.products
                 state.total = action.payload.cart.total;
             })
@@ -163,7 +134,7 @@ const cartSlice = createSlice({
     }
 });
 
-export const { addToCart, removeCart, increment, decrement } =
+export const { clearCart } =
     cartSlice.actions;
 export default cartSlice.reducer;
 
