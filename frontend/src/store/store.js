@@ -4,6 +4,7 @@ import productReducer from "../redux/productSlice";
 import snackBarReducer from "../redux/snackBarSlice";
 import cartReducer from "../redux/cartSlice";
 import orderReducer from "../redux/orderSlice";
+import adminReducer from "../redux/adminSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     products: productReducer,
     snackBar: snackBarReducer,
     cart: cartReducer,
-    order: orderReducer
+    order: orderReducer,
+    admin: adminReducer
   },
 });

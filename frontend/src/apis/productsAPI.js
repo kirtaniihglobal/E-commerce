@@ -27,9 +27,7 @@ export const getTopSellingproductsAPI = async () => {
 }
 export const getOneproductAPI = async (id) => {
     try {
-        // console.log(id)
         const response = await api.get(`products/${id}`);
-        // console.log(response);
         return response;
     } catch (error) {
         throw error;
@@ -45,7 +43,6 @@ export const addProductAPI = async (values) => {
 }
 export const updateProductAPI = async (id, values) => {
     try {
-        // console.log(values);
         const response = await api.put(`products/${id}`, values,);
         return response.data;
     } catch (error) {
@@ -60,12 +57,3 @@ export const deleteProductAPI = async (id) => {
         throw error;
     }
 }
-// export const getNewArrivalsProductAPI = async () => {
-//     try {
-//         const response = await api.get(`products/newArrival`);
-//         console.log(response);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }

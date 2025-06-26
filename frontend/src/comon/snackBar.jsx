@@ -8,9 +8,6 @@ const SnackBar = () => {
     dispatch(closeSnackbar());
   };
   const { isOpen, massage, severity } = useSelector((state) => state.snackBar);
-  // console.log(isOpen);
-  // console.log(massage);
-  // console.log(severity);
   return (
     <Snackbar
       open={isOpen}

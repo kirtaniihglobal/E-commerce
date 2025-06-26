@@ -34,9 +34,8 @@ function MyAddress() {
     setOpen(true);
     setEditAddMode(true);
     setEditAddId(add._id);
-    // console.log(add._id);
     setEditAddData(add);
-    // console.log(add);
+
   };
 
   return (

@@ -21,13 +21,13 @@ import {
   minusData,
   removeFromCartData,
 } from "../Thunk/cartThunk";
+import { openSnackbar } from "../redux/snackBarSlice";
 
 function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cartData } = useSelector((state) => state.cart);
   const total = useSelector((state) => state.cart.total);
-  console.log(total);
   useEffect(() => {
     dispatch(getAllCartData());
   }, [dispatch]);
@@ -100,7 +100,6 @@ function Cart() {
             ) : (
               <>
                 {cartData.map((product) => {
-                  // console.log(product);
                   return (
                     <Box
                       key={product.productId._id}
@@ -342,7 +341,16 @@ function Cart() {
               >
                 <Button
                   onClick={() => {
-                    navigate("/checkOut");
+                    if (cartData == "") {
+                      dispatch(
+                        openSnackbar({
+                          massage: "The cart is empty",
+                          severity: "error",
+                        })
+                      );
+                    } else {
+                      navigate("/checkOut");
+                    }
                   }}
                   sx={{
                     width: "100%",

@@ -41,7 +41,6 @@ function CheckOut() {
   const [checked, setChecked] = useState(false);
   const { cartData, total } = useSelector((state) => state.cart);
   const { user, address } = useSelector((state) => state.auth);
-  console.log(address);
 
   const handleChange = (event) => {
     const selectId = event.target.value;
@@ -66,6 +65,7 @@ function CheckOut() {
       const respons = await dispatch(
         addOrderData({ ...selectedAddress })
       ).unwrap();
+      navigate("/");
     } catch (error) {}
   };
   const handleDeleteAddress = async (id) => {
@@ -77,9 +77,7 @@ function CheckOut() {
     setOpen(true);
     setEditAddMode(true);
     setEditAddId(add._id);
-    // console.log(add._id);
     setEditAddData(add);
-    // console.log(add);
   };
 
   useEffect(() => {
@@ -312,7 +310,6 @@ function CheckOut() {
                           p: 2,
                           flexDirection: "column",
                           gap: 3,
-                          backgroundColor: "#f0f0f0",
                         }}
                       >
                         <Box
@@ -322,17 +319,23 @@ function CheckOut() {
                             gap: 5,
                           }}
                         >
-                          <Typography variant="h5">{user.fullName}</Typography>
-                          <Typography variant="h5">{user.number}</Typography>
+                          <Box>
+                            <Typography variant="body1">FulLName:</Typography>
+                            <TextField fullWidth value={user.fullName} />
+                          </Box>
+                          <Box>
+                            <Typography variant="body1">Number:</Typography>
+                            <TextField fullWidth value={user.number} />
+                          </Box>
                         </Box>
                         <Box>
-                          <Typography variant="h5">{user.email}</Typography>
+                          <Typography variant="body1">Email:</Typography>
+                          <TextField fullWidth value={user.email} />
                         </Box>
                       </Box>
                       <Box
                         sx={{
                           width: "100%",
-                          backgroundColor: "#f0f0f0",
                           p: 2,
                         }}
                       >
@@ -397,7 +400,8 @@ function CheckOut() {
                       <Box
                         onClick={() => setOpen(true)}
                         sx={{
-                          width: "100%",
+                          width: "30%",
+                          borderRadius: 10,
                           backgroundColor: "#f0f0f0",
                           p: 2,
                           cursor: "pointer",
@@ -438,7 +442,6 @@ function CheckOut() {
                   }}
                 >
                   {cartData?.map((product) => {
-                    // console.log(product);
                     return (
                       <Box
                         key={product.productId._id}

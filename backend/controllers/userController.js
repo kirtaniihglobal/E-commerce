@@ -4,7 +4,7 @@ const { generateJWTToken } = require("../middleware/auth");
 
 const register = async (req, res) => {
   try {
-    console.log("Incoming registration data:", req.body);
+
     const {
       fullName,
       number,
@@ -33,7 +33,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       role,
     })
-    console.log(newUser);
+
 
     return res.status(201).json({ status: 200, msg: "User created successfully", user: newUser });
   } catch (error) {
@@ -55,6 +55,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ status: 400, msg: "Invalid credentials" });
     }
+
     const user = {
       id: userDetails.id,
       fullName: userDetails.fullName,
@@ -63,6 +64,7 @@ const login = async (req, res) => {
       role: userDetails.role,
     };
     const token = generateJWTToken(user);
+
     return res.status(200).json({ status: 200, msg: "User login successfully", user, token });
   } catch (error) {
     console.error("Login Error:", error);
@@ -115,5 +117,28 @@ const updateProfile = async (req, res) => {
 }
 
 
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(500).json({ status: false, msg: "Email is not found !" })
+    }
+    const token = generateJWTToken(user);
+    user.resetToken = token
+    await user.save();
 
-module.exports = { register, login, profileDetail, updateProfile };
+
+    const resetLink = `http://192.168.2.222:5000/api/resetPassword/${token}`;
+    await sendEmail(email, "Reset your Password", `click here:${resetLink}`);
+    res.json({ msg: "Password reset email sent" });
+  } catch (error) {
+    return res.status(500).json({ status: false, msg: "reset password error" });
+  }
+}
+
+
+
+
+
+module.exports = { register, login, profileDetail, updateProfile, forgotPassword };

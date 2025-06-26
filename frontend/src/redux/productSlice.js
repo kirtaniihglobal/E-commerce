@@ -63,13 +63,6 @@ const productSlice = createSlice({
             })
 
 
-
-
-
-
-
-
-
             /***********************************updateProductData***************************/
             .addCase(updateProductData.pending, (state) => {
                 state.loading = true;
@@ -108,9 +101,8 @@ const productSlice = createSlice({
             })
             .addCase(getOneproductData.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action)
                 state.selectedProduct = action.payload.product;
-                // console.log(state.selectedProduct);
+
 
             })
             .addCase(getOneproductData.rejected, (state, action) => {

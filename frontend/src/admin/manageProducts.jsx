@@ -137,7 +137,6 @@ function ManageProducts() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("price", values.price);
@@ -564,7 +563,7 @@ function ManageProducts() {
                                 setEditmode(true);
                                 setEditId(prod._id);
                                 setEditData(prod);
-                                console.log(prod);
+                    
                               }}
                             >
                               <EditIcon color="info" />

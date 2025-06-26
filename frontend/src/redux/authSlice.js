@@ -36,7 +36,6 @@ export const registerUser = createAsyncThunk('user/register', async (values, { d
         );
         return response;
     } catch (error) {
-        console.log(error)
         dispatch(
             openSnackbar({
                 massage: error?.response?.data?.msg || "Register failed",
@@ -48,7 +47,6 @@ export const registerUser = createAsyncThunk('user/register', async (values, { d
 });
 export const updateUser = createAsyncThunk('user/UserUpdate', async (values, { dispatch, rejectWithValue }) => {
     try {
-        console.log(values)
         const response = await updateUserAPI(values);
         dispatch(
             openSnackbar({
@@ -58,7 +56,6 @@ export const updateUser = createAsyncThunk('user/UserUpdate', async (values, { d
         );
         return response;
     } catch (error) {
-        console.log(error)
         dispatch(
             openSnackbar({
                 massage: error?.response?.data?.msg || "profile update failed",
@@ -70,7 +67,7 @@ export const updateUser = createAsyncThunk('user/UserUpdate', async (values, { d
 });
 export const addAddress = createAsyncThunk('user/addAddress', async (values, { dispatch, rejectWithValue }) => {
     try {
-        console.log(values)
+
         const response = await addAddressAPI(values);
         dispatch(
             openSnackbar({
@@ -80,7 +77,6 @@ export const addAddress = createAsyncThunk('user/addAddress', async (values, { d
         );
         return response;
     } catch (error) {
-        console.log(error)
         dispatch(
             openSnackbar({
                 massage: error?.response?.data?.msg || "add  Address failed",
@@ -92,11 +88,9 @@ export const addAddress = createAsyncThunk('user/addAddress', async (values, { d
 });
 export const getAddress = createAsyncThunk('user/getAddress', async (_, { dispatch, rejectWithValue }) => {
     try {
-        // console.log(values)
         const response = await getAddressAPI();
         return response;
     } catch (error) {
-        console.log(error)
         dispatch(
             openSnackbar({
                 massage: error?.response?.data?.msg || "get address failed",
@@ -108,7 +102,6 @@ export const getAddress = createAsyncThunk('user/getAddress', async (_, { dispat
 });
 export const deleteAddress = createAsyncThunk('user/deleteAddress', async (id, { dispatch, rejectWithValue }) => {
     try {
-        // console.log(values)
         const response = await deleteAddressAPI(id);
         dispatch(
             openSnackbar({
@@ -118,7 +111,6 @@ export const deleteAddress = createAsyncThunk('user/deleteAddress', async (id, {
         );
         return response;
     } catch (error) {
-        console.log(error)
         dispatch(
             openSnackbar({
                 massage: error?.response?.data?.msg || "delete address failed",
@@ -130,8 +122,6 @@ export const deleteAddress = createAsyncThunk('user/deleteAddress', async (id, {
 });
 export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id, values }, { dispatch, rejectWithValue }) => {
     try {
-        // console.log(values)
-        // console.log(id)
         const response = await updateAddressAPI(id, values);
         dispatch(
             openSnackbar({
@@ -139,9 +129,8 @@ export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id,
                 severity: "success",
             })
         );
-        return response;
+        return response.addressUpdate;
     } catch (error) {
-        console.log(error)
         dispatch(
             openSnackbar({
                 massage: error?.response?.data?.msg || "update address failed",
@@ -151,12 +140,14 @@ export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id,
         return rejectWithValue(response?.data.msg)
     }
 });
+
 const initialState = {
     user: null,
     loading: false,
     error: null,
     token: null,
-    address: []
+    address: [],
+    users: []
 };
 const userSlice = createSlice({
     name: 'auth',
@@ -222,7 +213,6 @@ const userSlice = createSlice({
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.updateUser);
                 state.user = action.payload.updateUser;
             })
             .addCase(updateUser.rejected, (state, action) => {
@@ -239,7 +229,6 @@ const userSlice = createSlice({
             })
             .addCase(addAddress.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.data.addressData);
                 state.address = action.payload.data.addressData
             })
             .addCase(addAddress.rejected, (state, action) => {
@@ -256,7 +245,6 @@ const userSlice = createSlice({
             })
             .addCase(getAddress.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.data)
                 state.address = action.payload.data
             })
             .addCase(getAddress.rejected, (state, action) => {
@@ -274,7 +262,6 @@ const userSlice = createSlice({
             })
             .addCase(deleteAddress.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.updatedAddress.addressData)
                 state.address = action.payload.updatedAddress.addressData
             })
             .addCase(deleteAddress.rejected, (state, action) => {
@@ -292,15 +279,16 @@ const userSlice = createSlice({
             })
             .addCase(updateAddress.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.addressUpdate.addressData)
-                // console.log(action.meta.arg.values)
-                // const newData = action.meta.arg.values
-                state.address = action.payload.updatedAddress.addressData
+                state.address = action.payload.addressData
             })
             .addCase(updateAddress.rejected, (state, action) => {
                 state.error = action.error.message;
                 state.loading = false;
-            });
+            })
+
+
+
+   
     }
 });
 

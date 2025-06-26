@@ -15,8 +15,6 @@ import { useEffect } from "react";
 
 function AddAddress({ open, onClose, editData, editId, editAddMode }) {
   const dispatch = useDispatch();
-  console.log(editData);
-  console.log(editId);
   const validationSchema = yup.object({
     address: yup.string().required("address is required"),
     city: yup.string().required("city is required"),
@@ -34,8 +32,6 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      console.log(editId);
       try {
         if (editAddMode && editData) {
           const response = await dispatch(

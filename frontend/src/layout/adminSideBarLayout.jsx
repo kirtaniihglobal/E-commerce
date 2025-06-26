@@ -1,22 +1,39 @@
 import { Grid, Box, Typography, Button } from "@mui/material";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/snackBarSlice";
 
 function Layout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const activeStyle = {
+    backgroundColor: "#333",
+    color: "#fff",
+    fontSize: "20px",
+    padding: "8px 16px",
+    textDecoration: "none",
+    borderRadius: "5px",
+  };
+
+  const inactiveStyle = {
+    color: "#fff",
+    fontSize: "20px",
+    cursor: "pointer",
+    textDecoration: "none",
+    padding: "8px 16px",
+  };
+
   return (
     <>
       <Grid
         container
-        wrap="nowrap"
         sx={{
           width: "100%",
-          height: "600px",
+          height: "100vh",
         }}
       >
-        <Grid
+        <Box
           sx={{
             width: "20%",
             height: "100%",
@@ -32,12 +49,11 @@ function Layout() {
               display: "flex",
               flexDirection: "column",
               gap: 6,
-              color: "#fff",
             }}
           >
             <Box>
               <Typography
-                variant=""
+                variant="h5"
                 sx={{
                   color: "#fff",
                   fontSize: 33,
@@ -53,33 +69,44 @@ function Layout() {
                 display: "flex",
                 justifyContent: "center",
                 flexDirection: "column",
-                gap: 4,
+                gap: 3,
               }}
             >
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/admin/adminDashboard");
-                }}
+              <NavLink
+                to="/admin/adminDashboard"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
               >
-                DashBoard
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/admin/manageProducts");
-                }}
+                <Typography variant="">DashBoard</Typography>
+              </NavLink>
+
+              <NavLink
+                to="/admin/manageProducts"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
               >
-                Products
-              </Typography>
+                <Typography variant="">Products</Typography>
+              </NavLink>
+
+              <NavLink
+                to="/admin/manageOrders"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
+              >
+                <Typography variant="">Orders</Typography>
+              </NavLink>
+
+              <NavLink
+                to="/admin/manageUsers"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
+              >
+                <Typography variant="">Users</Typography>
+              </NavLink>
             </Box>
             <Box
               sx={{
@@ -91,7 +118,7 @@ function Layout() {
                 onClick={() => {
                   dispatch(
                     openSnackbar({
-                      massage: "Logout SuccessFully",
+                      message: "Logout Successfully",
                       severity: "success",
                     })
                   );
@@ -108,18 +135,24 @@ function Layout() {
               </Button>
             </Box>
           </Box>
-        </Grid>
-        <Grid sx={{ width: "80%", position: "fixed", right: 0 }}>
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
           <Box
             sx={{
-              width: "100%",
-              height: "100%",
-              // p: 2,
+              height: "auto",
+              width: "80%",
             }}
           >
             <Outlet />
           </Box>
-        </Grid>
+        </Box>
       </Grid>
     </>
   );

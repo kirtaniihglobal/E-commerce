@@ -1,5 +1,5 @@
-import { Grid, Box, Typography, Button } from "@mui/material";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Grid, Box, Typography } from "@mui/material";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/snackBarSlice";
 import Header from "../components/header/header";
@@ -7,17 +7,27 @@ import Header from "../components/header/header";
 function UserProfileLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const activeStyle = {
+    backgroundColor: "#333",
+    color: "#fff",
+    fontSize: "20px",
+    padding: "8px 16px",
+    textDecoration: "none",
+    borderRadius: "5px",
+  };
+
+  const inactiveStyle = {
+    color: "#fff",
+    fontSize: "20px",
+    cursor: "pointer",
+    textDecoration: "none",
+    padding: "8px 16px",
+  };
   return (
     <>
       <Header />
-      <Grid
-        container
-        // wrap="nowrap"
-        sx={{
-          width: "100%",
-          // height: "100%",
-        }}
-      >
+      <Grid container sx={{ width: "100%" }}>
         <Grid
           sx={{
             width: "20%",
@@ -28,7 +38,7 @@ function UserProfileLayout() {
         >
           <Box
             sx={{
-              backgroundColor: "#303030",
+              backgroundColor: "#000",
               height: "100%",
               padding: 2,
               display: "flex",
@@ -40,14 +50,12 @@ function UserProfileLayout() {
             <Box>
               <Typography
                 variant="h4"
-                sx={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                }}
+                sx={{ color: "#fff", fontWeight: "bold" }}
               >
                 My Profile
               </Typography>
             </Box>
+
             <Box
               sx={{
                 width: "100%",
@@ -57,66 +65,47 @@ function UserProfileLayout() {
                 gap: 3,
               }}
             >
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/profile");
-                }}
+              <NavLink
+                to="/profile/myProfile"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
               >
                 DashBoard
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/profile/myAddress");
-                }}
+              </NavLink>
+              <NavLink
+                to="/profile/myAddress"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
               >
                 My Address
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/profile/myOrders");
-                }}
+              </NavLink>
+              <NavLink
+                to="/profile/myOrders"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
               >
                 My Orders
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/profile/myPayments");
-                }}
+              </NavLink>
+              <NavLink
+                to="/profile/myPayments"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
               >
                 My Payments
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/profile/myWallet");
-                }}
+              </NavLink>
+              <NavLink
+                to="/profile/myWallet"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : inactiveStyle
+                }
               >
                 My Wallet
-              </Typography>
+              </NavLink>
+
               <Typography
                 onClick={() => {
                   dispatch(
@@ -139,6 +128,7 @@ function UserProfileLayout() {
             </Box>
           </Box>
         </Grid>
+
         <Grid sx={{ width: "80%", right: 0 }}>
           <Box
             sx={{

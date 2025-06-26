@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   confirmPassword: String,
   role: { type: String, enum: ["admin", "user"] },
   address: String,
-  image: String
+  image: String,
+  isBlocked: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model("User", userSchema);

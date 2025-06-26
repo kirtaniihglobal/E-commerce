@@ -67,7 +67,6 @@ export default function RegisterPage() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
       const match = values.password === values.confirmPassword;
       if (match) {
         try {

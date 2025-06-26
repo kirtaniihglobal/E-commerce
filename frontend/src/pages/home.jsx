@@ -363,8 +363,6 @@ function Home() {
             </Box>
             <Box
               sx={{
-                // width: "100%",
-                // height: "auto",
                 display: "flex",
                 flexDirection: "row",
                 gap: 4,

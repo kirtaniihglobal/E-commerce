@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addOrderData, getAllOrderData } from "../Thunk/orderThunk";
+import { addOrderData, getAllOrderData, cancelOrderData } from "../Thunk/orderThunk";
 
 
 
@@ -7,23 +7,23 @@ import { addOrderData, getAllOrderData } from "../Thunk/orderThunk";
 
 const initialState = {
     orderData: [],
-    total: null
+    total: null,
 };
 
 const orderSlice = createSlice({
     name: 'order',
     initialState,
-    reducers: {},
+    reducers: {
+    },
     extraReducers: (builder) => {
         builder
-
+            /*************************************addOrderData**************************/
             .addCase(addOrderData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(addOrderData.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.newOrder.total)
                 state.total = action.payload.newOrder.total
             })
             .addCase(addOrderData.rejected, (state, action) => {
@@ -31,13 +31,15 @@ const orderSlice = createSlice({
                 state.error = action.payload || "Error fetching Products";
             })
 
+
+            /*************************************getAllOrderData**************************/
+
             .addCase(getAllOrderData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(getAllOrderData.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.data);
                 state.orderData = action.payload.data
                 state.total = action.payload.data.total
             })
@@ -45,8 +47,25 @@ const orderSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || "Error fetching Products";
             })
+
+         
+
+            /*************************************cancelOrderData**************************/
+
+            .addCase(cancelOrderData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(cancelOrderData.fulfilled, (state, action) => {
+                state.loading = false;
+            })
+            .addCase(cancelOrderData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
     }
 })
 
-
+export const { deleteOrder } =
+    orderSlice.actions;
 export default orderSlice.reducer;

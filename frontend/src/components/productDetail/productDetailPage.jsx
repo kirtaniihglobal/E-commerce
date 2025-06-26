@@ -10,8 +10,6 @@ import {
   Divider,
   useTheme,
   Button,
-  Tab,
-  Tabs,
   Skeleton,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -21,9 +19,7 @@ import {
   getAllproductsData,
   getOneproductData,
 } from "../../Thunk/productThunk";
-import { fetchUser } from "../../redux/authSlice";
 import { addToCartData } from "../../Thunk/cartThunk";
-// import { addToCart, decrement, increment } from "../../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import prod9 from "../../assets/prod9.png";
@@ -33,7 +29,6 @@ import prod12 from "../../assets/prod12.png";
 import ProductCard from "../../comon/productCard";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Header from "../header/header";
-import RatingPage from "../ratingPage/ratingPage";
 import Footer from "../footer/footer";
 import img1 from "../../assets/image 1.png";
 import img2 from "../../assets/image 2.png";
@@ -43,18 +38,12 @@ import { openSnackbar } from "../../redux/snackBarSlice";
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
-  // const [value, setValue] = useState(1);
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const product = useSelector((state) => state.products.selectedProduct);
   const { products } = useSelector((state) => state.products);
   const { id } = useParams();
-  // const { user } = useSelector((state) => state.auth);
-  // // console.log(user);
-  // useEffect(() => {
-  //   dispatch(fetchUser());
-  // }, [dispatch]);
 
   const handlePlus = () => {
     setQuantity((quantity) => quantity + 1);
@@ -97,7 +86,6 @@ function ProductDetailPage() {
   const handleChangeColor = (color) => {
     setSelectedColor(color);
   };
-  // console.log(selectedColor);
   const handleChangeSize = (name) => {
     setSelectedSize(name);
   };
@@ -107,7 +95,6 @@ function ProductDetailPage() {
   useEffect(() => {
     if (!product) {
       const selectProd = products.find((product) => product._id === id);
-      console.log(selectProd);
       if (selectProd) {
         dispatch(getOneproductData(id));
       }
@@ -372,11 +359,6 @@ function ProductDetailPage() {
                       className="black"
                       onClick={() => {
                         handleSubmit();
-                        // console.log({
-                        //   ...product,
-                        //   size: selectedSize,
-                        //   color: selectedColor,
-                        // });
                       }}
                       sx={{
                         width: "100%",
