@@ -8,7 +8,6 @@ import {
   TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import Header from "../components/header/header";
 import { fetchUser, updateUser } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -87,9 +86,7 @@ export default function ProfilePage() {
       setIsEditing(false);
     } catch (error) {
       console.error("Update error:", error);
-      dispatch(
-        openSnackbar({ message: error || "Update failed", severity: "error" })
-      );
+   
     }
   };
 

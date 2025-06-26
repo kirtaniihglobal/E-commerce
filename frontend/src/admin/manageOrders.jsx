@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllOrderAdminData,
   updateOrderAdminData,
-} from "../Thunk/orderThunk";
+} from "../Thunk/adminThunk";
 import {
   Grid,
   Typography,
@@ -20,10 +20,8 @@ import { useState } from "react";
 
 function ManageOrders() {
   const dispatch = useDispatch();
-  const { allOrders } = useSelector((state) => state.order);
+  const { allOrders } = useSelector((state) => state.admin);
   const [filter, setFilter] = useState("");
-  console.log(filter);
-  console.log(allOrders);
   useEffect(() => {
     dispatch(getAllOrderAdminData(filter));
   }, [filter]);
@@ -187,7 +185,7 @@ function ManageOrders() {
                       >
                         <Button
                           onClick={() => {
-                            console.log(order._id);
+                        
                             dispatch(updateOrderAdminData(order._id));
                           }}
                           variant="contained"

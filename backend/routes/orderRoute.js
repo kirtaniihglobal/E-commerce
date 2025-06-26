@@ -1,16 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { verifyToken } = require("../middleware/auth")
+const { verifyToken, checkBlockUser } = require("../middleware/auth")
 const { addOrder, getAllOrders, cancelOrder } = require("../controllers/orderController");
-const { getAllOrdersAdmin, updateOrdersAdmin } = require("../controllers/adminController")
 
 
 
-router.post("/addOrder", verifyToken, addOrder)
+router.post("/addOrder", verifyToken, checkBlockUser, addOrder)
 router.get("/getOrder", verifyToken, getAllOrders)
-router.get("/getAllOrder", getAllOrdersAdmin)
-router.put("/updateOrder/:id", updateOrdersAdmin)
-router.put("/cancelOrder/:id", cancelOrder)
+
+router.put("/cancelOrder/:id", verifyToken, checkBlockUser, cancelOrder)
 
 
 

@@ -6,7 +6,7 @@ const Order = require("../models/order");
 
 const addOrder = async (req, res) => {
     try {
-        // console.log(address)
+       
         const { address, pincode, city, country } = req.body;
         const id = req.user.id;
         if (!address || !pincode || !city || !country) {
@@ -16,9 +16,9 @@ const addOrder = async (req, res) => {
         if (!findUser) {
             return res.status(500).json({ status: false, msg: "user not found!" });
         }
-        // console.log(findUser)
+        
         const cart = await Cart.findOne({ userId: id });
-        // console.log(cart.total)
+    
         if (!cart) {
             return res.status(500).json({ status: false, msg: "cart not found!" });
         }
@@ -34,7 +34,7 @@ const addOrder = async (req, res) => {
                 info: [{ country: country, address: address, pincode: pincode, city: city }],
                 status: "pending",
             });
-            console.log("newOrder", newOrder)
+          
             await newOrder.save();
             cart.products = [];
             cart.total = 0;
@@ -68,15 +68,15 @@ const getAllOrders = async (req, res) => {
 const cancelOrder = async (req, res) => {
     try {
         const orderId = req.params.id;
-        console.log("hello", orderId)
+    
 
         const order = await Order.findOne({ _id: orderId }).populate("orderData.products.productId");
-        console.log("order", order)
+      
         const pending = order.status == "pending";
 
         if (pending) {
             const updateOrder = await Order.findByIdAndUpdate(orderId, { status: "canceled" }, { new: true })
-            console.log(updateOrder)
+          
             return res.status(200).json({ status: true, msg: "order canceled", updateOrder })
         } else {
             return res.status(500).json({ status: false, msg: "Order not Canceled" })

@@ -101,9 +101,8 @@ const productSlice = createSlice({
             })
             .addCase(getOneproductData.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action)
                 state.selectedProduct = action.payload.product;
-                // console.log(state.selectedProduct);
+
 
             })
             .addCase(getOneproductData.rejected, (state, action) => {

@@ -4,10 +4,8 @@ import api from "../services/api";
 export const loginUserAPI = async (values) => {
     try {
         const response = await api.post(`auth/login`, values);
-        // console.log(response)
         return response.data;
     } catch (error) {
-        console.log(error)
         throw error;
     }
 }
@@ -46,7 +44,6 @@ export const addAddressAPI = async (values) => {
 export const getAddressAPI = async () => {
     try {
         const response = await api.get(`address/getAddress`);
-        // console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;
@@ -55,7 +52,6 @@ export const getAddressAPI = async () => {
 export const deleteAddressAPI = async (id) => {
     try {
         const response = await api.delete(`address/deleteAddress/${id}`);
-        console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;
@@ -63,33 +59,12 @@ export const deleteAddressAPI = async (id) => {
 }
 export const updateAddressAPI = async (id, values) => {
     try {
-        console.log(id)
-        console.log(values)
         const response = await api.put(`address/updateAddress/${id}`, values,);
-        console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;
     }
 }
-export const getAllUsersAPI = async (id, values) => {
-    try {
-        const response = await api.get(`auth/AllUsers`);
-        console.log(response.data)
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-export const blockUserAPI = async (id) => {
-    try {
-        console.log(id)
-        const response = await api.put(`auth/blockUser/${id}`);
-        console.log(response.data)
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
+
 
 

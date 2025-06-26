@@ -28,7 +28,6 @@ function Cart() {
   const dispatch = useDispatch();
   const { cartData } = useSelector((state) => state.cart);
   const total = useSelector((state) => state.cart.total);
-  console.log(total);
   useEffect(() => {
     dispatch(getAllCartData());
   }, [dispatch]);
@@ -101,7 +100,6 @@ function Cart() {
             ) : (
               <>
                 {cartData.map((product) => {
-                  // console.log(product);
                   return (
                     <Box
                       key={product.productId._id}

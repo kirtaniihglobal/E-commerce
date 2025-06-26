@@ -4,7 +4,7 @@ const { generateJWTToken } = require("../middleware/auth");
 
 const register = async (req, res) => {
   try {
-    console.log("Incoming registration data:", req.body);
+
     const {
       fullName,
       number,
@@ -33,7 +33,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       role,
     })
-    console.log(newUser);
+
 
     return res.status(201).json({ status: 200, msg: "User created successfully", user: newUser });
   } catch (error) {
@@ -55,9 +55,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ status: 400, msg: "Invalid credentials" });
     }
-    if (userDetails.isBlocked) {
-      return res.status(500).json({ status: false, msg: "User is Blocked" })
-    }
+
     const user = {
       id: userDetails.id,
       fullName: userDetails.fullName,
@@ -66,6 +64,7 @@ const login = async (req, res) => {
       role: userDetails.role,
     };
     const token = generateJWTToken(user);
+
     return res.status(200).json({ status: 200, msg: "User login successfully", user, token });
   } catch (error) {
     console.error("Login Error:", error);
@@ -138,21 +137,8 @@ const forgotPassword = async (req, res) => {
   }
 }
 
-const blockUser = async (req, res) => {
-  const userId = req.params.id;
-  console.log(userId)
-  try {
-    const checkUser = await User.findById(userId);
-    if (!checkUser) {
-      return res.status(500).json({ status: false, msg: "User is not found" })
-    }
-    const updateUser = await User.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
-    return res.status(200).json({ status: true, msg: "user Bloked successfully", updateUser })
-  } catch (error) {
-    return res.status(500).json({ status: false, msg: "User block error" })
-  }
-}
 
 
 
-module.exports = { register, login, profileDetail, updateProfile, forgotPassword, blockUser };
+
+module.exports = { register, login, profileDetail, updateProfile, forgotPassword };

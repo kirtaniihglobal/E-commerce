@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user")
 
 function verifyToken(req, res, next) {
     const authHeader = req.headers["authorization"];
-    console.log(authHeader, "Auth Header");
+   
     const token = authHeader && authHeader.split(" ")[1];
     if (!token) return res.status(401).json({ status: 401, msg: "Token not Found" });
 
@@ -22,7 +23,33 @@ function generateJWTToken(user) {
         }
     );
 }
+
+const checkBlockUser = async (req, res, next) => {
+    try {
+        const userId = req.user?.id;
+      
+
+        const checkUser = await User.findById(userId);
+       
+
+        if (!checkUser) {
+            return res.status(404).json({ status: false, msg: "User not found" });
+        }
+
+        if (checkUser.isBlocked) {
+            return res.status(403).json({ status: false, msg: "User is Blocked" });
+        }
+
+        next();
+
+    } catch (err) {
+        console.error("Error in checkBlockUser:", err);
+        return res.status(500).json({ status: false, msg: "Internal Server Error" });
+    }
+};
+
 module.exports = {
     verifyToken,
-    generateJWTToken
+    generateJWTToken,
+    checkBlockUser
 };

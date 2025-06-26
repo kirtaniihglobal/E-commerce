@@ -1,7 +1,5 @@
-const { default: mongoose } = require("mongoose");
 const Address = require("../models/address");
 const User = require("../models/user");
-const address = require("../models/address");
 
 
 
@@ -9,15 +7,11 @@ const addAddress = async (req, res) => {
     try {
         const id = req.user.id;
         const { address, city, pincode, country } = req.body;
-        console.log("Addrerss", address)
-
         const findUser = await User.findOne({ _id: id });
         if (!findUser) {
             return res.status(404).json({ status: 404, msg: "User not found" });
         }
-
         const addressData = await Address.findOne({ userId: id });
-        // console.log("addressDta", addressData)
         if (!addressData) {
             const newAddress = await Address.create({
                 userId: id,
@@ -59,7 +53,6 @@ const getAllAddress = async (req, res) => {
             return res.status(500).json({ status: 500, msg: "Dont have Address" })
         }
         const fetchAddress = address.addressData
-        console.log(fetchAddress)
 
         return res.status(201).json({ status: 200, msg: "Address fetch successfully", data: fetchAddress });
     } catch (error) {
@@ -70,17 +63,8 @@ const getAllAddress = async (req, res) => {
 const deleteAddress = async (req, res) => {
     try {
         const id = req.user.id;
-        // console.log(id);
-        // console.log(typeof (id));
-
-        // const address = await Address.findOne({ userId: id });
-        // const userId = new mongoose.Schema.Types.ObjectId(id);
-        // console.log("userid", userId);
-
         const addId = req.params.id;
-        console.log(addId);
         const updatedAddress = await Address.findOneAndUpdate({ userId: id }, { $pull: { addressData: { _id: addId } } }, { new: true });
-        console.log("addes", updatedAddress);
 
         return res.status(200).json({ status: 200, msg: "Deleted address successfully", updatedAddress });
     } catch (error) {
