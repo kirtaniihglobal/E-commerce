@@ -66,6 +66,7 @@ function CheckOut() {
       const respons = await dispatch(
         addOrderData({ ...selectedAddress })
       ).unwrap();
+      navigate("/");
     } catch (error) {}
   };
   const handleDeleteAddress = async (id) => {

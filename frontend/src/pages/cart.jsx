@@ -21,6 +21,7 @@ import {
   minusData,
   removeFromCartData,
 } from "../Thunk/cartThunk";
+import { openSnackbar } from "../redux/snackBarSlice";
 
 function Cart() {
   const navigate = useNavigate();
@@ -342,7 +343,16 @@ function Cart() {
               >
                 <Button
                   onClick={() => {
-                    navigate("/checkOut");
+                    if (cartData == "") {
+                      dispatch(
+                        openSnackbar({
+                          massage: "The cart is empty",
+                          severity: "error",
+                        })
+                      );
+                    } else {
+                      navigate("/checkOut");
+                    }
                   }}
                   sx={{
                     width: "100%",

@@ -159,7 +159,7 @@ export default function Header() {
                   ? [
                       <Button
                         onClick={() => {
-                          navigate("/profile");
+                          navigate("/profile/myProfile");
                         }}
                       >
                         <AccountCircleIcon />
@@ -265,7 +265,7 @@ export default function Header() {
                     ? [
                         <Button
                           onClick={() => {
-                            navigate("/profile");
+                            navigate("/profile/myProfile");
                           }}
                         >
                           <AccountCircleIcon />

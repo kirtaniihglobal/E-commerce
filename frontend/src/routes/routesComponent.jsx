@@ -9,9 +9,11 @@ import ProfilePage from "../pages/profile";
 import RegisterPage from "../pages/register";
 import PrivateRoute from "./privateRoute";
 import AdminDashboard from "../admin/adminDashboard";
-import Layout from "../layout/layout";
+import Layout from "../layout/adminSideBarLayout";
 import ManageProducts from "../admin/manageProducts";
 import PublicRoute from "./publicRoute";
+import ManageOrders from "../admin/manageOrders";
+import ManageUsers from "../admin/manageusers";
 import UserProfileLayout from "../layout/userSideBarLayout";
 import MyAddress from "../components/profile/myAddress";
 import MyOrders from "../components/profile/myOrders";
@@ -33,9 +35,11 @@ const RoutesComponent = () => {
           <Route element={<Layout />}>
             <Route path="/admin/adminDashboard" element={<AdminDashboard />} />
             <Route path="/admin/manageProducts" element={<ManageProducts />} />
+            <Route path="/admin/manageOrders" element={<ManageOrders />} />
+            <Route path="/admin/manageUsers" element={<ManageUsers />} />
           </Route>
           <Route element={<UserProfileLayout />}>
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/myProfile" element={<ProfilePage />} />
             <Route path="/profile/myAddress" element={<MyAddress />} />
             <Route path="/profile/myOrders" element={<MyOrders />} />
           </Route>

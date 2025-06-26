@@ -55,6 +55,9 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ status: 400, msg: "Invalid credentials" });
     }
+    if (userDetails.isBlocked) {
+      return res.status(500).json({ status: false, msg: "User is Blocked" })
+    }
     const user = {
       id: userDetails.id,
       fullName: userDetails.fullName,
@@ -115,5 +118,41 @@ const updateProfile = async (req, res) => {
 }
 
 
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(500).json({ status: false, msg: "Email is not found !" })
+    }
+    const token = generateJWTToken(user);
+    user.resetToken = token
+    await user.save();
 
-module.exports = { register, login, profileDetail, updateProfile };
+
+    const resetLink = `http://192.168.2.222:5000/api/resetPassword/${token}`;
+    await sendEmail(email, "Reset your Password", `click here:${resetLink}`);
+    res.json({ msg: "Password reset email sent" });
+  } catch (error) {
+    return res.status(500).json({ status: false, msg: "reset password error" });
+  }
+}
+
+const blockUser = async (req, res) => {
+  const userId = req.params.id;
+  console.log(userId)
+  try {
+    const checkUser = await User.findById(userId);
+    if (!checkUser) {
+      return res.status(500).json({ status: false, msg: "User is not found" })
+    }
+    const updateUser = await User.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
+    return res.status(200).json({ status: true, msg: "user Bloked successfully", updateUser })
+  } catch (error) {
+    return res.status(500).json({ status: false, msg: "User block error" })
+  }
+}
+
+
+
+module.exports = { register, login, profileDetail, updateProfile, forgotPassword, blockUser };

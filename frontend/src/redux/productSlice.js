@@ -63,13 +63,6 @@ const productSlice = createSlice({
             })
 
 
-
-
-
-
-
-
-
             /***********************************updateProductData***************************/
             .addCase(updateProductData.pending, (state) => {
                 state.loading = true;

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { openSnackbar } from "./snackBarSlice";
-import { loginUserAPI, userDetailAPI, registerUserAPI, updateUserAPI, addAddressAPI, getAddressAPI, deleteAddressAPI, updateAddressAPI } from "../apis/authAPI";
+import { loginUserAPI, userDetailAPI, registerUserAPI, updateUserAPI, addAddressAPI, getAddressAPI, deleteAddressAPI, updateAddressAPI, getAllUsersAPI, blockUserAPI } from "../apis/authAPI";
 export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
     const user = await userDetailAPI();
     return user;
@@ -139,7 +139,8 @@ export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id,
                 severity: "success",
             })
         );
-        return response;
+        // console.log(response.a   ddressUpdate)
+        return response.addressUpdate;
     } catch (error) {
         console.log(error)
         dispatch(
@@ -151,12 +152,48 @@ export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id,
         return rejectWithValue(response?.data.msg)
     }
 });
+export const getAllUsers = createAsyncThunk('user/getAllUsers', async (_, { dispatch, rejectWithValue }) => {
+    try {
+        // console.log(values)
+        const response = await getAllUsersAPI();
+        // console.log(response)
+        return response;
+    } catch (error) {
+        console.log(error)
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "get users failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
+export const blockUser = createAsyncThunk('user/blockUser', async (id, { dispatch, rejectWithValue }) => {
+    try {
+        console.log(id)
+        const response = await blockUserAPI(id);
+        // console.log(response)
+        dispatch(openSnackbar({ massage: "User Block Successfully", severity: "success" }))
+        return response;
+    } catch (error) {
+        console.log(error)
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "get users failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
 const initialState = {
     user: null,
     loading: false,
     error: null,
     token: null,
-    address: []
+    address: [],
+    users: []
 };
 const userSlice = createSlice({
     name: 'auth',
@@ -292,15 +329,46 @@ const userSlice = createSlice({
             })
             .addCase(updateAddress.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload.addressUpdate.addressData)
-                // console.log(action.meta.arg.values)
-                // const newData = action.meta.arg.values
-                state.address = action.payload.updatedAddress.addressData
+                state.address = action.payload.addressData
             })
             .addCase(updateAddress.rejected, (state, action) => {
                 state.error = action.error.message;
                 state.loading = false;
-            });
+            })
+
+
+
+            /*********get Users***********/
+            .addCase(getAllUsers.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getAllUsers.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action.payload.data)
+                state.users = action.payload.users
+            })
+            .addCase(getAllUsers.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+
+
+
+            /*********block Users***********/
+            .addCase(blockUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(blockUser.fulfilled, (state, action) => {
+                state.loading = false;
+                // console.log(action.payload.data)
+                // state.users = action.payload.users
+            })
+            .addCase(blockUser.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
     }
 });
 

@@ -7,13 +7,19 @@ const {
   register,
   login,
   profileDetail,
-  updateProfile
+  updateProfile,
+  blockUser
 } = require("../controllers/userController");
+const {
+  getAllUsers
+} = require("../controllers/adminController");
 
 router.post("/register", upload.single("image"), register);
 router.post("/login", login);
 router.get("/UserDetail", verifyToken, profileDetail);
 router.put("/UserUpdate", upload.single("image"), verifyToken, updateProfile);
+router.get("/AllUsers", upload.single("image"), getAllUsers);
+router.put("/blockUser/:id", blockUser);
 
 
 module.exports = router;

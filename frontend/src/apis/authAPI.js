@@ -72,5 +72,24 @@ export const updateAddressAPI = async (id, values) => {
         throw error;
     }
 }
+export const getAllUsersAPI = async (id, values) => {
+    try {
+        const response = await api.get(`auth/AllUsers`);
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+export const blockUserAPI = async (id) => {
+    try {
+        console.log(id)
+        const response = await api.put(`auth/blockUser/${id}`);
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 

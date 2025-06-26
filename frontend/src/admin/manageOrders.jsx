@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cancelOrderData, getAllOrderData } from "../../Thunk/orderThunk";
+import {
+  getAllOrderAdminData,
+  updateOrderAdminData,
+} from "../Thunk/orderThunk";
 import {
   Grid,
   Typography,
@@ -9,46 +12,80 @@ import {
   Divider,
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Container,
   Chip,
 } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import { useState } from "react";
 
-function MyOrders() {
+function ManageOrders() {
   const dispatch = useDispatch();
-  const { orderData } = useSelector((state) => state.order);
-
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  const { allOrders } = useSelector((state) => state.order);
+  const [filter, setFilter] = useState("");
+  console.log(filter);
+  console.log(allOrders);
   useEffect(() => {
-    dispatch(getAllOrderData());
-  }, [dispatch]);
+    dispatch(getAllOrderAdminData(filter));
+  }, [filter]);
 
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <>
-      <Container>
-        <Grid container direction="column" p={3}>
-          <Typography variant="h4" gutterBottom>
-            Order Details
-          </Typography>
+      <Grid container direction="column" sx={{ width: "100%" }}>
+        <Typography variant="h4" gutterBottom>
+          Order Details
+        </Typography>
 
-          {orderData?.length === 0 ? (
-            <Typography variant="body1">No orders found.</Typography>
-          ) : (
-            orderData.map((order) => (
-              <>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
+          <Tabs
+            sx={{
+              width: "100%",
+            }}
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab
+              label="All"
+              onClick={() => setFilter("")}
+              sx={{ width: "25%" }}
+            />
+            <Tab
+              label="Pending"
+              onClick={() => setFilter("pending")}
+              sx={{ width: "25%" }}
+            />
+            <Tab
+              label="Delivered"
+              onClick={() => setFilter("delivered")}
+              sx={{ width: "25%" }}
+            />
+            <Tab
+              label="Canceled"
+              onClick={() => setFilter("canceled")}
+              sx={{ width: "25%" }}
+            />
+          </Tabs>
+        </Box>
+
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            pt: 4,
+          }}
+        >
+          <Box>
+            {allOrders?.length === 0 ? (
+              <Typography variant="body1">No orders found.</Typography>
+            ) : (
+              allOrders.map((order) => (
                 <Card key={order._id} sx={{ mb: 3, p: 2 }}>
                   <CardContent>
                     <Typography variant="h5" gutterBottom>
@@ -66,8 +103,20 @@ function MyOrders() {
                             : "success"
                         }
                       />
-                    </Typography>{" "}
+                    </Typography>
                     <Typography>Total: ₹{order.total}</Typography>
+                    <Divider sx={{ my: 2 }} />
+
+                    <Typography variant="h6" gutterBottom>
+                      Coustomer Details
+                    </Typography>
+                    {order.userId && (
+                      <Box>
+                        <Typography>Name: {order.userId.fullName}</Typography>
+                        <Typography>Number: {order.userId.number}</Typography>
+                        <Typography>Email: {order.userId.email}</Typography>
+                      </Box>
+                    )}
                     <Divider sx={{ my: 2 }} />
                     <Typography variant="h6" gutterBottom>
                       Shipping Address
@@ -87,6 +136,7 @@ function MyOrders() {
                       </Box>
                     )}
                     <Divider sx={{ my: 2 }} />
+
                     <Typography variant="h6" gutterBottom>
                       Products
                     </Typography>
@@ -102,7 +152,10 @@ function MyOrders() {
                               alt={productItem.productId.name}
                               width={120}
                               height={120}
-                              style={{ objectFit: "cover", marginRight: 10 }}
+                              style={{
+                                objectFit: "cover",
+                                marginRight: 10,
+                              }}
                             />
                             <Box>
                               <Typography>
@@ -123,23 +176,28 @@ function MyOrders() {
                         </Grid>
                       ))}
                     </Grid>
-                    {order.status == "pending" ? (
+                    {order.status === "pending" ? (
                       <Box
                         sx={{
                           width: "100%",
                           display: "flex",
                           justifyContent: "flex-end",
+                          pt: 3,
                         }}
                       >
                         <Button
                           onClick={() => {
-                            handleClickOpen();
+                            console.log(order._id);
+                            dispatch(updateOrderAdminData(order._id));
                           }}
                           variant="contained"
-                          sx={{ borderRadius: 7, px: 3 }}
                           className="black"
+                          sx={{
+                            borderRadius: 7,
+                            px: 2,
+                          }}
                         >
-                          Cancel
+                          Delivered
                         </Button>
                       </Box>
                     ) : (
@@ -147,43 +205,13 @@ function MyOrders() {
                     )}
                   </CardContent>
                 </Card>
-                <Dialog open={open} onClose={handleClose}>
-                  <DialogTitle>{"Alert"}</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText>
-                      <Typography variant="" color="error">
-                        Are you sure you want to delete this Order
-                      </Typography>
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      variant="outlined"
-                      className="white"
-                      onClick={handleClose}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      className="white"
-                      onClick={() => {
-                        dispatch(cancelOrderData(order._id));
-                        handleClose();
-                      }}
-                      autoFocus
-                    >
-                      Confirm
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </>
-            ))
-          )}
-        </Grid>
-      </Container>
+              ))
+            )}
+          </Box>
+        </Box>
+      </Grid>
     </>
   );
 }
 
-export default MyOrders;
+export default ManageOrders;

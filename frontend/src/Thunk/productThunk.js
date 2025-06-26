@@ -51,6 +51,7 @@ export const updateProductData = createAsyncThunk(
             // console.log(values)
             const response = await updateProductAPI(id, values);
             dispatch(openSnackbar({ massage: "Product Update Successfully", severity: "success" }));
+            console.log(response)
             return response;
 
         } catch (error) {
