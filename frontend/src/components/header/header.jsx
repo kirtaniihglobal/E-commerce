@@ -12,6 +12,7 @@ import {
   Grid,
   InputBase,
   Badge,
+  IconButton,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -120,6 +121,7 @@ export default function Header() {
                   width: "50%",
                   display: "flex",
                   justifyContent: "flex-end",
+                  gap: 2,
                 }}
                 gap={{}}
               >
@@ -146,44 +148,46 @@ export default function Header() {
                     }}
                   />
                 </Box>
-                <Button
+                <IconButton
                   onClick={() => {
                     navigate("/Cart");
                   }}
                 >
                   <Badge badgeContent={cartData.length} color="error">
-                    <ShoppingCartIcon />
+                    <ShoppingCartIcon color="info" />
                   </Badge>
-                </Button>
+                </IconButton>
                 {token
                   ? [
-                      <Button
-                        onClick={() => {
-                          navigate("/profile/myProfile");
-                        }}
-                      >
-                        <AccountCircleIcon />
-                      </Button>,
-                      <Button
-                        variant="outlined"
-                        className="white"
-                        sx={{
-                          borderRadius: "50px",
-                          p: "5px  40px",
-                        }}
-                        onClick={() => {
-                          dispatch(
-                            openSnackbar({
-                              massage: "Logout Successfully",
-                              severity: "success",
-                            })
-                          );
-                          localStorage.removeItem("token");
-                          navigate("/login");
-                        }}
-                      >
-                        Logout
-                      </Button>,
+                      <>
+                        <IconButton
+                          onClick={() => {
+                            navigate("/profile/myProfile");
+                          }}
+                        >
+                          <AccountCircleIcon color="primary" />
+                        </IconButton>
+                        <Button
+                          variant="outlined"
+                          className="white"
+                          sx={{
+                            borderRadius: "50px",
+                            p: "5px  40px",
+                          }}
+                          onClick={() => {
+                            dispatch(
+                              openSnackbar({
+                                massage: "Logout Successfully",
+                                severity: "success",
+                              })
+                            );
+                            localStorage.removeItem("token");
+                            navigate("/login");
+                          }}
+                        >
+                          Logout
+                        </Button>
+                      </>,
                     ]
                   : [
                       <>
@@ -238,6 +242,7 @@ export default function Header() {
                   width: "100%",
                   display: "flex",
                   justifyContent: "space-between",
+                  gap: 2,
                 }}
                 gap={{ md: 3, lg: 4, xl: 2 }}
               >
@@ -251,45 +256,54 @@ export default function Header() {
                     SHOP.CO
                   </Typography>
                 </Box>
-                <Box>
-                  <Button
+                <Box
+                  sx={{
+                    width: "50%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: 2,
+                  }}
+                >
+                  <IconButton
                     onClick={() => {
                       navigate("/Cart");
                     }}
                   >
                     <Badge badgeContent={cartData.length} color="error">
-                      <ShoppingCartIcon />
+                      <ShoppingCartIcon color="info" />
                     </Badge>
-                  </Button>
+                  </IconButton>
                   {token
                     ? [
-                        <Button
-                          onClick={() => {
-                            navigate("/profile/myProfile");
-                          }}
-                        >
-                          <AccountCircleIcon />
-                        </Button>,
-                        <Button
-                          variant="outlined"
-                          className="white"
-                          sx={{
-                            borderRadius: "50px",
-                            p: "5px  30px",
-                          }}
-                          onClick={() => {
-                            dispatch(
-                              openSnackbar({
-                                massage: "Logout Successfully",
-                                severity: "success",
-                              })
-                            );
-                            localStorage.removeItem("token");
-                            navigate("/login");
-                          }}
-                        >
-                          Logout
-                        </Button>,
+                        <>
+                          <IconButton
+                            onClick={() => {
+                              navigate("/profile/myProfile");
+                            }}
+                          >
+                            <AccountCircleIcon color="primary" />
+                          </IconButton>
+                          <Button
+                            variant="outlined"
+                            className="white"
+                            sx={{
+                              borderRadius: "50px",
+                              p: "6px  30px",
+                            }}
+                            onClick={() => {
+                              dispatch(
+                                openSnackbar({
+                                  massage: "Logout Successfully",
+                                  severity: "success",
+                                })
+                              );
+                              localStorage.removeItem("token");
+                              navigate("/login");
+                            }}
+                          >
+                            Logout
+                          </Button>
+                        </>,
                       ]
                     : [
                         <>

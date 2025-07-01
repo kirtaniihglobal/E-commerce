@@ -1,6 +1,4 @@
 const User = require("../models/user");
-const Cart = require("../models/cart");
-
 const Order = require("../models/order");
 const Product = require("../models/product");
 
@@ -32,8 +30,6 @@ const updateOrdersAdmin = async (req, res) => {
         if (pending) {
             const updateOrder = await Order.findByIdAndUpdate(orderId, { status: "delivered" }, { new: true })
             return res.status(200).json({ status: true, msg: "order updated", updateOrder })
-
-
         } else {
             return res.status(500).json({ status: false, msg: "Order not Update" })
         }
@@ -63,30 +59,22 @@ const updateUserByAdmin = async (req, res) => {
             number: req.body.number,
             email: req.body.email,
             address: req.body.address,
-
         };
         const findUser = await User.findById(userID);
         if (!findUser) {
             return res.status(500).json({ status: false, msg: "User is not found" });
-
         }
-
-
-
         if (req.file) {
             updateData.image = req.file.path;
         }
-
         const updateUser = await User.findByIdAndUpdate(userID, updateData, {
             new: true,
         });
-
         if (!updateUser) {
             return res
                 .status(400)
                 .json({ status: 400, msg: "User not found" });
         }
-
         return res.status(200).json({
             status: 200,
             msg: "UserProfile updated successfully",
@@ -101,9 +89,9 @@ const updateUserByAdmin = async (req, res) => {
 const getAllCount = async (req, res) => {
     try {
         const users = await User.countDocuments({ role: "user" });
- 
+
         const orders = await Order.countDocuments({});
-  
+
         const product = await Product.countDocuments({});
 
         return res.status(200).json({ status: 200, msg: "fetch all users", users, orders, product })

@@ -27,7 +27,9 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Skeleton,
 } from "@mui/material";
+import useIntersectionObserver from "../components/myHook/intersaction";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
@@ -43,6 +45,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { OutlinedInput } from "@mui/material";
 import LoadingPage from "../comon/loadingPage";
+import { useRef } from "react";
 const names = ["Small", "Medium", "Large", "X-Large"];
 const colors = [
   {
@@ -69,15 +72,35 @@ const colors = [
 
 function ManageProducts() {
   const dispatch = useDispatch();
-  const { products, loading } = useSelector((state) => state.products);
+  const loaderRef = useRef(null);
+  const { products, total } = useSelector((state) => state.products);
   const [open, setOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [editMode, setEditmode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState("");
+  const [skip, setSkip] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const limit = 2;
+
   useEffect(() => {
-    dispatch(getAllproductsData());
+    dispatch(getAllproductsData({ skip: 0, limit }));
+    setSkip(limit);
   }, [dispatch]);
+
+  const loadMoreProducts = () => {
+    if (loading || products.length >= total) return;
+    setLoading(true);
+    dispatch(getAllproductsData({ skip, limit })).finally(() => {
+      setSkip((prev) => prev + limit);
+      setLoading(false);
+    });
+  };
+  useIntersectionObserver({
+    target: loaderRef,
+    onIntersect: loadMoreProducts,
+    enabled: !loading && products.length < total,
+  });
 
   const handaleOpen = () => {
     setOpen(true);
@@ -411,18 +434,6 @@ function ManageProducts() {
                             </Stack>
                           )}
                         >
-                          {/* {colors.map((color) => (
-                            <MenuItem
-                              key={color.id}
-                              value={color.value}
-                              sx={{ justifyContent: "space-between" }}
-                            >
-                              {color.value}
-                              {formik.values.color.includes(color.value) ? (
-                                <CheckIcon color="info" />
-                              ) : null}
-                            </MenuItem>
-                          ))} */}
                           {colors.map((color) => (
                             <MenuItem key={color.id} value={color.value}>
                               <Checkbox
@@ -468,7 +479,10 @@ function ManageProducts() {
               width: "100%",
             }}
           >
-            <TableContainer style={{ maxHeight: 500 }}>
+            <TableContainer
+              id="scrollableDiv"
+              style={{ height: 530, overflow: "auto" }}
+            >
               <Table
                 stickyHeader
                 aria-label="sticky table"
@@ -487,18 +501,14 @@ function ManageProducts() {
                     <TableCell align="center">Edit/Delete</TableCell>
                   </TableRow>
                 </TableHead>
-                {loading ? (
-                  <>
-                    <LoadingPage />
-                  </>
-                ) : products?.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4}>No products found</TableCell>
-                  </TableRow>
-                ) : (
-                  products?.map((prod) => (
-                    <TableBody key={prod._id}>
-                      <TableRow>
+                <TableBody>
+                  {products.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={10}>No Product Data Found</TableCell>
+                    </TableRow>
+                  ) : (
+                    products.map((prod) => (
+                      <TableRow key={prod._id}>
                         <TableCell>{prod.name}</TableCell>
                         <TableCell>
                           {prod.image && (
@@ -522,9 +532,17 @@ function ManageProducts() {
                         </TableCell>
                         <TableCell>{prod.stock}</TableCell>
                         <TableCell>
-                          {prod.size?.map((name, index) => (
-                            <Chip key={index} label={name} />
-                          ))}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 1,
+                            }}
+                          >
+                            {prod.size?.map((name, index) => (
+                              <Chip key={index} label={name} />
+                            ))}
+                          </Box>
                         </TableCell>
                         <TableCell>{prod.productType}</TableCell>
                         <TableCell>
@@ -548,11 +566,10 @@ function ManageProducts() {
                             ))}
                           </Box>
                         </TableCell>
-
                         <TableCell align="center">
                           <Box
                             sx={{
-                              Width: "100%",
+                              width: "100%",
                               display: "flex",
                               justifyContent: "center",
                             }}
@@ -563,7 +580,6 @@ function ManageProducts() {
                                 setEditmode(true);
                                 setEditId(prod._id);
                                 setEditData(prod);
-                    
                               }}
                             >
                               <EditIcon color="info" />
@@ -578,10 +594,55 @@ function ManageProducts() {
                           </Box>
                         </TableCell>
                       </TableRow>
-                    </TableBody>
-                  ))
-                )}
+                    ))
+                  )}
+                </TableBody>
               </Table>
+                <Box
+                  ref={loaderRef}
+                  id="loader"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    px: 2,
+                    py: 3,
+                  }}
+                >
+                  {loading && (
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      <Skeleton width="15%" height={80} />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Skeleton variant="rectangular" width={70} height={60} />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          flexDirection: "row",
+                          gap: 2,
+                        }}
+                      >
+                        <Skeleton width="7%" height={40} />
+                        <Skeleton width="15%" height={40} />
+                        <Skeleton width="7%" height={40} />
+                        <Skeleton width="15%" height={90} />
+                        <Skeleton width="10%" height={40} />
+                        <Skeleton width="25%" height={70} />
+                        <Skeleton width="15%" height={50} />
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
             </TableContainer>
           </Box>
         </Grid>
