@@ -18,23 +18,28 @@ const ProductCard = ({ product }) => {
   };
   return (
     <Grid key={product._id}>
-      <Box>
+      <Box
+        sx={{
+          maxWidth: "295px",
+          maxHeight: "508px",
+        }}
+      >
         <Box
-          sx={{ cursor: "pointer" }}
+          sx={{ cursor: "pointer", maxWidth: "295px" }}
           onClick={() => {
             handleSelect(product._id);
           }}
         >
-          <img src={`http://192.168.2.222:5000/${product.image}`} alt="" />
+          <img
+            style={{ width: "100%" }}
+            src={`http://192.168.2.222:5000/${product.image}`}
+            alt=""
+          />
         </Box>
         <Box>
           <Typography variant="h6">{product.name}</Typography>
-          <Typography variant="h5">
-            <GradeIcon color="warning" />
-            <GradeIcon color="warning" />
-            <GradeIcon color="warning" />
-            <GradeIcon />
-            {/* {product.rating} */}
+          <Typography variant="h5" sx={{ color: "orange" }}>
+            {product.rating} rate
           </Typography>
           <Typography variant="h5">${product.price}</Typography>
           <Box
@@ -56,8 +61,8 @@ const ProductCard = ({ product }) => {
                     // userId: user._id,
                     productId: product._id,
                     quantity: 1,
-                    size:"small",
-                    color:"red"
+                    size: "small",
+                    color: "red",
                   })
                 );
                 dispatch(
