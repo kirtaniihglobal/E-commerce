@@ -1,5 +1,7 @@
 const User = require("../models/user");
+const crypto = require("crypto")
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer")
 const { generateJWTToken } = require("../middleware/auth");
 
 const register = async (req, res) => {
@@ -120,17 +122,26 @@ const updateProfile = async (req, res) => {
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
-    const user = await User.findOne({ email });
+    console.log(req.body)
+    const user = await User.findOne({ email: email });
+    console.log(user)
     if (!user) {
       return res.status(500).json({ status: false, msg: "Email is not found !" })
     }
-    const token = generateJWTToken(user);
+    const token = crypto.randomBytes(32).toString("hex");
+    console.log(token)
     user.resetToken = token
     await user.save();
-
-
-    const resetLink = `http://192.168.2.222:5000/api/resetPassword/${token}`;
-    await sendEmail(email, "Reset your Password", `click here:${resetLink}`);
+    console.log(user)
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    })
+    const resetLink = `${process.env.REACTBASE_URL}/resetPaasword?token=${token}`;
+    await transporter.sendMail({ to: user.email, subject: "Reset your Password", html: ` For reset Password:<a href="${resetLink}"><h1>Click here</h1></a>` });
     res.json({ msg: "Password reset email sent" });
   } catch (error) {
     return res.status(500).json({ status: false, msg: "reset password error" });
@@ -138,7 +149,29 @@ const forgotPassword = async (req, res) => {
 }
 
 
+const resetPassword = async (req, res) => {
+  const { password, token } = req.body;
+  try {
+    console.log(token)
+    const user = await User.findOne({ resetToken: token })
+    if (!user) {
+      return res.status(500).json({ status: false, msg: "invalid user" });
+    }
+    const isSame = await bcrypt.compare(password, user.password);
+    if (isSame) {
+      return res.status(400).json({ msg: "New password must be different from the old password." });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    user.resetToken = undefined;
+    await user.save();
+    return res.status(200).json({ status: true, msg: "password update successfully" })
+  } catch (error) {
+    return res.status(500).json({ status: false, msg: "Password update error" })
+  }
+}
 
 
 
-module.exports = { register, login, profileDetail, updateProfile, forgotPassword };
+
+module.exports = { register, login, profileDetail, updateProfile, forgotPassword, resetPassword };

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { openSnackbar } from "./snackBarSlice";
-import { loginUserAPI, userDetailAPI, registerUserAPI, updateUserAPI, addAddressAPI, getAddressAPI, deleteAddressAPI, updateAddressAPI } from "../apis/authAPI";
+import { loginUserAPI, userDetailAPI, registerUserAPI, updateUserAPI, addAddressAPI, getAddressAPI, deleteAddressAPI, updateAddressAPI, forgotPasswordAPI, resetPasswordAPI } from "../apis/authAPI";
 export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
     const user = await userDetailAPI();
     return user;
@@ -126,6 +126,48 @@ export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id,
         dispatch(
             openSnackbar({
                 massage: "Address Update Successfully",
+                severity: "success",
+            })
+        );
+        return response.addressUpdate;
+    } catch (error) {
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "update address failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
+export const forgotPassword = createAsyncThunk('user/forgotPassword', async (email, { dispatch, rejectWithValue }) => {
+    try {
+        console.log(email)
+        const response = await forgotPasswordAPI(email);
+        dispatch(
+            openSnackbar({
+                massage: "Email send  Successfully",
+                severity: "success",
+            })
+        );
+        return response.addressUpdate;
+    } catch (error) {
+        dispatch(
+            openSnackbar({
+                massage: error?.response?.data?.msg || "update address failed",
+                severity: "error",
+            })
+        );
+        return rejectWithValue(response?.data.msg)
+    }
+});
+export const resetPassword = createAsyncThunk('user/resetPassword', async (values, { dispatch, rejectWithValue }) => {
+    try {
+        console.log(values)
+        const response = await resetPasswordAPI(values);
+        dispatch(
+            openSnackbar({
+                massage: "Password Update Successfully",
                 severity: "success",
             })
         );
@@ -287,8 +329,39 @@ const userSlice = createSlice({
             })
 
 
+            /*********forgot password***********/
+            .addCase(forgotPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(forgotPassword.fulfilled, (state, action) => {
+                state.loading = false;
+                // state.address = action.payload.addressData
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
 
-   
+
+
+            /*********reset password***********/
+            .addCase(resetPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(resetPassword.fulfilled, (state, action) => {
+                state.loading = false;
+                // state.address = action.payload.addressData
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+
+
+
+
     }
 });
 
