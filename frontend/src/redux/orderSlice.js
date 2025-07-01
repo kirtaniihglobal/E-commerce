@@ -57,7 +57,7 @@ const orderSlice = createSlice({
                 state.error = null;
             })
             .addCase(cancelOrderData.fulfilled, (state, action) => {
-                state.loading = false;
+                state.loading = false;  
             })
             .addCase(cancelOrderData.rejected, (state, action) => {
                 state.loading = false;

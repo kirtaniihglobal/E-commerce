@@ -1,9 +1,11 @@
 import api from "../services/api";
 
 
-export const getAllproductsAPI = async () => {
+export const getAllproductsAPI = async ({ skip, limit }) => {
     try {
-        const response = await api.get(`products/`);
+        // console.log(skip)
+        // console.log(limit)
+        const response = await api.get(`products?skip=${skip}&limit=${limit}`);
         return response.data;
     } catch (error) {
         throw error;

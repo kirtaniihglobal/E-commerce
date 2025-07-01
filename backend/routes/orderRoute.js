@@ -7,7 +7,6 @@ const { addOrder, getAllOrders, cancelOrder } = require("../controllers/orderCon
 
 router.post("/addOrder", verifyToken, checkBlockUser, addOrder)
 router.get("/getOrder", verifyToken, getAllOrders)
-
 router.put("/cancelOrder/:id", verifyToken, checkBlockUser, cancelOrder)
 
 

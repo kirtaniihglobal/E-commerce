@@ -27,14 +27,12 @@ function ManageUsers() {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.admin);
 
-
   useEffect(() => {
     dispatch(getAllUsersData());
   }, [dispatch]);
 
   const [imageFile, setImageFile] = useState(null);
   const fileInputRef = useRef(null);
-
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -45,6 +43,28 @@ function ManageUsers() {
     image: "",
     address: "",
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemPerPage = 1;
+  const startIndex = (currentPage - 1) * itemPerPage;
+  const endIndex = startIndex + itemPerPage;
+  const currentItems = users.slice(startIndex, endIndex);
+  const totalPage = Math.ceil(users.length / itemPerPage);
+
+  const handleClickPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const goNext = () => {
+    if (currentPage < totalPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+  const goPrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
 
   useEffect(() => {
     if (editData && isEditing) {
@@ -57,7 +77,6 @@ function ManageUsers() {
       });
       setImageFile(`http://192.168.2.222:5000/${editData.image}`);
     }
-
   }, [editData, isEditing]);
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
@@ -82,7 +101,6 @@ function ManageUsers() {
 
   const handleSave = async () => {
     try {
-     
       // const form = new FormData();
       // form.append("fullName", formData.fullName);
       // form.append("number", formData.number);
@@ -91,7 +109,7 @@ function ManageUsers() {
       // if (imageFile instanceof File) {
       //   formData.image("image", imageFile);
       // }
-     
+
       await dispatch(
         updateUserByAdminData({ id: editId, values: formData })
       ).unwrap();
@@ -118,7 +136,7 @@ function ManageUsers() {
               width: "100%",
             }}
           >
-            <TableContainer style={{ maxHeight: 500 }}>
+            <TableContainer style={{ height: 250 }}>
               <Table
                 stickyHeader
                 aria-label="sticky table"
@@ -134,12 +152,12 @@ function ManageUsers() {
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
-                {users?.length === 0 ? (
+                {currentItems?.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>No users found</TableCell>
                   </TableRow>
                 ) : (
-                  users?.map((user) => (
+                  currentItems?.map((user) => (
                     <TableBody key={user._id}>
                       <TableRow>
                         <TableCell>{user.fullName}</TableCell>
@@ -176,7 +194,7 @@ function ManageUsers() {
                                 dispatch(blockUserData(user._id));
                               }}
                             >
-                              <BlockIcon />
+                              <BlockIcon color="error" />
                             </IconButton>
                             <IconButton
                               onClick={() => {
@@ -195,6 +213,42 @@ function ManageUsers() {
                 )}
               </Table>
             </TableContainer>
+            <Box
+              sx={{
+                width: "98%",
+                display: "flex",
+                flexDirection: "row",
+                p: 1,
+                gap: 5,
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={goPrev} disabled={currentPage === 1}>
+                Previous
+              </Button>
+              {Array.from({ length: totalPage }, (_, index) => {
+                const page = index + 1;
+                return (
+                  <Box sx={{}}>
+                    <Button
+                      key={page}
+                      onClick={() => handleClickPage(page)}
+                      sx={{
+                        borderRadius: 5,
+                        backgroundColor: currentPage === page ? "#000" : "#fff",
+                        color: currentPage === page ? "#fff" : "#000",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {page}
+                    </Button>
+                  </Box>
+                );
+              })}
+              <Button onClick={goNext} disabled={currentPage === totalPage}>
+                Next
+              </Button>
+            </Box>
           </Box>
           <Box sx={{ mt: 5, width: "90%" }}>
             {users && (

@@ -35,8 +35,13 @@ const createProduct = async (req, res) => {
 
 const getAllproducts = async (req, res) => {
     try {
-        const products = await Product.find();
-        return res.status(200).json({ status: 200, msg: "fetch all products", products })
+        const limit = parseInt(req.query.limit);
+        console.log("LIMIT", limit)
+        const skip = parseInt(req.query.skip)
+        console.log("SKIP", skip)
+        const products = await Product.find().skip(skip).limit(limit);
+        const total = await Product.countDocuments();
+        return res.status(200).json({ status: 200, msg: "fetch all products", products, total })
     }
     catch (error) {
         console.error("error to fetch product", error);

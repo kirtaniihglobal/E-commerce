@@ -3,7 +3,7 @@ const User = require("../models/user")
 
 function verifyToken(req, res, next) {
     const authHeader = req.headers["authorization"];
-   
+
     const token = authHeader && authHeader.split(" ")[1];
     if (!token) return res.status(401).json({ status: 401, msg: "Token not Found" });
 
@@ -27,10 +27,10 @@ function generateJWTToken(user) {
 const checkBlockUser = async (req, res, next) => {
     try {
         const userId = req.user?.id;
-      
+
 
         const checkUser = await User.findById(userId);
-       
+
 
         if (!checkUser) {
             return res.status(404).json({ status: false, msg: "User not found" });

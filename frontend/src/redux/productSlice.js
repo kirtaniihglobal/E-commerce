@@ -1,4 +1,4 @@
-import { getAllproductsData, addProductData, updateProductData, deleteProductData, getOneproductData, getNewArrivalsProductData, getTopSellingProductData } from "../Thunk/productThunk";
+import { getAllproductsData, updateProductData, deleteProductData, getOneproductData, getNewArrivalsProductData, getTopSellingProductData } from "../Thunk/productThunk";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
     topSelling: [],
     loading: false,
     error: null,
+    total: null,
     selectedProduct: null,
 
 };
@@ -24,7 +25,10 @@ const productSlice = createSlice({
             })
             .addCase(getAllproductsData.fulfilled, (state, action) => {
                 state.loading = false;
-                state.products = action.payload.products;
+                console.log(action.payload)
+                state.products = [...state.products, ...action.payload.products];
+                state.total = action.payload.total;
+                state.loading = false;
             })
             .addCase(getAllproductsData.rejected, (state, action) => {
                 state.loading = false;

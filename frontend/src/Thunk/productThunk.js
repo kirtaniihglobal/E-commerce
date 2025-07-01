@@ -5,9 +5,12 @@ import { openSnackbar } from "../redux/snackBarSlice";
 
 export const getAllproductsData = createAsyncThunk(
     "products/getAllProducts",
-    async () => {
+    async ({ skip, limit }) => {
         try {
-            const response = await getAllproductsAPI();
+            // console.log(limit)
+            // console.log(skip)
+            const response = await getAllproductsAPI({ skip, limit });
+            console.log(response)
             return response;
 
         } catch (error) {

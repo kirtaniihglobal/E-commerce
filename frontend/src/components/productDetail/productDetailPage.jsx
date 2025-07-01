@@ -43,6 +43,7 @@ function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState("");
   const product = useSelector((state) => state.products.selectedProduct);
   const { products } = useSelector((state) => state.products);
+  console.log(products);
   const { id } = useParams();
 
   const handlePlus = () => {

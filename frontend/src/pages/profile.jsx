@@ -86,13 +86,11 @@ export default function ProfilePage() {
       setIsEditing(false);
     } catch (error) {
       console.error("Update error:", error);
-   
     }
   };
 
   return (
     <>
-      {/* <Header /> */}
       <Grid container maxWidth="xl" sx={{ mt: 10 }}>
         <Box>
           <Box></Box>
