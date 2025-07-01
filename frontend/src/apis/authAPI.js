@@ -65,6 +65,24 @@ export const updateAddressAPI = async (id, values) => {
         throw error;
     }
 }
+export const forgotPasswordAPI = async (email) => {
+    try {
+        console.log(email)
+        const response = await api.post(`auth/forgotPassword`, email,);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+export const resetPasswordAPI = async (values) => {
+    try {
+        console.log(values)
+        const response = await api.post(`auth/resetPassword`, values,);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 
 

@@ -17,6 +17,8 @@ import ManageUsers from "../admin/manageusers";
 import UserProfileLayout from "../layout/userSideBarLayout";
 import MyAddress from "../components/profile/myAddress";
 import MyOrders from "../components/profile/myOrders";
+import ForgotPassword from "../components/password/forgotPassword";
+import ResetPassword from "../components/password/resetPassword";
 
 const RoutesComponent = () => {
   return (
@@ -25,6 +27,8 @@ const RoutesComponent = () => {
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPaasword" element={<ResetPassword />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route element={<PrivateRoute />}>

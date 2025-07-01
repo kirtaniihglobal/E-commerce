@@ -180,12 +180,32 @@ export default function LoginPage() {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, py: 1.5 }}
+                        sx={{ mt: 3, mb: 1, py: 1.5 }}
                       >
                         Login
                       </Button>
                     </Grid>
                   </form>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      mb: 2,
+                    }}
+                  >
+                    <Typography textAlign="center" variant="body1">
+                      <Link
+                        component={RouterLink}
+                        to="/forgotPassword"
+                        underline="hover"
+                        fontWeight="bold"
+                        sx={{}}
+                      >
+                        ForgotPassword
+                      </Link>
+                    </Typography>
+                  </Box>
                   <Box>
                     <Typography textAlign="center" variant="body1">
                       Don’t have an account?{" "}

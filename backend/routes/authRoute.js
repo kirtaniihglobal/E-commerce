@@ -8,11 +8,15 @@ const {
   login,
   profileDetail,
   updateProfile,
+  forgotPassword,
+  resetPassword,
 
 } = require("../controllers/userController");
 
 router.post("/register", upload.single("image"), register);
 router.post("/login", login);
+router.post("/forgotPassword", forgotPassword);
+router.post("/resetPassword", resetPassword);
 router.get("/UserDetail", verifyToken, profileDetail);
 router.put("/UserUpdate", upload.single("image"), verifyToken, checkBlockUser, updateProfile);
 
