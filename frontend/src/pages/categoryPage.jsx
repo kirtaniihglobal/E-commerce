@@ -8,8 +8,11 @@ import {
   Divider,
   Slider,
   Chip,
+  Paper,
+  ButtonBase,
   Skeleton,
 } from "@mui/material";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 // import { useState } from "react";
 import { getAllproductsData } from "../Thunk/productThunk";
 import { useEffect, useState } from "react";
@@ -40,7 +43,7 @@ function CategoryPage() {
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const limit = 6;
-
+  // const loading = true;
   useEffect(() => {
     dispatch(getAllproductsData({ skip: 0, limit }));
     setSkip(limit);
@@ -63,26 +66,29 @@ function CategoryPage() {
   return (
     <>
       <Header />
-      <Grid
-        container
-        spacing={2}
+      <Box
         sx={{
+          // height:"100vh",
           width: "100%",
           display: "flex",
           flexDirection: "row",
         }}
       >
-        <Grid
-          container
+        <Box
           sx={{
+            // backgroundColor:"black",
+            // position: "sticky",
+            // top: "100px",
+            // left:0,
             width: "25%",
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
+            p: 2,
           }}
         >
           <Box
             sx={{
+              position: "sticky",
+              top: 100,
+              left: 0,
               width: "80%",
               border: "1px solid black",
             }}
@@ -97,7 +103,9 @@ function CategoryPage() {
               }}
             >
               <Typography variant="h5">Filters</Typography>
-              <Button>hello</Button>
+              <Button size="small">
+                <FilterAltIcon />
+              </Button>
             </Box>
             <Divider sx={{ width: "100%" }} />
             <Box sx={{ width: "100%" }}>
@@ -203,111 +211,89 @@ function CategoryPage() {
                   display: "flex",
                   flexWrap: "wrap",
                   gap: 2,
-                  ml: 3,
-                  // justifyContent: "space-evenly",
+                  ml: 2,
                 }}
               >
-                <Box
-                  variant="contained"
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     backgroundColor: "black",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
-                <Box
-                  variant="contained"
+                />
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     backgroundColor: "red",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
-                <Box
-                  variant="contained"
+                />
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     backgroundColor: "green",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
-                <Box
-                  variant="contained"
+                />
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     backgroundColor: "yellow",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
-                <Box
-                  variant="contained"
+                />
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
-                    backgroundColor: "grey",
+                    backgroundColor: "gray",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
-
-                <Box
-                  variant="contained"
+                />
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     backgroundColor: "pink",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
-                <Box
-                  variant="contained"
+                />
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     backgroundColor: "blue",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
-                <Box
-                  variant="contained"
+                />
+                <ButtonBase
                   sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
-                    borderRadius: "50%",
-                    backgroundColor: "black",
-                  }}
-                ></Box>
-                <Box
-                  variant="contained"
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
-                    borderRadius: "50%",
-                    backgroundColor: "#7D06F5",
-                  }}
-                ></Box>
-                <Box
-                  variant="contained"
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    p: 1,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     backgroundColor: "orange",
+                    border: "2px solid white",
+                    boxShadow: "0 0 0 1px #ccc",
                   }}
-                ></Box>
+                />
               </Box>
             </Box>
             <Divider sx={{ width: "100%" }} />
@@ -340,77 +326,68 @@ function CategoryPage() {
               </Box>
             </Box>
           </Box>
-        </Grid>
-        <Grid
-          container
-          spacing={5}
+        </Box>
+        <Box
           sx={{
-            width: "70%",
-            display: "flex",
-            justifyContent: "center",
+            width: "75%",
           }}
         >
-          <Grid
+          <Box
             sx={{
-              width: "90%",
+              p: 3,
               display: "flex",
-              flexDirection: "row",
               flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "20px",
+              gap: 3,
             }}
           >
             {products.map((product, index) => (
-              <ProductCard key={index} product={product} />
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <ProductCard product={product} />
+              </Grid>
             ))}
-            <Box
-              ref={loaderRef}
-              id="loader"
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-                px: 2,
-                py: 3,
-              }}
-            >
-              {loading && (
-                <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
-                  {Array.from({ length: 3 }).map((_, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        width: "100%",
-                        maxWidth: 300,
-                        borderRadius: 2,
-                        p: 2,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                      }}
-                    >
-                      <Skeleton
-                        variant="rectangular"
-                        height={280}
-                        sx={{ borderRadius: 6 }}
-                      />
-                      <Skeleton width="80%" height={30} />
-                      <Skeleton width="60%" height={20} />
-                      <Skeleton width="40%" height={20} />
-                      <Skeleton
-                        width="100%"
-                        height={90}
-                        sx={{ borderRadius: 10 }}
-                      />
-                    </Box>
-                  ))}
+          </Box>
+          <Box
+            ref={loaderRef}
+            id="loader"
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            {loading &&
+              Array.from({ length: 6 }).map((_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: 295,
+                    height: 508,
+                    borderRadius: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    p: 2,
+                  }}
+                >
+                  <Skeleton
+                    variant="rectangular"
+                    height={298}
+                    sx={{ borderRadius: 2 }}
+                  />
+                  <Skeleton variant="text" height={40} width="80%" />
+                  <Skeleton variant="text" height={30} width="60%" />
+                  <Skeleton variant="text" height={30} width="40%" />
+                  <Skeleton
+                    variant="rectangular"
+                    height={50}
+                    width="100%"
+                    sx={{ borderRadius: 2 }}
+                  />
                 </Box>
-              )}
-            </Box>
-          </Grid>
-        </Grid>
-      </Grid>
+              ))}
+          </Box>
+        </Box>
+      </Box>
     </>
   );
 }

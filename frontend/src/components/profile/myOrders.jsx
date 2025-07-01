@@ -16,6 +16,7 @@ import {
   DialogTitle,
   Container,
   Chip,
+  Rating,
 } from "@mui/material";
 
 function MyOrders() {
@@ -23,6 +24,7 @@ function MyOrders() {
   const { orderData } = useSelector((state) => state.order);
 
   const [open, setOpen] = useState(false);
+  const [ratingValue, setRatingValue] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,6 +32,10 @@ function MyOrders() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleRatingChange = (event, newValue) => {
+    setRatingValue(newValue);
+    console.log("value", newValue);
   };
 
   useEffect(() => {
@@ -91,37 +97,91 @@ function MyOrders() {
                       Products
                     </Typography>
                     <Grid container spacing={2}>
-                      {order.orderData?.products?.map((productItem) => (
-                        <Grid item xs={12} md={8} key={productItem._id}>
-                          <Card
-                            variant="outlined"
-                            sx={{ display: "flex", p: 1 }}
-                          >
-                            <img
-                              src={`http://192.168.2.222:5000/${productItem.productId.image}`}
-                              alt={productItem.productId.name}
-                              width={120}
-                              height={120}
-                              style={{ objectFit: "cover", marginRight: 10 }}
-                            />
-                            <Box>
-                              <Typography>
-                                Name: {productItem.productId.name}
-                              </Typography>
-                              <Typography>
-                                Color: {productItem.color}
-                              </Typography>
-                              <Typography>Size: {productItem.size}</Typography>
-                              <Typography>
-                                Quantity: {productItem.quantity}
-                              </Typography>
-                              <Typography>
-                                Price: ₹{productItem.productId.price}
-                              </Typography>
-                            </Box>
-                          </Card>
-                        </Grid>
-                      ))}
+                      {order.status === "delivered" ||
+                      order.status === "canceled" ? (
+                        order.orderData?.products?.map((productItem) => (
+                          <Grid item xs={12} md={8} key={productItem._id}>
+                            <Card
+                              variant="outlined"
+                              sx={{ display: "flex", p: 1 }}
+                            >
+                              <img
+                                src={`http://192.168.2.222:5000/${productItem.productId.image}`}
+                                alt={productItem.productId.name}
+                                width={150}
+                                height={150}
+                                style={{ objectFit: "cover", marginRight: 10 }}
+                              />
+                              <Box sx={{ p: 2 }}>
+                                <Typography>
+                                  {productItem.productId.name}
+                                </Typography>
+                                <Typography
+                                  variant="h6"
+                                  sx={{ color: "green" }}
+                                >
+                                  ₹{productItem.productId.price}
+                                </Typography>
+                                <Box
+                                  sx={{
+                                    width: "100%",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    mt: 4,
+                                  }}
+                                >
+                                  <Rating
+                                    size="large"
+                                    name="half-rating"
+                                    value={ratingValue}
+                                    onChange={handleRatingChange}
+                                    precision={0.5}
+                                  />
+                                </Box>
+                              </Box>
+                            </Card>
+                          </Grid>
+                        ))
+                      ) : (
+                        <>
+                          {order.orderData?.products?.map((productItem) => (
+                            <Grid item xs={12} md={8} key={productItem._id}>
+                              <Card
+                                variant="outlined"
+                                sx={{ display: "flex", p: 1 }}
+                              >
+                                <img
+                                  src={`http://192.168.2.222:5000/${productItem.productId.image}`}
+                                  alt={productItem.productId.name}
+                                  width={120}
+                                  height={120}
+                                  style={{
+                                    objectFit: "cover",
+                                    marginRight: 10,
+                                  }}
+                                />
+                                <Box>
+                                  <Typography>
+                                    Name: {productItem.productId.name}
+                                  </Typography>
+                                  <Typography>
+                                    Color: {productItem.color}
+                                  </Typography>
+                                  <Typography>
+                                    Size: {productItem.size}
+                                  </Typography>
+                                  <Typography>
+                                    Quantity: {productItem.quantity}
+                                  </Typography>
+                                  <Typography>
+                                    Price: ₹{productItem.productId.price}
+                                  </Typography>
+                                </Box>
+                              </Card>
+                            </Grid>
+                          ))}
+                        </>
+                      )}
                     </Grid>
                     {order.status == "pending" ? (
                       <Box
