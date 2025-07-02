@@ -19,7 +19,7 @@ const snackBarSlice = createSlice({
             state.severity = action.payload.severity
 
         },
-        closeSnackbar(state, action) {
+        closeSnackbar(state) {
             state.isOpen = false;
             state.massage = "";
             state.severity = "";

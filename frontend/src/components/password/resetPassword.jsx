@@ -55,7 +55,9 @@ function ResetPassword() {
           console.log(password);
           await dispatch(resetPassword({ password, token })).unwrap();
           navigate("/login");
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         dispatch(
           openSnackbar({

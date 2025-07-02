@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk('user/login', async (values, { dispatc
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const registerUser = createAsyncThunk('user/register', async (values, { dispatch, rejectWithValue }) => {
@@ -42,7 +42,7 @@ export const registerUser = createAsyncThunk('user/register', async (values, { d
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const updateUser = createAsyncThunk('user/UserUpdate', async (values, { dispatch, rejectWithValue }) => {
@@ -62,7 +62,7 @@ export const updateUser = createAsyncThunk('user/UserUpdate', async (values, { d
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const addAddress = createAsyncThunk('user/addAddress', async (values, { dispatch, rejectWithValue }) => {
@@ -83,7 +83,7 @@ export const addAddress = createAsyncThunk('user/addAddress', async (values, { d
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const getAddress = createAsyncThunk('user/getAddress', async (_, { dispatch, rejectWithValue }) => {
@@ -97,7 +97,7 @@ export const getAddress = createAsyncThunk('user/getAddress', async (_, { dispat
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const deleteAddress = createAsyncThunk('user/deleteAddress', async (id, { dispatch, rejectWithValue }) => {
@@ -117,7 +117,7 @@ export const deleteAddress = createAsyncThunk('user/deleteAddress', async (id, {
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id, values }, { dispatch, rejectWithValue }) => {
@@ -137,7 +137,7 @@ export const updateAddress = createAsyncThunk('user/updateAddress', async ({ id,
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const forgotPassword = createAsyncThunk('user/forgotPassword', async (email, { dispatch, rejectWithValue }) => {
@@ -158,7 +158,7 @@ export const forgotPassword = createAsyncThunk('user/forgotPassword', async (ema
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 export const resetPassword = createAsyncThunk('user/resetPassword', async (values, { dispatch, rejectWithValue }) => {
@@ -179,7 +179,7 @@ export const resetPassword = createAsyncThunk('user/resetPassword', async (value
                 severity: "error",
             })
         );
-        return rejectWithValue(response?.data.msg)
+        return rejectWithValue(error?.data.msg)
     }
 });
 
@@ -223,7 +223,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(loginUser.fulfilled, (state, action) => {
+            .addCase(loginUser.fulfilled, (state) => {
                 state.loading = false;
             })
             .addCase(loginUser.rejected, (state, action) => {
@@ -238,7 +238,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 state.loading = false;
             })
             .addCase(registerUser.rejected, (state, action) => {
@@ -334,7 +334,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(forgotPassword.fulfilled, (state, action) => {
+            .addCase(forgotPassword.fulfilled, (state) => {
                 state.loading = false;
                 // state.address = action.payload.addressData
             })
@@ -350,7 +350,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(resetPassword.fulfilled, (state, action) => {
+            .addCase(resetPassword.fulfilled, (state) => {
                 state.loading = false;
                 // state.address = action.payload.addressData
             })

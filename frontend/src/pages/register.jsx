@@ -72,7 +72,9 @@ export default function RegisterPage() {
         try {
           await dispatch(registerUser(values)).unwrap();
           navigate("/login");
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         dispatch(
           openSnackbar({

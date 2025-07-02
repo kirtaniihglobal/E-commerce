@@ -2,7 +2,7 @@ import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import Header from "../components/header/header";
 import Footer from "../components/footer/footer";
 import hero from "../assets/hero.jpg";
-import { useTheme } from "@mui/material";
+// import { useTheme } from "@mui/material";
 import star from "../assets/Vector.png";
 import NewArrivalProduct from "../components/newArrivalProduct";
 import TopSellingProduct from "../components/topSellingProduct";
@@ -15,7 +15,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import RatingCard from "../comon/ratingCard";
 
 function Home() {
-  const theme = useTheme();
+  // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const Review = [

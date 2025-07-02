@@ -8,7 +8,7 @@ import {
   Box,
   Chip,
   Divider,
-  useTheme,
+  // useTheme,
   Button,
   Skeleton,
 } from "@mui/material";
@@ -95,12 +95,12 @@ function ProductDetailPage() {
   }, [dispatch]);
   useEffect(() => {
     if (!product) {
-      const selectProd = products.find((product) => product._id === id);
+      const selectProd = products.find((p) => p._id === id);
       if (selectProd) {
         dispatch(getOneproductData(id));
       }
     }
-  }, [dispatch, id, products]);
+  }, [dispatch, id, products, product]);
 
   const Products = [
     {
@@ -137,7 +137,7 @@ function ProductDetailPage() {
     },
   ];
 
-  const theme = useTheme();
+  // const theme = useTheme();
   const breadcrumbs = [
     <Link underline="hover" key="1" color="inherit" href="/">
       HOME

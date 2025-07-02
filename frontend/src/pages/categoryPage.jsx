@@ -16,7 +16,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 // import { useState } from "react";
 import { getAllproductsData } from "../Thunk/productThunk";
 import { useEffect, useState } from "react";
-import { useTheme, useMediaQuery } from "@mui/material";
+// import { useTheme, useMediaQuery } from "@mui/material";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/header/header";
@@ -24,21 +24,21 @@ import { useRef } from "react";
 import useIntersectionObserver from "../components/myHook/intersaction";
 function CategoryPage() {
   const dispatch = useDispatch();
-  const [minNum, setMinNum] = useState(0);
-  const [maxNum, setMaxNum] = useState(1000);
+  // const [minNum, setMinNum] = useState(0);
+  // const [maxNum, setMaxNum] = useState(1000);
   const minmin = 0;
   const maxmax = 1000;
   const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const handlePriceRangeChange = (event, newValue) => {
-    setMinNum(newValue[0]);
-    setMaxNum(newValue[1]);
+    // setMinNum(newValue[0]);
+    // setMaxNum(newValue[1]);
     setPriceRangeValue(newValue);
   };
   const loaderRef = useRef(null);
   const { products, total } = useSelector((state) => state.products);
   console.log(products);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);

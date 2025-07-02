@@ -41,7 +41,7 @@ const adminSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(blockUserData.fulfilled, (state, action) => {
+            .addCase(blockUserData.fulfilled, (state) => {
                 state.loading = false;
             })
             .addCase(blockUserData.rejected, (state, action) => {
@@ -56,7 +56,7 @@ const adminSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(updateUserByAdminData.fulfilled, (state, action) => {
+            .addCase(updateUserByAdminData.fulfilled, (state) => {
                 state.loading = false;
             })
             .addCase(updateUserByAdminData.rejected, (state, action) => {

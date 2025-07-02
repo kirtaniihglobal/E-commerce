@@ -56,7 +56,9 @@ export default function LoginPage() {
         } else {
           navigate("/");
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error)
+      }
     },
   });
   return (

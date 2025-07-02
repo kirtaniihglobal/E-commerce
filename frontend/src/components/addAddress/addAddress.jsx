@@ -34,9 +34,7 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
     onSubmit: async (values) => {
       try {
         if (editAddMode && editData) {
-          const response = await dispatch(
-            updateAddress({ id: editId, values: values })
-          )
+          await dispatch(updateAddress({ id: editId, values: values }))
             .unwrap()
             .then(onClose());
 
@@ -47,7 +45,9 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
           onClose();
           formik.resetForm();
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
   const handleClose = () => {
@@ -63,7 +63,7 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
         country: editData.country || "",
       });
     }
-  }, [editAddMode, editData]);
+  }, [editAddMode, editData, formik]);
   return (
     <>
       <Dialog open={open} onClose={handleClose}>

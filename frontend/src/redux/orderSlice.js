@@ -40,6 +40,7 @@ const orderSlice = createSlice({
             })
             .addCase(getAllOrderData.fulfilled, (state, action) => {
                 state.loading = false;
+                console.log(action.payload.data)
                 state.orderData = action.payload.data
                 state.total = action.payload.data.total
             })
@@ -48,7 +49,7 @@ const orderSlice = createSlice({
                 state.error = action.payload || "Error fetching Products";
             })
 
-         
+
 
             /*************************************cancelOrderData**************************/
 
@@ -56,8 +57,8 @@ const orderSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(cancelOrderData.fulfilled, (state, action) => {
-                state.loading = false;  
+            .addCase(cancelOrderData.fulfilled, (state) => {
+                state.loading = false;
             })
             .addCase(cancelOrderData.rejected, (state, action) => {
                 state.loading = false;

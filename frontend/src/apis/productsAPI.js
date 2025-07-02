@@ -2,60 +2,30 @@ import api from "../services/api";
 
 
 export const getAllproductsAPI = async ({ skip, limit }) => {
-    try {
-        // console.log(skip)
-        // console.log(limit)
-        const response = await api.get(`products?skip=${skip}&limit=${limit}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.get(`products?skip=${skip}&limit=${limit}`);
+    return response.data;
 }
 export const getNewArrivalproductsAPI = async () => {
-    try {
-        const response = await api.get(`products/new`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.get(`products/new`);
+    return response.data;
 }
 export const getTopSellingproductsAPI = async () => {
-    try {
-        const response = await api.get(`products/top`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.get(`products/top`);
+    return response.data;
 }
 export const getOneproductAPI = async (id) => {
-    try {
-        const response = await api.get(`products/${id}`);
-        return response;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.get(`products/${id}`);
+    return response;
 }
 export const addProductAPI = async (values) => {
-    try {
-        const response = await api.post(`products/`, values);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.post(`products/`, values);
+    return response.data;
 }
 export const updateProductAPI = async (id, values) => {
-    try {
-        const response = await api.put(`products/${id}`, values,);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.put(`products/${id}`, values,);
+    return response.data;
 }
 export const deleteProductAPI = async (id) => {
-    try {
-        const response = await api.delete(`products/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.delete(`products/${id}`);
+    return response.data;
 }

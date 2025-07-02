@@ -62,16 +62,18 @@ function CheckOut() {
   };
   const handlePlaceOrder = async () => {
     try {
-      const respons = await dispatch(
-        addOrderData({ ...selectedAddress })
-      ).unwrap();
+      await dispatch(addOrderData({ ...selectedAddress })).unwrap();
       navigate("/");
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleDeleteAddress = async (id) => {
     try {
       await dispatch(deleteAddress(id)).unwrap();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleEditAddress = (add) => {
     setOpen(true);

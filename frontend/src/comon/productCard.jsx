@@ -14,7 +14,9 @@ const ProductCard = ({ product }) => {
       await dispatch(getOneproductData(id));
       navigate(`/productDetail/${id}`);
       window.scrollTo(0, 0);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Grid key={product._id}>

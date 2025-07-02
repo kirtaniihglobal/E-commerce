@@ -1,7 +1,7 @@
 import { Grid, Typography, Button } from "@mui/material";
-import { useTheme, useMediaQuery } from "@mui/material";
+// import { useTheme} from "@mui/material";
 import {
-  getAllproductsData,
+  // getAllproductsData,
   getTopSellingProductData,
 } from "../Thunk/productThunk";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,8 +11,8 @@ function TopSellingProduct() {
   const dispatch = useDispatch();
   const { topSelling } = useSelector((state) => state.products);
   const [visible, setVisible] = useState(4);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
     dispatch(getTopSellingProductData());
   }, [dispatch]);
