@@ -9,7 +9,7 @@ export const getAllproductsData = createAsyncThunk(
         try {
             // console.log(limit)
             // console.log(skip)
-            const response = await getAllproductsAPI({ skip, limit });
+            const response = getAllproductsAPI({ skip, limit });
             console.log(response)
             return response;
 

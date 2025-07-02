@@ -128,7 +128,7 @@ function ManageProducts() {
       });
       setImageFile(`http://192.168.2.222:5000/${editData.image}`);
     }
-  }, [editMode, editData]);
+  }, [editMode, editData, formik]);
 
   const validationSchema = yup.object({
     name: yup
@@ -194,7 +194,9 @@ function ManageProducts() {
     try {
       await dispatch(deleteProductData(id)).unwrap();
       dispatch(getAllproductsData());
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -598,51 +600,51 @@ function ManageProducts() {
                   )}
                 </TableBody>
               </Table>
-                <Box
-                  ref={loaderRef}
-                  id="loader"
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    px: 2,
-                    py: 3,
-                  }}
-                >
-                  {loading && (
-                    <Box sx={{ display: "flex", gap: 2 }}>
-                      <Skeleton width="15%" height={80} />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Skeleton variant="rectangular" width={70} height={60} />
-                      </Box>
-                      <Box
-                        sx={{
-                          width: "100%",
-
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          flexDirection: "row",
-                          gap: 2,
-                        }}
-                      >
-                        <Skeleton width="7%" height={40} />
-                        <Skeleton width="15%" height={40} />
-                        <Skeleton width="7%" height={40} />
-                        <Skeleton width="15%" height={90} />
-                        <Skeleton width="10%" height={40} />
-                        <Skeleton width="25%" height={70} />
-                        <Skeleton width="15%" height={50} />
-                      </Box>
+              <Box
+                ref={loaderRef}
+                id="loader"
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                  px: 2,
+                  py: 3,
+                }}
+              >
+                {loading && (
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <Skeleton width="15%" height={80} />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Skeleton variant="rectangular" width={70} height={60} />
                     </Box>
-                  )}
-                </Box>
+                    <Box
+                      sx={{
+                        width: "100%",
+
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "row",
+                        gap: 2,
+                      }}
+                    >
+                      <Skeleton width="7%" height={40} />
+                      <Skeleton width="15%" height={40} />
+                      <Skeleton width="7%" height={40} />
+                      <Skeleton width="15%" height={90} />
+                      <Skeleton width="10%" height={40} />
+                      <Skeleton width="25%" height={70} />
+                      <Skeleton width="15%" height={50} />
+                    </Box>
+                  </Box>
+                )}
+              </Box>
             </TableContainer>
           </Box>
         </Grid>

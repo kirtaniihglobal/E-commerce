@@ -27,7 +27,9 @@ function MyAddress() {
   const handleDeleteAddress = async (id) => {
     try {
       await dispatch(deleteAddress(id)).unwrap();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleEditAddress = (add) => {
@@ -35,7 +37,6 @@ function MyAddress() {
     setEditAddMode(true);
     setEditAddId(add._id);
     setEditAddData(add);
-
   };
 
   return (

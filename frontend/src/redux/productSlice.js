@@ -72,7 +72,7 @@ const productSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(updateProductData.fulfilled, (state, action) => {
+            .addCase(updateProductData.fulfilled, (state) => {
                 state.loading = false;
 
             })
@@ -87,7 +87,7 @@ const productSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(deleteProductData.fulfilled, (state, action) => {
+            .addCase(deleteProductData.fulfilled, (state) => {
                 state.loading = false;
 
             })

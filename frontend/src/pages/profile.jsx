@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { fetchUser, updateUser } from "../redux/authSlice";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { openSnackbar } from "../redux/snackBarSlice";
+// import { openSnackbar } from "../redux/snackBarSlice";
 
 export default function ProfilePage() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [imageFile, setImageFile] = useState(null);

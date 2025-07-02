@@ -26,7 +26,9 @@ export const getAllOrderData = createAsyncThunk(
     async (_, { dispatch, rejectWithValue }) => {
         try {
             const response = await getAllOrderAPI();
+            console.log(response)
             return response;
+
 
         } catch (error) {
             dispatch(openSnackbar({ massage: error.response.data.msg || "Failed to Add", severity: "error" }));

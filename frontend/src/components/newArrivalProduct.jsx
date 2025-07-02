@@ -1,7 +1,7 @@
 import { Grid, Typography, Button } from "@mui/material";
 import { getNewArrivalsProductData } from "../Thunk/productThunk";
-import { useEffect, useState } from "react";
-import { useTheme, useMediaQuery } from "@mui/material";
+import { useEffect} from "react";
+// import { useTheme, useMediaQuery } from "@mui/material";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,8 +10,8 @@ function NewArrivalProduct() {
   const navigate = useNavigate();
   const { newArrival } = useSelector((state) => state.products);
   // const [visible, setVisible] = useState(4);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     dispatch(getNewArrivalsProductData());

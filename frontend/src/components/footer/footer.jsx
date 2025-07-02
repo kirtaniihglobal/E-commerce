@@ -19,7 +19,7 @@ import { Box } from "@mui/material";
 function Footer() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTab = useMediaQuery(theme.breakpoints.down("md"));
+  // const isTab = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <>
       <Container
