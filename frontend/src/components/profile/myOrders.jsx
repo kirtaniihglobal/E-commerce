@@ -17,25 +17,123 @@ import {
   Container,
   Chip,
   Rating,
+  TextField,
 } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import { openSnackbar } from "../../redux/snackBarSlice";
+import {
+  addRatingData,
+  getUserRatingData,
+  updateUserRatingData,
+} from "../../Thunk/ratingThunk";
+// import { addRatingData } from "../../Thunk/ratingThunk";
+// import { openSnackbar } from "../../redux/snackBarSlice";
 
 function MyOrders() {
   const dispatch = useDispatch();
   const { orderData } = useSelector((state) => state.order);
+  console.log(orderData);
+  const { UserProductRatingData } = useSelector((state) => state.rating);
+  // const { ratingData } = useSelector((state) => state.order);
+  console.log(UserProductRatingData);
 
   const [open, setOpen] = useState(false);
+  const [openRate, setOpenRate] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [ratingValue, setRatingValue] = useState(0);
+  const [comment, setComment] = useState("");
+  const [cancelId, setCancelId] = useState(null);
+  // const [updateMode, setUpdateMode] = useState(false);
+  // const [updateData, setUpdateData] = useState("");
+  // const [updateId, setUpdateId] = useState(null);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (orderId) => {
+    setCancelId(orderId);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-  const handleRatingChange = (event, newValue) => {
-    setRatingValue(newValue);
-    console.log("value", newValue);
+
+  useEffect(() => {
+    if (UserProductRatingData) {
+      setRatingValue(UserProductRatingData.rating || 0);
+      setComment(UserProductRatingData.comment || "");
+    } else {
+      setRatingValue(0);
+      setComment("");
+    }
+  }, [openRate, UserProductRatingData]);
+  const handleClickOpenRate = (product) => {
+    // if (UserProductRatingData) {
+    //   setUpdateMode(true);
+    // }
+    console.log(product.productId._id);
+    setSelectedProduct(product);
+    dispatch(getUserRatingData(product.productId._id));
+    setOpenRate(true);
+  };
+
+  const handleCloseRate = () => {
+    setOpenRate(false);
+  };
+  const handleRatingSubmit = async () => {
+    if (!selectedProduct || !ratingValue) return;
+
+    try {
+      // console.log("Submitting:", {
+      //   productId: selectedProduct.productId._id,
+      //   rating: ratingValue,
+      // });
+      // console.log(UserProductRatingData._id);
+      if (UserProductRatingData) {
+        console.log(UserProductRatingData._id);
+        await dispatch(
+          updateUserRatingData({
+            ratingId: UserProductRatingData._id,
+            rating: ratingValue,
+            comment: comment,
+          })
+        ).unwrap();
+      } else {
+        await dispatch(
+          addRatingData({
+            productId: selectedProduct.productId._id,
+            rating: ratingValue,
+            comment: comment,
+          })
+        ).unwrap();
+      }
+      // .then(() => {
+      //   dispatch(
+      //     openSnackbar({
+      //       massage: "Rating submitted successfully",
+      //       severity: "success",
+      //     })
+      //   );
+      // })
+      // .catch(() => {
+      //   dispatch(
+      //     openSnackbar({
+      //       massage: "Rating  successfully",
+      //       severity: "success",
+      //     })
+      //   );
+      // });
+
+      setSelectedProduct(null);
+
+      handleCloseRate();
+    } catch (error) {
+      dispatch(
+        openSnackbar({
+          massage: "Failed to submit rating",
+          severity: "error",
+        })
+      );
+      console.error("Rating submission failed:", error);
+    }
   };
 
   useEffect(() => {
@@ -97,8 +195,7 @@ function MyOrders() {
                       Products
                     </Typography>
                     <Grid container spacing={2}>
-                      {order.status === "delivered" ||
-                      order.status === "canceled" ? (
+                      {order.status === "delivered" ? (
                         order.orderData?.products?.map((productItem) => (
                           <Grid item xs={12} md={8} key={productItem._id}>
                             <Card
@@ -130,13 +227,21 @@ function MyOrders() {
                                     mt: 4,
                                   }}
                                 >
-                                  <Rating
-                                    size="large"
-                                    name="half-rating"
-                                    value={ratingValue}
-                                    onChange={handleRatingChange}
-                                    precision={0.5}
-                                  />
+                                  <Button
+                                    onClick={() => {
+                                      handleClickOpenRate(productItem);
+                                    }}
+                                    className="black"
+                                    variant="contained"
+                                    sx={{
+                                      borderRadius: 7,
+                                      display: "flex",
+                                      gap: 2,
+                                    }}
+                                  >
+                                    Rate
+                                    <StarIcon color="warning" />
+                                  </Button>
                                 </Box>
                               </Box>
                             </Card>
@@ -193,7 +298,8 @@ function MyOrders() {
                       >
                         <Button
                           onClick={() => {
-                            handleClickOpen();
+                            console.log(order._id);
+                            handleClickOpen(order._id);
                           }}
                           variant="contained"
                           sx={{ borderRadius: 7, px: 3 }}
@@ -228,11 +334,92 @@ function MyOrders() {
                       variant="outlined"
                       className="white"
                       onClick={() => {
-                        dispatch(cancelOrderData(order._id));
+                        // console.log(order._id);
+                        dispatch(cancelOrderData(cancelId));
                         handleClose();
                       }}
                       autoFocus
                     >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+                <Dialog open={openRate} onClose={handleCloseRate}>
+                  <DialogTitle>Rate Product</DialogTitle>
+                  <DialogContent>
+                    {selectedProduct && (
+                      <Box
+                        sx={{
+                          width: "500px",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                          }}
+                        >
+                          <img
+                            src={`http://192.168.2.222:5000/${selectedProduct.productId.image}`}
+                            alt={selectedProduct.productId.name}
+                            width={120}
+                            height={120}
+                            style={{
+                              objectFit: "cover",
+                              marginRight: 10,
+                            }}
+                          />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <Typography variant="h6">
+                              {selectedProduct.productId.name}
+                            </Typography>
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                color: "green",
+                              }}
+                            >
+                              ₹{selectedProduct.productId.price}
+                            </Typography>
+                            <Box sx={{ mt: 2 }}>
+                              <Rating
+                                value={ratingValue}
+                                onChange={(e, newValue) =>
+                                  setRatingValue(newValue)
+                                }
+                                precision={0.5}
+                              />
+                            </Box>
+                          </Box>
+                        </Box>
+                        {/* {UserProductRatingData && ( */}
+                        <>
+                          <Box>
+                            <TextField
+                              label="Write your feedback"
+                              multiline
+                              rows={5}
+                              fullWidth
+                              variant="outlined"
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
+                              sx={{ mt: 2 }}
+                            />
+                          </Box>
+                        </>
+                        {/* )} */}
+                      </Box>
+                    )}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseRate} variant="outlined">
+                      Cancel
+                    </Button>
+                    <Button variant="contained" onClick={handleRatingSubmit}>
                       Confirm
                     </Button>
                   </DialogActions>

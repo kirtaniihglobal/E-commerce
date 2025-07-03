@@ -4,6 +4,7 @@ import productReducer from "../redux/productSlice";
 import snackBarReducer from "../redux/snackBarSlice";
 import cartReducer from "../redux/cartSlice";
 import orderReducer from "../redux/orderSlice";
+import ratingReducer from "../redux/ratingSlice";
 import adminReducer from "../redux/adminSlice";
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     snackBar: snackBarReducer,
     cart: cartReducer,
     order: orderReducer,
-    admin: adminReducer
+    admin: adminReducer,
+    rating: ratingReducer
   },
 });
