@@ -1,7 +1,7 @@
-import { Box, Grid, Typography } from "@mui/material";
-
+import { Box, Grid, Rating, Typography } from "@mui/material";
 import GreenTik from "../assets/greentik.png";
-import GradeIcon from "@mui/icons-material/Grade";
+import moment from "moment";
+
 const RatingCard = ({ item, width }) => {
   return (
     <Grid
@@ -13,29 +13,39 @@ const RatingCard = ({ item, width }) => {
       <Box
         sx={{
           width: width || "400px",
-          height: "240px",
-          borderRadius: "20px",
-          border: "1px solid #ccc",
-          p: 4,
+          height: "220px",
+          borderRadius: "10px",
+          border: "2px solid #ccc",
+          p: 3,
           display: "flex",
           flexDirection: "column",
+          gap: 3,
           justifyContent: "center",
-          gap: 1,
         }}
       >
         <Typography>
-          <GradeIcon color="warning" />
-          <GradeIcon color="warning" />
-          <GradeIcon color="warning" />
-          <GradeIcon color="warning" />
-          <GradeIcon />
+          <Rating
+            size="large"
+            name="read-only"
+            value={Number(item.rating?.toFixed(1))}
+            precision={0.5}
+            readOnly
+          />
         </Typography>
-        <Typography variant="h5">
-          {item.name}
-          <img src={GreenTik} alt="" />
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h5">{item.userId.fullName}</Typography>
+          <img width={20} height={20} src={GreenTik} alt="" />
+        </Box>
+        <Typography variant="body1">{item.comment}</Typography>
+        <Typography variant="h6">
+          {moment(item.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
         </Typography>
-        <Typography variant="body1">{item.review}</Typography>
-        <Typography variant="h6">{item.date}</Typography>
       </Box>
     </Grid>
   );
