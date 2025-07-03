@@ -3,47 +3,32 @@ import {
   Grid,
   Typography,
   Button,
-  Stack,
-  Card,
   Divider,
   Slider,
   Chip,
-  Paper,
   ButtonBase,
   Skeleton,
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-// import { useState } from "react";
 import { getAllproductsData } from "../Thunk/productThunk";
 import { useEffect, useState } from "react";
-// import { useTheme, useMediaQuery } from "@mui/material";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/header/header";
-import { useRef } from "react";
-import useIntersectionObserver from "../components/myHook/intersaction";
 function CategoryPage() {
   const dispatch = useDispatch();
-  // const [minNum, setMinNum] = useState(0);
-  // const [maxNum, setMaxNum] = useState(1000);
   const minmin = 0;
   const maxmax = 1000;
   const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const handlePriceRangeChange = (event, newValue) => {
-    // setMinNum(newValue[0]);
-    // setMaxNum(newValue[1]);
     setPriceRangeValue(newValue);
   };
-  const loaderRef = useRef(null);
   const { products, total } = useSelector((state) => state.products);
   console.log(products);
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
-  const limit = 6;
-  // const loading = true;
+  const limit = 9;
   useEffect(() => {
     dispatch(getAllproductsData({ skip: 0, limit }));
     setSkip(limit);
@@ -57,18 +42,12 @@ function CategoryPage() {
       setLoading(false);
     });
   };
-  useIntersectionObserver({
-    target: loaderRef,
-    onIntersect: loadMoreProducts,
-    enabled: !loading && products.length < total,
-  });
 
   return (
     <>
       <Header />
       <Box
         sx={{
-          // height:"100vh",
           width: "100%",
           display: "flex",
           flexDirection: "row",
@@ -76,10 +55,6 @@ function CategoryPage() {
       >
         <Box
           sx={{
-            // backgroundColor:"black",
-            // position: "sticky",
-            // top: "100px",
-            // left:0,
             width: "25%",
             p: 2,
           }}
@@ -185,7 +160,6 @@ function CategoryPage() {
                   value={priceRangeValue}
                   onChange={handlePriceRangeChange}
                   valueLabelDisplay="auto"
-                  // getAriaValueText={valuetext}
                   min={minmin}
                   max={maxmax}
                 />
@@ -341,13 +315,39 @@ function CategoryPage() {
             }}
           >
             {products.map((product, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid key={index}>
                 <ProductCard product={product} />
               </Grid>
             ))}
           </Box>
           <Box
-            ref={loaderRef}
+            sx={{
+              width: "85%",
+              display: "flex",
+              justifyContent: "center",
+              p: 5,
+            }}
+          >
+            <Button
+              sx={{
+                width: "70%",
+                borderRadius: 7,
+                px: 2,
+                py: 2,
+              }}
+              variant="outlined"
+              className="white"
+              onClick={loadMoreProducts}
+              disabled={loading || products.length >= total}
+            >
+              {loading
+                ? "Loading..."
+                : products.length >= total
+                ? "No More Products"
+                : "Load More"}
+            </Button>
+          </Box>
+          <Box
             id="loader"
             sx={{
               width: "100%",
