@@ -1,48 +1,26 @@
-import { Grid, Typography, Box, Button } from "@mui/material";  
-import { useTheme, useMediaQuery } from "@mui/material";
-import prod5 from "../assets/prod5.png";
-import prod6 from "../assets/prod6.png";
-import prod7 from "../assets/prod7.png";
-import prod8 from "../assets/prod8.png";
+import { Grid, Typography, Button } from "@mui/material";
+// import { useTheme} from "@mui/material";
+import {
+  // getAllproductsData,
+  getTopSellingProductData,
+} from "../Thunk/productThunk";
+import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../comon/productCard";
+import { useState, useEffect } from "react";
 function TopSellingProduct() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const dispatch = useDispatch();
+  const { topSelling } = useSelector((state) => state.products);
+  const [visible, setVisible] = useState(4);
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  useEffect(() => {
+    dispatch(getTopSellingProductData());
+  }, [dispatch]);
+  const handleViewAll = () => {
+    setVisible(topSelling.length);
+  };
 
-  const Products = [
-    {
-      id: 1,
-      image: prod5,
-      name: "VERTICAL STRIPED SHIRT",
-      rating: 4.5,
-      price: "$212",
-      description: "This is a description of product 1",
-    },
-    {
-      id: 2,
-      image: prod6,
-      name: "COURAGE GRAPHIC T-SHIRT",
-      rating: 4.5,
-      price: "$145",
-      description: "This is a description of product 1",
-    },
-    {
-      id: 3,
-      image: prod7,
-      name: "LOOSE FIT BERMUDA SHORTS",
-      rating: 4.5,
-      price: "$80",
-      description: "This is a description of product 1",
-    },
-    {
-      id: 4,
-      image: prod8,
-      name: "FADED SKINNY JEANS",
-      rating: 4.5,
-      price: "$210",
-      description: "This is a description of product 1",
-    },
-  ];
+  const displayProducts = topSelling.slice(0, visible);
 
   return (
     <>
@@ -87,7 +65,7 @@ function TopSellingProduct() {
               gap: "20px",
             }}
           >
-            {Products.map((product, index) => (
+            {displayProducts.map((product, index) => (
               <ProductCard key={index} product={product} />
             ))}
             <Grid
@@ -97,17 +75,20 @@ function TopSellingProduct() {
                 justifyContent: "center",
               }}
             >
-              <Button
-                variant="outlined"
-                className="white"
-                sx={{
-                  width: "20%",
-                  p: 1.5,
-                  borderRadius: 10,
-                }}
-              >
-                View All
-              </Button>
+              {visible < topSelling.length && (
+                <Button
+                  variant="outlined"
+                  className="white"
+                  onClick={handleViewAll}
+                  sx={{
+                    width: "20%",
+                    p: 1.5,
+                    borderRadius: 10,
+                  }}
+                >
+                  View All
+                </Button>
+              )}
             </Grid>
           </Grid>
         </Grid>

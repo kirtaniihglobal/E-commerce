@@ -4,9 +4,9 @@ const Product = require("../models/product");
 
 const createProduct = async (req, res) => {
     try {
-        const { name, price, description, stock } = req.body;
-        console.log(req.body);
-        if (!name || !price || !description || !stock) {
+
+        const { name, price, description, stock, size, color, productType } = req.body;
+        if (!name || !price || !stock || !size || !color) {
             return res.status(400).json({ msg: "All fields are required", status: 400 });
         }
         if (!req.file) {
@@ -19,10 +19,12 @@ const createProduct = async (req, res) => {
             price,
             description,
             stock,
-            image
+            image,
+            size,
+            color,
+            productType
         })
         await newProduct.save();
-        console.log(newProduct);
         return res.status(201).json({ status: 201, msg: "product add successfully", product: newProduct })
     }
     catch (error) {
@@ -33,7 +35,25 @@ const createProduct = async (req, res) => {
 
 const getAllproducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const limit = parseInt(req.query.limit);
+        console.log("LIMIT", limit)
+        const skip = parseInt(req.query.skip)
+        console.log("SKIP", skip)
+        const products = await Product.find().skip(skip).limit(limit);
+        const total = await Product.countDocuments();
+        // setTimeout(() => {
+
+        return res.status(200).json({ status: 200, msg: "fetch all products", products, total })
+        // }, 5000);
+    }
+    catch (error) {
+        console.error("error to fetch product", error);
+        return res.status(500).json({ status: 500, msg: "error to fetch product" })
+    }
+}
+const getNewArrivalproducts = async (req, res) => {
+    try {
+        const products = await Product.find({ productType: "newArrival" });
         return res.status(200).json({ status: 200, msg: "fetch all products", products })
     }
     catch (error) {
@@ -41,21 +61,78 @@ const getAllproducts = async (req, res) => {
         return res.status(500).json({ status: 500, msg: "error to fetch product" })
     }
 }
-const deleteProduct = async (req, res) => {
+const getTopSellingproducts = async (req, res) => {
     try {
-        await Product.findByIdAndDelete(req.parmas.id);
-        return res.status(200).json({ status: 200, msg: "delete successfully" })
+        const products = await Product.find({ productType: "topSelling" });
+        return res.status(200).json({ status: 200, msg: "fetch all products", products })
     }
     catch (error) {
-        console.error("delete error", error);
+        console.error("error to fetch product", error);
+        return res.status(500).json({ status: 500, msg: "error to fetch product" })
+    }
+}
+const getOneproduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        return res.status(200).json({ status: 200, msg: "one product selected", product });
+    } catch (error) {
+        return res.status(500).json({ status: 500, msg: "product fetch errorr" });
+    }
+}
+const deleteProduct = async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        return res.status(200).json({ status: 200, msg: "delete successfully" })
+    } catch (error) {
         return res.status(500).json({ status: 500, msg: "delete error" })
     }
 }
+const editProduct = async (req, res) => {
+    try {
+        const updateData = {
+            name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            stock: req.body.stock,
+            size: req.body.size,
+            color: req.body.color,
+            productType: req.body.productType
+        };
+
+        if (req.file) {
+            updateData.image = req.file.path;
+        }
+
+        const product = await Product.findByIdAndUpdate(req.params.id, updateData, {
+            new: true,
+        });
+
+        if (!product) {
+            return res
+                .status(400)
+                .json({ status: 400, msg: "Product not found" });
+        }
+
+        return res.status(200).json({
+            status: 200,
+            msg: "Product updated successfully",
+            product,
+        });
+    } catch (error) {
+        return res.status(500).json({ msg: "Update failed" });
+    }
+};
+
+
 
 
 
 module.exports = {
     createProduct,
     getAllproducts,
-    deleteProduct
+    getOneproduct,
+    deleteProduct,
+    editProduct,
+    getNewArrivalproducts,
+    getTopSellingproducts
 }

@@ -1,11 +1,23 @@
-import { Box, Button, Card, Container, Grid, Typography } from "@mui/material";
+import { Box, Card, Container, Grid, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAllCountByAdminData } from "../Thunk/adminThunk";
+import product from "../assets/product-line-icon-vector.jpg";
+import orders from "../assets/clipboard.png";
+import users from "../assets/group.png";
 
 function AdminDashboard() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { usersCount, orderCount, productCount } = useSelector(
+    (state) => state.admin
+  );
+
+  useEffect(() => {
+    dispatch(getAllCountByAdminData());
+  }, [dispatch]);
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="">
       <Grid
         container
         spacing={2}
@@ -37,12 +49,12 @@ function AdminDashboard() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body1" component="h2">
+                <Typography variant="h5" component="h2">
                   Total Product
                 </Typography>
 
-                <Typography variant="h5" component="h2">
-                  150
+                <Typography variant="h4" component="h2">
+                  {productCount}
                 </Typography>
               </Box>
               <Box
@@ -54,7 +66,7 @@ function AdminDashboard() {
                   alignItems: "center",
                 }}
               >
-                <PersonIcon sx={{ fontSize: 50 }} />
+                <img src={product} alt="" style={{ width: "100px" }} />
               </Box>
             </Box>
           </Card>
@@ -75,12 +87,12 @@ function AdminDashboard() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body1" component="h2">
+                <Typography variant="h5" component="h2">
                   Total Orders
                 </Typography>
 
-                <Typography variant="h5" component="h2">
-                  2500
+                <Typography variant="h4" component="h2">
+                  {orderCount}
                 </Typography>
               </Box>
               <Box
@@ -92,7 +104,7 @@ function AdminDashboard() {
                   alignItems: "center",
                 }}
               >
-                <PersonIcon sx={{ fontSize: 50 }} />
+                <img src={orders} alt="" style={{ width: "90px" }} />
               </Box>
             </Box>
           </Card>
@@ -113,12 +125,12 @@ function AdminDashboard() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body1" component="h2">
+                <Typography variant="h5" component="h2">
                   Total Users
                 </Typography>
 
-                <Typography variant="h5" component="h2">
-                  15
+                <Typography variant="h4" component="h2">
+                  {usersCount}
                 </Typography>
               </Box>
               <Box
@@ -130,19 +142,11 @@ function AdminDashboard() {
                   alignItems: "center",
                 }}
               >
-                <PersonIcon sx={{ fontSize: 50 }} />
+                <img src={users} alt="" style={{ width: "90px" }} />
               </Box>
             </Box>
           </Card>
         </Box>
-        <Box
-          sx={{
-            position: "absolute",
-            // bottom : 0,
-            top: 20,
-            right: 0,
-          }}
-        ></Box>
       </Grid>
     </Container>
   );

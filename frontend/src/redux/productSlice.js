@@ -1,37 +1,120 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../services/api";
-
-
-
-export const fetchProduct = createAsyncThunk('product/fetchProduct', async () => {
-    const products = await api.get('products/',);
-    return products.data;
-});
+import { getAllproductsData, updateProductData, deleteProductData, getOneproductData, getNewArrivalsProductData, getTopSellingProductData } from "../Thunk/productThunk";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     products: [],
+    newArrival: [],
+    topSelling: [],
     loading: false,
-    error: null
+    error: null,
+    total: null,
+    selectedProduct: null,
+
 };
 const productSlice = createSlice({
-    name: 'product',
+    name: 'products',
     initialState,
     reducers: {
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchProduct.pending, (state) => {
+            /*******************************getAllProductData*****************************/
+            .addCase(getAllproductsData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchProduct.fulfilled, (state, action) => {
+            .addCase(getAllproductsData.fulfilled, (state, action) => {
                 state.loading = false;
-                state.products = action.payload;
+                console.log(action.payload)
+                state.products = [...state.products, ...action.payload.products];
+                state.total = action.payload.total;
+                state.loading = false;
             })
-            .addCase(fetchProduct.rejected, (state, action) => {
-                state.error = action.error.message;
+            .addCase(getAllproductsData.rejected, (state, action) => {
                 state.loading = false;
-            });
+                state.error = action.payload || "Error fetching Products";
+            })
+
+
+            /*******************************getNewArrivalProductData*****************************/
+            .addCase(getNewArrivalsProductData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getNewArrivalsProductData.fulfilled, (state, action) => {
+                state.loading = false;
+                state.newArrival = action.payload.products;
+            })
+            .addCase(getNewArrivalsProductData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
+
+
+
+            /*******************************getTopSellingProductData*****************************/
+            .addCase(getTopSellingProductData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getTopSellingProductData.fulfilled, (state, action) => {
+                state.loading = false;
+                state.topSelling = action.payload.products;
+            })
+            .addCase(getTopSellingProductData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
+
+
+            /***********************************updateProductData***************************/
+            .addCase(updateProductData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateProductData.fulfilled, (state) => {
+                state.loading = false;
+
+            })
+            .addCase(updateProductData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
+
+            /*************************************deleteProductData*************************/
+
+            .addCase(deleteProductData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteProductData.fulfilled, (state) => {
+                state.loading = false;
+
+            })
+            .addCase(deleteProductData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
+
+            /*************************************getOneProductData**************************/
+
+
+            .addCase(getOneproductData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getOneproductData.fulfilled, (state, action) => {
+                state.loading = false;
+                state.selectedProduct = action.payload.product;
+
+
+            })
+            .addCase(getOneproductData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
+
+
     }
 });
 export default productSlice.reducer;

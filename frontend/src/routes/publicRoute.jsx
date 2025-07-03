@@ -16,7 +16,7 @@ export const PublicRoute = () => {
   }, [dispatch]);
 
   if (token && user?.role === "admin") {
-    return <Navigate to="/adminDashboard" />;
+    return <Navigate to="/admin/adminDashboard" />;
   } else if (token && user?.role === "user") {
     return <Navigate to="/" />;
   } else {

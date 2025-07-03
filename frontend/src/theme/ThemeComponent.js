@@ -110,7 +110,7 @@ export const MuiTypography = {
       style: {
         fontSize: "14px",
         fontWeight: 400,
-        color: "#fff",
+        color: "#000",
       },
     },
   ],

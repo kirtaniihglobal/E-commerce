@@ -1,21 +1,25 @@
 const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
-const { verifyToken } = require("../middleware/auth");
+const upload = require("../middleware/upload")
+const { verifyToken, checkBlockUser } = require("../middleware/auth");
 const {
   register,
   login,
+  profileDetail,
+  updateProfile,
+  forgotPassword,
+  resetPassword,
+
 } = require("../controllers/userController");
 
-router.post("/register", register);
+router.post("/register", upload.single("image"), register);
 router.post("/login", login);
-router.get("/me", verifyToken, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ status: 500, message: "Error fetching user" });
-  }
-});
+router.post("/forgotPassword", forgotPassword);
+router.post("/resetPassword", resetPassword);
+router.get("/UserDetail", verifyToken, profileDetail);
+router.put("/UserUpdate", upload.single("image"), verifyToken, checkBlockUser, updateProfile);
+
+
 
 module.exports = router;

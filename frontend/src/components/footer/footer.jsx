@@ -19,7 +19,7 @@ import { Box } from "@mui/material";
 function Footer() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTab = useMediaQuery(theme.breakpoints.down("md"));
+  // const isTab = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <>
       <Container
@@ -27,7 +27,6 @@ function Footer() {
         sx={{
           height: "auto",
           mt: 20,
-          // mb: isMobile ? 0 : 4,
           backgroundColor: "#f0f0f0",
           position: "relative",
         }}
@@ -44,30 +43,30 @@ function Footer() {
             mt: "80px",
           }}
         >
-          <Grid
-            container
+          <Box
             sx={{
               display: "flex",
+              gap: 3,
 
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Box>
                 <Typography variant="h4">SHOP.CO</Typography>
               </Box>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">
                 {" "}
                 We have clothes that suits your style <br />
                 and which you’re proud to wear. <br />
                 From women to men.
               </Typography>
-            </Grid>
-            <Grid
+            </Box>
+            <Box
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -110,121 +109,120 @@ function Footer() {
               >
                 <GitHubIcon />
               </Avatar>
-            </Grid>
-          </Grid>
-          <Grid
-            container
+            </Box>
+          </Box>
+          <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 COMPANY
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">About</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">Features</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1">Works </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography variant="body1"> Career </Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
+            </Box>
+          </Box>
+          <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 HELP
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Customer Support</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Delivery Details</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Terms & Conditions</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Privacy Policy</Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
+            </Box>
+          </Box>
+          <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 FAQ
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Account</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Manage Deliveries</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Orders</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Payments</Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
+            </Box>
+          </Box>
+          <Box
             sx={{
               display: "flex",
+              gap: 2,
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
             }}
           >
-            <Grid>
+            <Box>
               <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
                 RESOURCES
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> Free eBooks</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Development Tutorial</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia> How to - Blog</Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography varia>Youtube Playlist</Typography>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Grid>
 
         <Divider />
-        <Grid
-          container
+        <Box
           sx={{
             display: "flex",
             p: 2,
@@ -235,37 +233,34 @@ function Footer() {
           <Typography variant="body1">
             Shop.co © 2000-2023, All Rights Reserved
           </Typography>
-          <Grid>
+          <Box>
             <img src={paymenttype1} alt="" />
             <img src={paymenttype2} alt="" />
             <img src={paymenttype3} alt="" />
             <img src={paymenttype4} alt="" />
             <img src={paymenttype5} alt="" />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Box
           sx={{
-            width: "1240px",
+            width: "95%",
             height: "180px",
             borderRadius: "20px",
             backgroundColor: "#000",
             position: "absolute",
             top: "-90px",
-            left: "150px",
           }}
         >
-          <Grid
-            container
+          <Box
             sx={{
-              width: "100%",
+              width: "90%",
+              display: "flex",
               p: 5,
               justifyContent: "space-between",
             }}
           >
-            <Grid
-              item
-              xs={12}
+            <Box
               sx={{
                 width: "40%",
               }}
@@ -273,30 +268,26 @@ function Footer() {
               <Typography variant="h4" color="#fff">
                 STAY UPTO DATE ABOUT OUR LATEST OFFERS
               </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
+            </Box>
+            <Box
               sx={{
                 width: "30%",
-                height: "48px",
+                height: "100px",
                 color: "#fff",
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
               }}
             >
-              <TextField
-                sx={{
+              <input
+                type="email"
+                style={{
                   width: "100%",
                   height: "100%",
                   backgroundColor: "#FFF",
                   borderRadius: "62px",
                 }}
-                fullWidth
-                variant="outlined"
                 required
-                label="Enter your email address "
               />
               <Button
                 variant="outlined"
@@ -310,8 +301,8 @@ function Footer() {
                 {" "}
                 Subscribe to Newsletter
               </Button>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Box>
       </Container>
     </>
