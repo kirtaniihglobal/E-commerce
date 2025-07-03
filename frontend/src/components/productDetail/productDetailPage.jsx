@@ -8,7 +8,6 @@ import {
   Box,
   Chip,
   Divider,
-  // useTheme,
   Button,
   Skeleton,
   Rating,
@@ -16,17 +15,14 @@ import {
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import {
-  getAllproductsData,
   getOneproductData,
+  getTopSellingProductData,
 } from "../../Thunk/productThunk";
 import { addToCartData } from "../../Thunk/cartThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import prod9 from "../../assets/prod9.png";
-import prod10 from "../../assets/prod10.png";
-import prod11 from "../../assets/prod11.png";
-import prod12 from "../../assets/prod12.png";
 import ProductCard from "../../comon/productCard";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Header from "../header/header";
@@ -34,8 +30,9 @@ import Footer from "../footer/footer";
 import img1 from "../../assets/image 1.png";
 import img2 from "../../assets/image 2.png";
 import img3 from "../../assets/image 3.png";
-import GradeIcon from "@mui/icons-material/Grade";
 import { openSnackbar } from "../../redux/snackBarSlice";
+import { getOneProductRatingData } from "../../Thunk/ratingThunk";
+import RatingCard from "../../comon/ratingCard";
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
@@ -43,13 +40,20 @@ function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const product = useSelector((state) => state.products.selectedProduct);
-  const { products } = useSelector((state) => state.products);
-  console.log(products);
+  const { topSelling } = useSelector((state) => state.products);
+  const { OneProductRatingData } = useSelector((state) => state.rating);
   const { id } = useParams();
+
+  useEffect(() => {
+    dispatch(getTopSellingProductData());
+    dispatch(getOneProductRatingData(id));
+    dispatch(getOneproductData(id));
+  }, [dispatch, id]);
 
   const handlePlus = () => {
     setQuantity((quantity) => quantity + 1);
   };
+
   const handleMins = () => {
     setQuantity((quantity) => {
       if (quantity == 1) {
@@ -91,54 +95,7 @@ function ProductDetailPage() {
   const handleChangeSize = (name) => {
     setSelectedSize(name);
   };
-  useEffect(() => {
-    dispatch(getAllproductsData());
-  }, [dispatch]);
-  useEffect(() => {
-    if (!product) {
-      const selectProd = products.find((p) => p._id === id);
-      if (selectProd) {
-        dispatch(getOneproductData(id));
-      }
-    }
-  }, [dispatch, id, products, product]);
 
-  const Products = [
-    {
-      id: 1,
-      image: prod9,
-      name: "Polo with Contrast Trims",
-      rating: 4.5,
-      price: "$120",
-      description: "This is a description of product 1",
-    },
-    {
-      id: 2,
-      image: prod10,
-      name: "Gradient Graphic T-shirt",
-      rating: 4.5,
-      price: "$212",
-      description: "This is a description of product 1",
-    },
-    {
-      id: 3,
-      image: prod11,
-      name: "Polo with Tipping Details",
-      rating: 4.5,
-      price: "$145",
-      description: "This is a description of product 1",
-    },
-    {
-      id: 4,
-      image: prod12,
-      name: "Black Striped T-shirt",
-      rating: 4.5,
-      price: "$180",
-      description: "This is a description of product 1",
-    },
-  ];
-
-  // const theme = useTheme();
   const breadcrumbs = [
     <Link underline="hover" key="1" color="inherit" href="/">
       HOME
@@ -184,7 +141,6 @@ function ProductDetailPage() {
                 sx={{
                   width: "50%",
                   display: "flex",
-                  // flexWrap:"wrap",
                   gap: 3,
                 }}
               >
@@ -228,8 +184,8 @@ function ProductDetailPage() {
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
+                    alignItems: "center",
+                    gap: 1,
                   }}
                 >
                   <Rating
@@ -426,42 +382,95 @@ function ProductDetailPage() {
               </Box>
             </>
           )}
-          <Grid container sx={{ width: "100%", mt: 2 }}>
-            <Box sx={{ width: "100%" }}>
-              <Box
-                sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}
+          <Grid
+            container
+            spacing={5}
+            sx={{
+              width: "100%",
+              mt: 5,
+              justifyContent: "center",
+            }}
+          >
+            <Grid
+              container
+              sx={{
+                width: "100%",
+              }}
+            >
+              <Grid
+                sx={{
+                  width: "50%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                }}
               >
-                {/* <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  aria-label="product tabs"
+                <Typography variant="h5">All Reviews</Typography>
+                <Typography variant="h5">
+                  ({OneProductRatingData.length})
+                </Typography>
+              </Grid>
+              <Grid
+                sx={{
+                  width: "45%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <Grid
                   sx={{
-                    width: "100%",
-                    "& .MuiTabs-flexContainer": {
-                      display: "flex",
-                      justifyContent: "space-around",
-                    },
+                    display: "flex",
+                    justifyContent: "flex-end",
                   }}
                 >
-                  <Tab label="Product Details" sx={{ width: "100%" }} />
-                  <Tab label="Rating & Reviews" sx={{ width: "100%" }} />
-                  <Tab label="FAQs" sx={{ width: "100%" }} />
-                </Tabs> */}
-              </Box>
-
-              {/* Tab Panels */}
-              {/* <TabPanel value={value} index={0}>
-                This is the **Product Details** section. You can place your
-                product info here.
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <RatingPage />
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                This is the **FAQs** section. Display questions and answers
-                here.
-              </TabPanel> */}
-            </Box>
+                  <img
+                    // src={filter}
+                    style={{
+                      width: "100%",
+                    }}
+                    alt=""
+                  />
+                </Grid>
+                <Grid>
+                  <Chip
+                    sx={{
+                      px: 3,
+                      py: 3,
+                      borderRadius: 6,
+                    }}
+                    label="Latest"
+                    deleteIcon={<KeyboardArrowDownIcon />}
+                  />
+                </Grid>
+                <Grid>
+                  <Button
+                    sx={{
+                      px: 3,
+                      py: 1.5,
+                      borderRadius: 6,
+                    }}
+                    variant="contained"
+                    className="black"
+                  >
+                    Write a Review
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                width: "95%",
+              }}
+            >
+              {OneProductRatingData.map((item) => (
+                <RatingCard key={item.id} item={item} width={600} />
+              ))}
+            </Grid>
           </Grid>
           <Box
             sx={{
@@ -498,7 +507,7 @@ function ProductDetailPage() {
                   gap: "20px",
                 }}
               >
-                {Products.map((product, index) => (
+                {topSelling.map((product, index) => (
                   <ProductCard key={index} product={product} />
                 ))}
                 <Box

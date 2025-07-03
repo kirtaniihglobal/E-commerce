@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addRatingData, getUserRatingData, updateUserRatingData } from "../Thunk/ratingThunk";
+import { addRatingData, getOneProductRatingData, getUserRatingData, updateUserRatingData } from "../Thunk/ratingThunk";
 
 
 
 const initialState = {
     UserProductRatingData: {},
-    // orderData: [],
-    // total: null,
+    OneProductRatingData: [],
 };
 
 const ratingSlice = createSlice({
@@ -24,7 +23,6 @@ const ratingSlice = createSlice({
             })
             .addCase(addRatingData.fulfilled, (state) => {
                 state.loading = false;
-                // state.total = action.payload.newOrder.total
             })
             .addCase(addRatingData.rejected, (state, action) => {
                 state.loading = false;
@@ -37,10 +35,24 @@ const ratingSlice = createSlice({
             })
             .addCase(getUserRatingData.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload.findRate)
                 state.UserProductRatingData = action.payload.findRate
             })
             .addCase(getUserRatingData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Error fetching Products";
+            })
+
+
+            /*************************************getOneProductRatingData**************************/
+            .addCase(getOneProductRatingData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getOneProductRatingData.fulfilled, (state, action) => {
+                state.loading = false;
+                state.OneProductRatingData = action.payload.findProductRate
+            })
+            .addCase(getOneProductRatingData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Error fetching Products";
             })
@@ -51,10 +63,8 @@ const ratingSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(updateUserRatingData.fulfilled, (state, action) => {
+            .addCase(updateUserRatingData.fulfilled, (state) => {
                 state.loading = false;
-                console.log(action.payload)
-                // state.UserProductRatingData = action.payload.findRate
             })
             .addCase(updateUserRatingData.rejected, (state, action) => {
                 state.loading = false;
