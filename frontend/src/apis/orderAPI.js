@@ -13,6 +13,7 @@ export const getAllOrderAPI = async () => {
 }
 
 export const cancelOrderAPI = async (id) => {
+    console.log(id)
     const response = await api.put(`order/cancelOrder/${id}`);
     return response.data;
 }

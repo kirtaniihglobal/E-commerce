@@ -7,6 +7,7 @@ import { addOrderData, getAllOrderData, cancelOrderData } from "../Thunk/orderTh
 
 const initialState = {
     orderData: [],
+    ratingData: [],
     total: null,
 };
 
@@ -40,8 +41,9 @@ const orderSlice = createSlice({
             })
             .addCase(getAllOrderData.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload.data)
+                console.log(action.payload)
                 state.orderData = action.payload.data
+                state.ratingData = action.payload.rateValue
                 state.total = action.payload.data.total
             })
             .addCase(getAllOrderData.rejected, (state, action) => {

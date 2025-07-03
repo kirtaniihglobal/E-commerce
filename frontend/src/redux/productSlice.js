@@ -12,9 +12,20 @@ const initialState = {
 
 };
 const productSlice = createSlice({
+
     name: 'products',
     initialState,
     reducers: {
+        ratingUpdate: (state, action) => {
+            // console.log(action.payload.updateRate)
+            const updatedProduct = action.payload.updateRate;
+            const index = state.products.findIndex(p => p._id === updatedProduct._id);
+
+            if (index !== -1) {
+                state.products[index] = updatedProduct;
+            }
+        }
+
     },
     extraReducers: (builder) => {
         builder
@@ -25,7 +36,7 @@ const productSlice = createSlice({
             })
             .addCase(getAllproductsData.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log(action.payload)
+                console.log(action.payload.products)
                 state.products = [...state.products, ...action.payload.products];
                 state.total = action.payload.total;
                 state.loading = false;
@@ -117,4 +128,6 @@ const productSlice = createSlice({
 
     }
 });
+export const { ratingUpdate } =
+    productSlice.actions;
 export default productSlice.reducer;

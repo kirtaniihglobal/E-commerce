@@ -41,6 +41,7 @@ export const cancelOrderData = createAsyncThunk(
     "order/cancelOrder",
     async (id, { dispatch, rejectWithValue }) => {
         try {
+            console.log(id)
             const response = await cancelOrderAPI(id);
             dispatch(openSnackbar({ massage: `Order Canceled Successfully`, severity: "success" }));
             return response.updateOrder;

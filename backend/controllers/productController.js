@@ -2,6 +2,7 @@ const Product = require("../models/product");
 
 
 
+
 const createProduct = async (req, res) => {
     try {
 
@@ -41,10 +42,8 @@ const getAllproducts = async (req, res) => {
         console.log("SKIP", skip)
         const products = await Product.find().skip(skip).limit(limit);
         const total = await Product.countDocuments();
-        // setTimeout(() => {
 
         return res.status(200).json({ status: 200, msg: "fetch all products", products, total })
-        // }, 5000);
     }
     catch (error) {
         console.error("error to fetch product", error);

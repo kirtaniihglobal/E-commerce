@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Button } from "@mui/material";
+import { Grid, Box, Typography, Button, Rating } from "@mui/material";
 import GradeIcon from "@mui/icons-material/Grade";
 import { getOneproductData } from "../Thunk/productThunk";
 import { useDispatch } from "react-redux";
@@ -41,7 +41,23 @@ const ProductCard = ({ product }) => {
         <Box>
           <Typography variant="h6">{product.name}</Typography>
           <Typography variant="h5" sx={{ color: "orange" }}>
-            {product.rating} rate
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <Rating
+                name="read-only"
+                value={Number(product.rating?.toFixed(1))}
+                precision={0.5}
+                readOnly
+              />
+              <Typography variant="h6">
+                {product.rating?.toFixed(1)}/5
+              </Typography>
+            </Box>
           </Typography>
           <Typography variant="h5">${product.price}</Typography>
           <Box
