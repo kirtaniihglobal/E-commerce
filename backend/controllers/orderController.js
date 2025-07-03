@@ -1,12 +1,13 @@
 const User = require("../models/user");
 const Cart = require("../models/cart");
 const Order = require("../models/order");
+const Rating = require("../models/rating");
 
 
 
 const addOrder = async (req, res) => {
     try {
-       
+
         const { address, pincode, city, country } = req.body;
         const id = req.user.id;
         if (!address || !pincode || !city || !country) {
@@ -16,9 +17,9 @@ const addOrder = async (req, res) => {
         if (!findUser) {
             return res.status(500).json({ status: false, msg: "user not found!" });
         }
-        
+
         const cart = await Cart.findOne({ userId: id });
-    
+
         if (!cart) {
             return res.status(500).json({ status: false, msg: "cart not found!" });
         }
@@ -34,7 +35,7 @@ const addOrder = async (req, res) => {
                 info: [{ country: country, address: address, pincode: pincode, city: city }],
                 status: "pending",
             });
-          
+
             await newOrder.save();
             cart.products = [];
             cart.total = 0;
@@ -54,11 +55,14 @@ const getAllOrders = async (req, res) => {
         if (!user) {
             return res.status(404).json({ status: false, msg: "User not found" });
         }
+        // const rateValue = await Rating.find({ userId: userId })
+        // console.log(rateValue)
         const orders = await Order.find({ userId: userId, status: { $in: ["pending", "delivered", "canceled"] } }).populate("orderData.products.productId");
         return res.status(200).json({
             status: true,
             message: "Orders fetched successfully",
             data: orders,
+            // rateValue
         });
     } catch (error) {
         console.error("Error fetching orders:", error);
@@ -68,15 +72,12 @@ const getAllOrders = async (req, res) => {
 const cancelOrder = async (req, res) => {
     try {
         const orderId = req.params.id;
-    
-
+        console.log(orderId)
         const order = await Order.findOne({ _id: orderId }).populate("orderData.products.productId");
-      
+        console.log(order)
         const pending = order.status == "pending";
-
         if (pending) {
             const updateOrder = await Order.findByIdAndUpdate(orderId, { status: "canceled" }, { new: true })
-          
             return res.status(200).json({ status: true, msg: "order canceled", updateOrder })
         } else {
             return res.status(500).json({ status: false, msg: "Order not Canceled" })

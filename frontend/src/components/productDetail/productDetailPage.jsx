@@ -11,6 +11,7 @@ import {
   // useTheme,
   Button,
   Skeleton,
+  Rating,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -231,11 +232,15 @@ function ProductDetailPage() {
                     gap: "10px",
                   }}
                 >
-                  <GradeIcon color="warning" />
-                  <GradeIcon color="warning" />
-                  <GradeIcon color="warning" />
-                  <GradeIcon color="warning" />
-                  {/* <Typography variant="h5">{product.rating}</Typography> */}
+                  <Rating
+                    name="read-only"
+                    value={Number(product.rating?.toFixed(1))}
+                    precision={0.5}
+                    readOnly
+                  />
+                  <Typography variant="h6">
+                    {Number(product.rating?.toFixed(1))}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
