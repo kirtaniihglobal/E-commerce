@@ -1,19 +1,53 @@
-import { Grid, Box, Typography, Button, Rating } from "@mui/material";
-import GradeIcon from "@mui/icons-material/Grade";
+import {
+  Grid,
+  Box,
+  Typography,
+  Button,
+  Rating,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getOneproductData } from "../Thunk/productThunk";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { openSnackbar } from "../redux/snackBarSlice";
 import { addToCartData } from "../Thunk/cartThunk";
-const ProductCard = ({ product }) => {
+import {
+  addWishlistData,
+  deleteUserWishlistData,
+} from "../Thunk/wishlistThunk";
+import { getUserRatingData } from "../Thunk/ratingThunk";
+// import { useEffect } from "react";
+const ProductCard = ({ product, isLiked }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // const { userLikes } = useSelector((state) =>   state.wishList);
+  // console.log(userLikes);
+  // const isLiked = userLikes?.find((like) => like.productId._id === product._id);
+
+  // useEffect(() => {
+  //   dispatch(getUserWishlistData());
+  // }, [dispatch]);
   const handleSelect = async (id) => {
     try {
       await dispatch(getOneproductData(id));
       navigate(`/productDetail/${id}`);
       window.scrollTo(0, 0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleChange = async (id) => {
+    try {
+      if (isLiked) {
+        await dispatch(deleteUserWishlistData(id));
+      } else {
+        await dispatch(addWishlistData(id));
+        dispatch(getUserRatingData());
+      }
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +61,7 @@ const ProductCard = ({ product }) => {
         }}
       >
         <Box
-          sx={{ cursor: "pointer", maxWidth: "295px" }}
+          sx={{ cursor: "pointer", maxWidth: "295px", position: "relative" }}
           onClick={() => {
             handleSelect(product._id);
           }}
@@ -37,6 +71,29 @@ const ProductCard = ({ product }) => {
             src={`http://192.168.2.222:5000/${product.image}`}
             alt=""
           />
+          <Tooltip
+            title={isLiked ? "Remove Like" : "like"}
+            placement="top"
+            arrow
+          >
+            <IconButton
+              sx={{
+                position: "absolute",
+                top: "15px",
+                right: "15px",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleChange({ id: product._id });
+              }}
+            >
+              {isLiked ? (
+                <FavoriteIcon color="error" />
+              ) : (
+                <FavoriteBorderIcon color="primary" />
+              )}
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box>
           <Typography variant="h6">{product.name}</Typography>
@@ -48,15 +105,21 @@ const ProductCard = ({ product }) => {
                 gap: 1,
               }}
             >
-              <Rating
-                name="read-only"
-                value={Number(product.rating?.toFixed(1))}
-                precision={0.5}
-                readOnly
-              />
-              <Typography variant="h6">
-                {product.rating?.toFixed(1)}/5
-              </Typography>
+              {product.rating == 0 ? (
+                <Typography variant="h6">No rating</Typography>
+              ) : (
+                <>
+                  <Rating
+                    name="read-only"
+                    value={Number(product.rating?.toFixed(1))}
+                    precision={0.5}
+                    readOnly
+                  />
+                  <Typography variant="h6">
+                    {product.rating?.toFixed(1)}/5
+                  </Typography>
+                </>
+              )}
             </Box>
           </Typography>
           <Typography variant="h5">${product.price}</Typography>

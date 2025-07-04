@@ -26,26 +26,16 @@ import {
   getUserRatingData,
   updateUserRatingData,
 } from "../../Thunk/ratingThunk";
-// import { addRatingData } from "../../Thunk/ratingThunk";
-// import { openSnackbar } from "../../redux/snackBarSlice";
-
 function MyOrders() {
   const dispatch = useDispatch();
   const { orderData } = useSelector((state) => state.order);
-  console.log(orderData);
   const { UserProductRatingData } = useSelector((state) => state.rating);
-  // const { ratingData } = useSelector((state) => state.order);
-  console.log(UserProductRatingData);
-
   const [open, setOpen] = useState(false);
   const [openRate, setOpenRate] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [ratingValue, setRatingValue] = useState(0);
   const [comment, setComment] = useState("");
   const [cancelId, setCancelId] = useState(null);
-  // const [updateMode, setUpdateMode] = useState(false);
-  // const [updateData, setUpdateData] = useState("");
-  // const [updateId, setUpdateId] = useState(null);
 
   const handleClickOpen = (orderId) => {
     setCancelId(orderId);
@@ -65,11 +55,8 @@ function MyOrders() {
       setComment("");
     }
   }, [openRate, UserProductRatingData]);
+
   const handleClickOpenRate = (product) => {
-    // if (UserProductRatingData) {
-    //   setUpdateMode(true);
-    // }
-    console.log(product.productId._id);
     setSelectedProduct(product);
     dispatch(getUserRatingData(product.productId._id));
     setOpenRate(true);
@@ -79,16 +66,8 @@ function MyOrders() {
     setOpenRate(false);
   };
   const handleRatingSubmit = async () => {
-    if (!selectedProduct || !ratingValue) return;
-
     try {
-      // console.log("Submitting:", {
-      //   productId: selectedProduct.productId._id,
-      //   rating: ratingValue,
-      // });
-      // console.log(UserProductRatingData._id);
       if (UserProductRatingData) {
-        console.log(UserProductRatingData._id);
         await dispatch(
           updateUserRatingData({
             ratingId: UserProductRatingData._id,
@@ -105,25 +84,7 @@ function MyOrders() {
           })
         ).unwrap();
       }
-      // .then(() => {
-      //   dispatch(
-      //     openSnackbar({
-      //       massage: "Rating submitted successfully",
-      //       severity: "success",
-      //     })
-      //   );
-      // })
-      // .catch(() => {
-      //   dispatch(
-      //     openSnackbar({
-      //       massage: "Rating  successfully",
-      //       severity: "success",
-      //     })
-      //   );
-      // });
-
       setSelectedProduct(null);
-
       handleCloseRate();
     } catch (error) {
       dispatch(
@@ -396,7 +357,6 @@ function MyOrders() {
                             </Box>
                           </Box>
                         </Box>
-                        {/* {UserProductRatingData && ( */}
                         <>
                           <Box>
                             <TextField
@@ -411,7 +371,6 @@ function MyOrders() {
                             />
                           </Box>
                         </>
-                        {/* )} */}
                       </Box>
                     )}
                   </DialogContent>
