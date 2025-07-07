@@ -81,7 +81,7 @@ function ManageProducts() {
   const [editData, setEditData] = useState("");
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
-  const limit = 10;
+  const limit = 9;
 
   useEffect(() => {
     dispatch(getAllproductsData({ skip: 0, limit }));

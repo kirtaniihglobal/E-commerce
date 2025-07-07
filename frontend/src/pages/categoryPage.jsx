@@ -16,24 +16,16 @@ import { useEffect, useState } from "react";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/header/header";
-import { getUserWishlistData } from "../Thunk/wishlistThunk";
 function CategoryPage() {
   const dispatch = useDispatch();
   const minmin = 0;
   const maxmax = 1000;
   const { products, total } = useSelector((state) => state.products);
-  const { userLikes } = useSelector((state) => state.wishList);
   const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const limit = 9;
-  const displayProducts = products.map((product) => ({
-    ...product,
-    isLiked: userLikes?.find((like) => like.productId._id === product._id),
-  }));
-  // console.log(displayProducts);
   useEffect(() => {
-    dispatch(getUserWishlistData());
     dispatch(getAllproductsData({ skip: 0, limit }));
     setSkip(limit);
   }, [dispatch]);
@@ -321,9 +313,9 @@ function CategoryPage() {
               gap: 3,
             }}
           >
-            {displayProducts.map((product, index) => (
+            {products.map((product, index) => (
               <Grid key={index}>
-                <ProductCard product={product} isLiked={product.isLiked} />
+                <ProductCard product={product} />
               </Grid>
             ))}
           </Box>

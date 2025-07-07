@@ -17,13 +17,13 @@ import { addToCartData } from "../Thunk/cartThunk";
 import {
   addWishlistData,
   deleteUserWishlistData,
-  getUserWishlistData,
 } from "../Thunk/wishlistThunk";
+import { useState } from "react";
 
-const ProductCard = ({ product, isLiked }) => {
+const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [liked, setLiked] = useState(product.isLiked);
   const handleSelect = async (id) => {
     try {
       await dispatch(getOneproductData(id));
@@ -35,16 +35,18 @@ const ProductCard = ({ product, isLiked }) => {
   };
   const handleChange = async (id) => {
     try {
-      if (isLiked) {
+      if (liked) {
         await dispatch(deleteUserWishlistData({ id }));
+        setLiked(false); // toggle like state locally
       } else {
         await dispatch(addWishlistData({ id }));
-        dispatch(getUserWishlistData());
+        setLiked(true);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <Grid key={product._id}>
       <Box
@@ -64,11 +66,7 @@ const ProductCard = ({ product, isLiked }) => {
             src={`http://192.168.2.222:5000/${product.image}`}
             alt=""
           />
-          <Tooltip
-            title={isLiked ? "Remove Like" : "like"}
-            placement="top"
-            arrow
-          >
+          <Tooltip title={liked ? "Remove Like" : "Like"} placement="top" arrow>
             <IconButton
               sx={{
                 position: "absolute",
@@ -80,7 +78,7 @@ const ProductCard = ({ product, isLiked }) => {
                 handleChange(product._id);
               }}
             >
-              {isLiked ? (
+              {liked ? (
                 <FavoriteIcon color="error" />
               ) : (
                 <FavoriteBorderIcon color="primary" />
@@ -98,8 +96,8 @@ const ProductCard = ({ product, isLiked }) => {
                 gap: 1,
               }}
             >
-              {product.rating == 0 ? (
-                <Typography variant="h6">No rating</Typography>
+              {product.rating == null ? (
+                <Typography variant="h6">No Rating</Typography>
               ) : (
                 <>
                   <Rating
@@ -132,7 +130,6 @@ const ProductCard = ({ product, isLiked }) => {
               onClick={() => {
                 dispatch(
                   addToCartData({
-                    // userId: user._id,
                     productId: product._id,
                     quantity: 1,
                     size: "small",

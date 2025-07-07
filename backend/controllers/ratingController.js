@@ -8,26 +8,10 @@ const addRating = async (req, res) => {
   try {
     const newRate = new Rating({ userId, productId, rating, comment });
     await newRate.save();
-    const findRatingStats = await Rating.aggregate([
-      { $match: { productId: new mongoose.Types.ObjectId(productId) } },
-      {
-        $group: {
-          _id: "$productId",
-          averageRating: { $avg: "$rating" },
-        },
-      },
-    ]);
-    const finalRating = findRatingStats[0]?.averageRating?.toFixed(1) || 0;
-    const updateRate = await Product.findByIdAndUpdate(
-      productId,
-      { rating: finalRating },
-      { new: true }
-    );
     return res.status(201).json({
       msg: "Rating Submitted",
       status: true,
-      rating: finalRating,
-      updateRate,
+      rating: newRate,
     });
   } catch (error) {
     console.error("Rating Error:", error);
@@ -52,13 +36,11 @@ const getUserRating = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching orders:", error);
-    return res
-      .status(500)
-      .json({
-        status: false,
-        msg: "Failed to fetch orders",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: false,
+      msg: "Failed to fetch orders",
+      error: error.message,
+    });
   }
 };
 const getOneProductRating = async (req, res) => {
@@ -74,13 +56,11 @@ const getOneProductRating = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching orders:", error);
-    return res
-      .status(500)
-      .json({
-        status: false,
-        msg: "Failed to fetch orders",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: false,
+      msg: "Failed to fetch orders",
+      error: error.message,
+    });
   }
 };
 const updateUserRating = async (req, res) => {
@@ -91,31 +71,14 @@ const updateUserRating = async (req, res) => {
     if (!prevRating) {
       return res.status(404).json({ status: false, msg: "Rating not found" });
     }
-    const productId = prevRating.productId;
     await Rating.findByIdAndUpdate(
       ratingId,
       { rating, comment },
       { new: true }
     );
-    const findRatingStats = await Rating.aggregate([
-      { $match: { productId: new mongoose.Types.ObjectId(productId) } },
-      {
-        $group: {
-          _id: "$productId",
-          averageRating: { $avg: "$rating" },
-        },
-      },
-    ]);
-    const finalRating = findRatingStats[0]?.averageRating?.toFixed(1) || 0;
-    const updateRate = await Product.findByIdAndUpdate(
-      productId,
-      { rating: finalRating },
-      { new: true }
-    );
     return res.status(200).json({
       status: true,
       message: "Rating updated successfully",
-      updateRate,
     });
   } catch (error) {
     console.error("Error updating rating:", error);

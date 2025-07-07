@@ -1,30 +1,20 @@
 import { Grid, Typography, Button } from "@mui/material";
-import { getNewArrivalsProductData } from "../Thunk/productThunk";
+import {
+  getAllproductsData,
+  // getNewArrivalsProductData,
+} from "../Thunk/productThunk";
 import { useEffect } from "react";
-// import { useTheme, useMediaQuery } from "@mui/material";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import { getUserWishlistData } from "../Thunk/wishlistThunk";
-function NewArrivalProduct({ likeData }) {
+function NewArrivalProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { newArrival } = useSelector((state) => state.products);
-  // const { userLikes } = useSelector((state) => state.wishList);
-  // const [visible, setVisible] = useState(4);
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const { products } = useSelector((state) => state.products);
   useEffect(() => {
-    dispatch(getNewArrivalsProductData());
-    // dispatch(getUserWishlistData());
+    dispatch(getAllproductsData({ skip: 0, limit: 9 }));
   }, [dispatch]);
-  const displayProducts = newArrival
-    .map((product) => ({
-      ...product,
-      isLiked: likeData?.find((like) => like.productId._id === product._id),
-    }))
-    .slice(0, 4);
+  const displayProducts = products.slice(0, 4);
   return (
     <>
       <Grid
@@ -69,11 +59,7 @@ function NewArrivalProduct({ likeData }) {
             }}
           >
             {displayProducts.map((product) => (
-              <ProductCard
-                key={product._id}
-                product={product}
-                isLiked={product.isLiked}
-              />
+              <ProductCard key={product._id} product={product} />
             ))}
             <Grid
               sx={{
@@ -82,7 +68,6 @@ function NewArrivalProduct({ likeData }) {
                 justifyContent: "center",
               }}
             >
-              {/* {visible < products.length && ( */}
               <Button
                 variant="outlined"
                 className="white"
@@ -98,7 +83,6 @@ function NewArrivalProduct({ likeData }) {
               >
                 View All
               </Button>
-              {/* )} */}
             </Grid>
           </Grid>
         </Grid>
