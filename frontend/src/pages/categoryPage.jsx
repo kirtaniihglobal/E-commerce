@@ -9,6 +9,7 @@ import {
   ButtonBase,
   Skeleton,
 } from "@mui/material";
+
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { getAllproductsData } from "../Thunk/productThunk";
 import { useEffect, useState } from "react";
@@ -19,13 +20,8 @@ function CategoryPage() {
   const dispatch = useDispatch();
   const minmin = 0;
   const maxmax = 1000;
-  const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
-  const handlePriceRangeChange = (event, newValue) => {
-    setPriceRangeValue(newValue);
-  };
   const { products, total } = useSelector((state) => state.products);
-  console.log(products);
-
+  const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const limit = 9;
@@ -34,6 +30,9 @@ function CategoryPage() {
     setSkip(limit);
   }, [dispatch]);
 
+  const handlePriceRangeChange = (event, newValue) => {
+    setPriceRangeValue(newValue);
+  };
   const loadMoreProducts = () => {
     if (loading || products.length >= total) return;
     setLoading(true);

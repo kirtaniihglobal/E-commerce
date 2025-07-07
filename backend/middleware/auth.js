@@ -27,21 +27,14 @@ function generateJWTToken(user) {
 const checkBlockUser = async (req, res, next) => {
     try {
         const userId = req.user?.id;
-
-
         const checkUser = await User.findById(userId);
-
-
         if (!checkUser) {
             return res.status(404).json({ status: false, msg: "User not found" });
         }
-
         if (checkUser.isBlocked) {
             return res.status(403).json({ status: false, msg: "User is Blocked" });
         }
-
         next();
-
     } catch (err) {
         console.error("Error in checkBlockUser:", err);
         return res.status(500).json({ status: false, msg: "Internal Server Error" });

@@ -1,26 +1,22 @@
 import { Grid, Typography, Button } from "@mui/material";
-// import { useTheme} from "@mui/material";
-import {
-  // getAllproductsData,
-  getTopSellingProductData,
-} from "../Thunk/productThunk";
+import { getAllproductsData } from "../Thunk/productThunk";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../comon/productCard";
 import { useState, useEffect } from "react";
+
 function TopSellingProduct() {
   const dispatch = useDispatch();
   const { topSelling } = useSelector((state) => state.products);
+  const { products } = useSelector((state) => state.products);
   const [visible, setVisible] = useState(4);
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
-    dispatch(getTopSellingProductData());
+    dispatch(getAllproductsData({ skip: 0, limit: 9 }));
   }, [dispatch]);
   const handleViewAll = () => {
     setVisible(topSelling.length);
   };
 
-  const displayProducts = topSelling.slice(0, visible);
+  const displayProducts = products.slice(0, 4);
 
   return (
     <>
@@ -65,8 +61,8 @@ function TopSellingProduct() {
               gap: "20px",
             }}
           >
-            {displayProducts.map((product, index) => (
-              <ProductCard key={index} product={product} />
+            {displayProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
             ))}
             <Grid
               sx={{

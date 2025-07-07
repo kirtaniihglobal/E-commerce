@@ -30,6 +30,10 @@ function MyOrders() {
   const dispatch = useDispatch();
   const { orderData } = useSelector((state) => state.order);
   const { UserProductRatingData } = useSelector((state) => state.rating);
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6a15ae0f658c522fcd9a4526f4bed7decae36d8a
   const [open, setOpen] = useState(false);
   const [openRate, setOpenRate] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -84,6 +88,10 @@ function MyOrders() {
           })
         ).unwrap();
       }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6a15ae0f658c522fcd9a4526f4bed7decae36d8a
       setSelectedProduct(null);
       handleCloseRate();
     } catch (error) {
