@@ -24,7 +24,7 @@ function ManageOrders() {
   const [filter, setFilter] = useState("");
   useEffect(() => {
     dispatch(getAllOrderAdminData(filter));
-  }, [filter]);
+  }, [filter, dispatch]);
 
   const [value, setValue] = React.useState(0);
 
@@ -185,7 +185,6 @@ function ManageOrders() {
                       >
                         <Button
                           onClick={() => {
-                        
                             dispatch(updateOrderAdminData(order._id));
                           }}
                           variant="contained"

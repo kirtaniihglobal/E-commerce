@@ -1,8 +1,7 @@
-import { Box, Button, Divider, Grid, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, Rating, Typography } from "@mui/material";
 import Header from "../components/header/header";
 import Footer from "../components/footer/footer";
 import hero from "../assets/hero.jpg";
-// import { useTheme } from "@mui/material";
 import star from "../assets/Vector.png";
 import NewArrivalProduct from "../components/newArrivalProduct";
 import TopSellingProduct from "../components/topSellingProduct";
@@ -12,12 +11,9 @@ import Frame3 from "../assets/Frame 3.png";
 import Frame4 from "../assets/Frame 4.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import RatingCard from "../comon/ratingCard";
+import GreenTik from "../assets/greentik.png";
 
 function Home() {
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
   const Review = [
     {
       id: 1,
@@ -369,7 +365,47 @@ function Home() {
               }}
             >
               {Review.map((item) => (
-                <RatingCard key={item.id} item={item} />
+                <Grid
+                  key={item.id}
+                  container
+                  sx={{
+                    height: "auto",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "400px",
+                      height: "240px",
+                      borderRadius: "20px",
+                      border: "1px solid #ccc",
+                      p: 4,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <Typography>
+                      <Rating
+                        name="read-only"
+                        value={4.5}
+                        precision={0.5}
+                        readOnly
+                      />
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="h5">{item.name}</Typography>
+                      <img width={20} height={20} src={GreenTik} alt="" />
+                    </Box>
+                    <Typography variant="body1">{item.review}</Typography>
+                  </Box>
+                </Grid>
               ))}
             </Box>
           </Box>

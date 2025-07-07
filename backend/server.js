@@ -7,6 +7,7 @@ const productRoutes = require("./routes/productRoute");
 const cartRoutes = require("./routes/cartRoute");
 const addressRoutes = require("./routes/addressRoute");
 const adminRoutes = require("./routes/adminRoute");
+const ratingRoutes = require("./routes/ratingRoute");
 const orderRoutes = require("./routes/orderRoute");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -23,6 +24,7 @@ app.use("/api/cart/", cartRoutes)
 app.use("/api/order/", orderRoutes)
 app.use("/api/address/", addressRoutes)
 app.use("/api/admin/", adminRoutes)
+app.use("/api/rating/", ratingRoutes)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.get("/", (req, res) => {
   res.send("Welcome to the API");

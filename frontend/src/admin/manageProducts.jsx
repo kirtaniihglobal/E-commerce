@@ -128,7 +128,7 @@ function ManageProducts() {
       });
       setImageFile(`http://192.168.2.222:5000/${editData.image}`);
     }
-  }, [editMode, editData, formik]);
+  }, [editMode, editData]);
 
   const validationSchema = yup.object({
     name: yup
