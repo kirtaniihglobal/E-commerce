@@ -19,6 +19,7 @@ import MyAddress from "../components/profile/myAddress";
 import MyOrders from "../components/profile/myOrders";
 import ForgotPassword from "../components/password/forgotPassword";
 import ResetPassword from "../components/password/resetPassword";
+import MyWishlist from "../components/profile/myWishlist";
 
 const RoutesComponent = () => {
   return (
@@ -46,6 +47,7 @@ const RoutesComponent = () => {
             <Route path="/profile/myProfile" element={<ProfilePage />} />
             <Route path="/profile/myAddress" element={<MyAddress />} />
             <Route path="/profile/myOrders" element={<MyOrders />} />
+            <Route path="/profile/myWishlist" element={<MyWishlist />} />
           </Route>
         </Route>
       </Routes>

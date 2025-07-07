@@ -90,21 +90,21 @@ function UserProfileLayout() {
                 My Orders
               </NavLink>
               <NavLink
-                to="/profile/myPayments"
+                to="/profile/myWishlist"
                 style={({ isActive }) =>
                   isActive ? activeStyle : inactiveStyle
                 }
               >
-                My Payments
+                My Wishlist
               </NavLink>
-              <NavLink
-                to="/profile/myWallet"
+              {/* <NavLink
+                to="/profile/myWishlist"
                 style={({ isActive }) =>
                   isActive ? activeStyle : inactiveStyle
                 }
               >
                 My Wallet
-              </NavLink>
+              </NavLink> */}
 
               <Typography
                 onClick={() => {

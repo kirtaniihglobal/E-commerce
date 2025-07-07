@@ -12,8 +12,16 @@ import Frame4 from "../assets/Frame 4.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import GreenTik from "../assets/greentik.png";
+import { getUserWishlistData } from "../Thunk/wishlistThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function Home() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserWishlistData());
+  }, [dispatch]);
+  const { userLikes } = useSelector((state) => state.wishList);
   const Review = [
     {
       id: 1,
@@ -206,8 +214,8 @@ function Home() {
               </Typography>
             </Box>
           </Box>
-          <NewArrivalProduct />
-          <TopSellingProduct />
+          <NewArrivalProduct likeData={userLikes} />
+          <TopSellingProduct likeData={userLikes} />
           <Box
             sx={{
               width: "100%",

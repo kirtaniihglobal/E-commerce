@@ -7,7 +7,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../comon/productCard";
 import { useState, useEffect } from "react";
-function TopSellingProduct() {
+function TopSellingProduct({ likeData }) {
   const dispatch = useDispatch();
   const { topSelling } = useSelector((state) => state.products);
   const [visible, setVisible] = useState(4);
@@ -19,8 +19,13 @@ function TopSellingProduct() {
   const handleViewAll = () => {
     setVisible(topSelling.length);
   };
-
-  const displayProducts = topSelling.slice(0, visible);
+  const displayProducts = topSelling
+    .map((product) => ({
+      ...product,
+      isLiked: likeData?.find((like) => like.productId._id === product._id),
+    }))
+    .slice(0, 4);
+  // const displayProducts = topSelling.slice(0, visible);
 
   return (
     <>
@@ -65,8 +70,12 @@ function TopSellingProduct() {
               gap: "20px",
             }}
           >
-            {displayProducts.map((product, index) => (
-              <ProductCard key={index} product={product} />
+            {displayProducts.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                isLiked={product.isLiked}
+              />
             ))}
             <Grid
               sx={{

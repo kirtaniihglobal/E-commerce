@@ -1,26 +1,30 @@
 import { Grid, Typography, Button } from "@mui/material";
 import { getNewArrivalsProductData } from "../Thunk/productThunk";
-import { useEffect} from "react";
+import { useEffect } from "react";
 // import { useTheme, useMediaQuery } from "@mui/material";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-function NewArrivalProduct() {
+// import { getUserWishlistData } from "../Thunk/wishlistThunk";
+function NewArrivalProduct({ likeData }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { newArrival } = useSelector((state) => state.products);
+  // const { userLikes } = useSelector((state) => state.wishList);
   // const [visible, setVisible] = useState(4);
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     dispatch(getNewArrivalsProductData());
+    // dispatch(getUserWishlistData());
   }, [dispatch]);
-  // const handleViewAll = () => {
-  //   setVisible(products.length);
-  // };
-
-  const displayProducts = newArrival.slice(0, 4);
+  const displayProducts = newArrival
+    .map((product) => ({
+      ...product,
+      isLiked: likeData?.find((like) => like.productId._id === product._id),
+    }))
+    .slice(0, 4);
   return (
     <>
       <Grid
@@ -64,8 +68,12 @@ function NewArrivalProduct() {
               gap: "20px",
             }}
           >
-            {displayProducts.map((product, index) => (
-              <ProductCard key={index} product={product} />
+            {displayProducts.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                isLiked={product.isLiked}
+              />
             ))}
             <Grid
               sx={{

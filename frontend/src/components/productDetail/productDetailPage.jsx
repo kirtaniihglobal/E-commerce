@@ -16,6 +16,8 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
   getOneproductData,
   getTopSellingProductData,
@@ -33,6 +35,7 @@ import img3 from "../../assets/image 3.png";
 import { openSnackbar } from "../../redux/snackBarSlice";
 import { getOneProductRatingData } from "../../Thunk/ratingThunk";
 import RatingCard from "../../comon/ratingCard";
+import { getUserWishlistData } from "../../Thunk/wishlistThunk";
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
@@ -43,6 +46,13 @@ function ProductDetailPage() {
   const { topSelling } = useSelector((state) => state.products);
   const { OneProductRatingData } = useSelector((state) => state.rating);
   const { id } = useParams();
+
+  const { userLikes } = useSelector((state) => state.wishList);
+  const isLiked = userLikes?.find((like) => like.productId._id === product._id);
+
+  useEffect(() => {
+    dispatch(getUserWishlistData());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getTopSellingProductData());
@@ -159,6 +169,7 @@ function ProductDetailPage() {
                 <Box
                   sx={{
                     width: "70%",
+                    position: "relative",
                   }}
                 >
                   <img
@@ -168,6 +179,22 @@ function ProductDetailPage() {
                     }}
                     alt=""
                   />
+                  <IconButton
+                    sx={{
+                      position: "absolute",
+                      top: "20px",
+                      right: "20px",
+                    }}
+                    onClick={() => {
+                      // handleChange(product._id);
+                    }}
+                  >
+                    {isLiked ? (
+                      <FavoriteIcon color="error" />
+                    ) : (
+                      <FavoriteBorderIcon color="primary" />
+                    )}
+                  </IconButton>
                 </Box>
               </Box>
               <Box
@@ -188,6 +215,10 @@ function ProductDetailPage() {
                     gap: 1,
                   }}
                 >
+                         {product.rating == 0 ? (
+                <Typography variant="h6">No rating</Typography>
+              ) : (
+                <>
                   <Rating
                     name="read-only"
                     value={Number(product.rating?.toFixed(1))}
@@ -195,8 +226,10 @@ function ProductDetailPage() {
                     readOnly
                   />
                   <Typography variant="h6">
-                    {Number(product.rating?.toFixed(1))}
+                    {product.rating?.toFixed(1)}/5
                   </Typography>
+                </>
+              )}
                 </Box>
                 <Box
                   sx={{
