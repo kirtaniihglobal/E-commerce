@@ -34,15 +34,14 @@ const updateOrdersAdmin = async (req, res) => {
     );
     const pending = order.status == "pending";
     const productList = order.orderData.products.map((product) => {
-      `<div>
-          <div>
+      return `
+             <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
             <p><strong>${product?.productId?.name}</strong></p>
             <p>Quantity:<strong> ${product?.quantity}</strong></p>
             <p>Size: <strong>${product?.size}</strong></p>
             <p>Color:<strong> ${product?.color}</strong></p>
             <p>Price: <strong>₹${product?.productId?.price}</strong></p>
-          </div>
-        </div>`;
+            </div>`
     });
 
     if (pending) {
@@ -69,11 +68,12 @@ const updateOrdersAdmin = async (req, res) => {
         ${productList}
         <hr/>
         <p><strong>Total:</strong> ₹${order.total}</p>
-        <p>Your Order Status is:<h1 style="color:green;">${updateOrder.status}</h1></p>
+        <p>Your Order Status is: <h1 style="color: green; font-weight: bold;">${updateOrder.status}</h1></p>
+
         <p>We’ll notify you once your items are Delivered.</p>
         <p>Thank you for shopping with us!</p>
       </div>
-    </div>`,
+    </div>`
       });
       return res
         .status(200)

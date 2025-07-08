@@ -2,7 +2,6 @@ const User = require("../models/user");
 const Cart = require("../models/cart");
 const Order = require("../models/order");
 const nodemailer = require("nodemailer");
-const { generateOrderHTML } = require("../middleware/emailOrder");
 
 const addOrder = async (req, res) => {
   try {
@@ -39,15 +38,19 @@ const addOrder = async (req, res) => {
       });
 
       await newOrder.save();
-
-      const htmlContent = generateOrderHTML({
-        orderInfo: newOrder.info,
-        name: findUser.fullName,
-        products: newOrder.orderData.products,
-        date: new Date().toLocaleDateString(),
-        total: newOrder.total,
-        status: newOrder.status,
-      });
+      const productList = newOrder.orderData.products
+        .map((product) => {
+          return `
+      <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
+        <p><strong>${product?.productId?.name}</strong></p>
+        <p>Quantity: <strong>${product?.quantity}</strong></p>
+        <p>Size: <strong>${product?.size}</strong></p>
+        <p>Color: <strong>${product?.color}</strong></p>
+        <p>Price: <strong>₹${product?.productId?.price}</strong></p>
+      </div>
+    `;
+        })
+        .join("");
 
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
@@ -59,7 +62,26 @@ const addOrder = async (req, res) => {
       await transporter.sendMail({
         to: findUser.email,
         subject: "Your Order Detail",
-        html: htmlContent,
+        html: `    <div>
+      <div>
+        <h2>🧾 Thank you for your order, ${findUser.fullName}!</h2>
+        <p>Order placed on: <strong>${new Date().toLocaleDateString()}</strong></p>
+        <p><strong>Shipping to:</strong> ${address}, ${city}, ${pincode}, ${country}</p>
+        <hr/>
+        ${productList}
+        <hr/>
+        <p><strong>Total:</strong> ₹${cart.total}</p>
+        <p>Your Order Status is:<h1 style="color:orange;">${
+          newOrder.status
+        }</h1></p>
+
+        <p>We’ll notify you once your items are shipped.</p>
+        <p>Thank you for shopping with us!</p>
+        <div>
+          This is an automated email. Please do not reply.
+        </div>
+      </div>
+    </div>`,
       });
       cart.products = [];
       cart.total = 0;
@@ -106,16 +128,53 @@ const cancelOrder = async (req, res) => {
     const orderId = req.params.id;
     console.log(orderId);
     const order = await Order.findOne({ _id: orderId }).populate(
-      "orderData.products.productId"
+      "orderData.products.productId userId"
     );
     console.log(order);
     const pending = order.status == "pending";
+    const productList = order.orderData.products
+      .map((product) => {
+        return `
+      <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
+        <p><strong>${product?.productId?.name}</strong></p>
+        <p>Quantity: <strong>${product?.quantity}</strong></p>
+        <p>Size: <strong>${product?.size}</strong></p>
+        <p>Color: <strong>${product?.color}</strong></p>
+        <p>Price: <strong>₹${product?.productId?.price}</strong></p>
+      </div>
+    `;
+      })
+      .join("");
+
     if (pending) {
       const updateOrder = await Order.findByIdAndUpdate(
         orderId,
         { status: "canceled" },
         { new: true }
       );
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+      await transporter.sendMail({
+        to: order.userId.email,
+        subject: "Your Order Detail",
+        html: `
+  <div style="font-family: Arial, sans-serif;">
+    <h2>🧾 Your order is Canceled, ${order.userId.fullName}!</h2>
+    <hr/>
+    ${productList}
+    <hr/>
+    <p><strong>Total:</strong> ₹${order.total}</p>
+    <p>Your Order Status is: <h1 style="color:red; font-weight: bold;">${updateOrder.status}</h1></p>
+    <p>We’ll notify you once your order is processed.</p>
+    <p>Thank you for shopping with us!</p>
+  </div>
+`,
+      });
       return res
         .status(200)
         .json({ status: true, msg: "order canceled", updateOrder });
