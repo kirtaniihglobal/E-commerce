@@ -25,7 +25,8 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, enum: ["pending", "confirmed", "shipped", "delivered", "canceled"], default: "pending" },
     paymentDetail: {
         paymentMode: String
-    }
+    },
+    
 });
 
 module.exports = mongoose.model("Order", orderSchema);
