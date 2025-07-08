@@ -546,7 +546,7 @@ function CheckOut() {
                   <Typography variant="h5">Subtotal</Typography>
                   <Typography variant="h5">${total}</Typography>
                 </Box>
-                <Box
+                {/* <Box
                   sx={{
                     width: "100%",
                     display: "flex",
@@ -560,7 +560,7 @@ function CheckOut() {
                   <Typography variant="h5" color="red">
                     -$ {(total / 100) * (20).toFixed(2)}
                   </Typography>
-                </Box>
+                </Box> */}
                 <Box
                   sx={{
                     width: "100%",
@@ -591,7 +591,7 @@ function CheckOut() {
                 >
                   <Typography variant="h4">Total</Typography>
                   <Typography variant="h4">
-                    $ {total - (total / 100) * (20).toFixed(2)}
+                    $ {total}
                   </Typography>
                 </Box>
               </Box>

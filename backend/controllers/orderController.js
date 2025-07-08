@@ -4,7 +4,6 @@ const Order = require("../models/order");
 const nodemailer = require("nodemailer");
 const { generateOrderHTML } = require("../middleware/emailOrder");
 
-
 const addOrder = async (req, res) => {
   try {
     const { address, pincode, city, country } = req.body;
@@ -26,15 +25,13 @@ const addOrder = async (req, res) => {
     if (!cart) {
       return res.status(500).json({ status: false, msg: "cart not found!" });
     }
-    const finalPrice = cart.total - (cart.total / 100) * 20;
-    // const order = await Order.findOne({ userId: id })
     if (cart.products == "") {
       return res.status(500).json({ status: false, msg: "cart is empty" });
     } else {
       const newOrder = new Order({
         userId: id,
         orderData: { products: cart.products },
-        total: finalPrice,
+        total: cart.total,
         info: [
           { country: country, address: address, pincode: pincode, city: city },
         ],
@@ -49,7 +46,7 @@ const addOrder = async (req, res) => {
         products: newOrder.orderData.products,
         date: new Date().toLocaleDateString(),
         total: newOrder.total,
-        status:newOrder.status
+        status: newOrder.status,
       });
 
       const transporter = nodemailer.createTransport({
