@@ -87,8 +87,8 @@ function MyWishlist() {
                   <Typography variant="h6" noWrap>
                     {likes.productId.name}
                   </Typography>
-                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                    {likes.productId.rating == 0 ? (
+                  {/* <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    {likes.productId.rating == null ? (
                       <Typography variant="h6">No rating</Typography>
                     ) : (
                       <>
@@ -103,7 +103,7 @@ function MyWishlist() {
                         </Typography>
                       </>
                     )}
-                  </Box>
+                  </Box> */}
                   <Typography variant="h6" color="primary" mt={1}>
                     ${likes.productId.price}
                   </Typography>

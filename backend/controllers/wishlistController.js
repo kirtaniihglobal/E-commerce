@@ -1,7 +1,4 @@
-// const Product = require("../models/product");
-const product = require("../models/product");
 const Likes = require("../models/wishlist");
-// const { default: mongoose } = require("mongoose");
 
 const addWishlist = async (req, res) => {
   const productId = req.params.id;
@@ -10,29 +7,6 @@ const addWishlist = async (req, res) => {
   try {
     const newLike = new Likes({ userId, productId });
     await newLike.save();
-    // const allLikes = await Likes.find({ userId: userId });
-    // .aggregate([
-    //   {
-    //     $match: { userId: new mongoose.Types.ObjectId(userId) },
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "products",
-    //       localField: "productId",
-    //       foreignField: "_id",
-    //       as: "product",
-    //     },
-    //   },
-    //   {
-    //     $unwind: "$product",
-    //   },
-    //   {
-    //     $project: {
-    //       name: "$product.name",
-    //     },
-    //   },
-    // ]);
-    // console.log(allLikes);
     return res
       .status(201)
       .json({ msg: "Add to wishList successfully", status: true });
