@@ -12,6 +12,7 @@ import {
   InputAdornment,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { registerUser } from "../redux/authSlice";
@@ -26,6 +27,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const theme = useTheme();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const [showPassword, setShowPassword] = useState(false);
@@ -69,11 +71,14 @@ export default function RegisterPage() {
     onSubmit: async (values) => {
       const match = values.password === values.confirmPassword;
       if (match) {
+        setLoading(true);
         try {
           await dispatch(registerUser(values)).unwrap();
           navigate("/login");
         } catch (error) {
           console.log(error);
+        } finally {
+          setLoading(false);
         }
       } else {
         dispatch(
@@ -285,10 +290,11 @@ export default function RegisterPage() {
                         variant="contained"
                         sx={{ mt: 2, mb: 2, py: 1.5 }}
                       >
-                        Register
+                        {loading ? "Registering..." : "Register"}
                       </Button>
                     </Grid>
                   </form>
+                  {loading && <CircularProgress size={24} />}
 
                   <Box>
                     <Typography textAlign="center" variant="body1">

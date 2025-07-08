@@ -45,7 +45,7 @@ function ManageUsers() {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemPerPage = 1;
+  const itemPerPage = 3;
   const startIndex = (currentPage - 1) * itemPerPage;
   const endIndex = startIndex + itemPerPage;
   const currentItems = users.slice(startIndex, endIndex);
@@ -136,7 +136,7 @@ function ManageUsers() {
               width: "100%",
             }}
           >
-            <TableContainer style={{ height: 250 }}>
+            <TableContainer style={{ height: 300 }}>
               <Table
                 stickyHeader
                 aria-label="sticky table"
