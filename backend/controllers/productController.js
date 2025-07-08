@@ -93,7 +93,7 @@ const getAllproducts = async (req, res) => {
       { $skip: skip },
       { $limit: limit },
     ]);
-    console.log(products);
+    // console.log(products);
     const total = await Product.countDocuments();
 
     return res.status(200).json({
