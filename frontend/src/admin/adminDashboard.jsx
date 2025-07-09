@@ -148,7 +148,7 @@ function AdminDashboard() {
             </Box>
           </Card>
         </Box>
-        <DashboardCharts/>
+        <DashboardCharts />
       </Grid>
     </Container>
   );

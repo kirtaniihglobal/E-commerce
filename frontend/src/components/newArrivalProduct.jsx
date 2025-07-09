@@ -11,10 +11,16 @@ function NewArrivalProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products } = useSelector((state) => state.products);
+  const newArrivalProduct = products.filter(
+    (product) => product.productType === "newArrival"
+  );
+
+  console.log(newArrivalProduct);
+
   useEffect(() => {
     dispatch(getAllproductsData({ skip: 0, limit: 9 }));
   }, [dispatch]);
-  const displayProducts = products.slice(0, 4);
+  const displayProducts = newArrivalProduct.slice(0, 4);
   return (
     <>
       <Grid
