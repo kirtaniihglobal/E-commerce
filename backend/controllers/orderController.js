@@ -65,15 +65,13 @@ const addOrder = async (req, res) => {
         html: `    <div>
       <div>
         <h2>🧾 Thank you for your order, ${findUser.fullName}!</h2>
-        <p>Order placed on: <strong>${new Date().toLocaleDateString()}</strong></p>
+        <p>Order placed on: <strong>${newOrder.createdAt}</strong></p>
         <p><strong>Shipping to:</strong> ${address}, ${city}, ${pincode}, ${country}</p>
         <hr/>
         ${productList}
         <hr/>
         <p><strong>Total:</strong> ₹${cart.total}</p>
-        <p>Your Order Status is:<h1 style="color:orange;">${
-          newOrder.status
-        }</h1></p>
+        <p>Your Order Status is:<h1 style="color:orange;">${newOrder.status}</h1></p>
 
         <p>We’ll notify you once your items are shipped.</p>
         <p>Thank you for shopping with us!</p>

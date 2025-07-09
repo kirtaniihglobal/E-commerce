@@ -6,6 +6,7 @@ import { getAllCountByAdminData } from "../Thunk/adminThunk";
 import product from "../assets/product-line-icon-vector.jpg";
 import orders from "../assets/clipboard.png";
 import users from "../assets/group.png";
+import DashboardCharts from "./dashBoardCharts";
 
 function AdminDashboard() {
   const dispatch = useDispatch();
@@ -147,6 +148,7 @@ function AdminDashboard() {
             </Box>
           </Card>
         </Box>
+        <DashboardCharts/>
       </Grid>
     </Container>
   );

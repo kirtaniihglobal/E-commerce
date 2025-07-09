@@ -20,6 +20,7 @@ import MyOrders from "../components/profile/myOrders";
 import ForgotPassword from "../components/password/forgotPassword";
 import ResetPassword from "../components/password/resetPassword";
 import MyWishlist from "../components/profile/myWishlist";
+import DashboardCharts from "../admin/dashBoardCharts";
 
 const RoutesComponent = () => {
   return (
@@ -42,6 +43,7 @@ const RoutesComponent = () => {
             <Route path="/admin/manageProducts" element={<ManageProducts />} />
             <Route path="/admin/manageOrders" element={<ManageOrders />} />
             <Route path="/admin/manageUsers" element={<ManageUsers />} />
+            <Route path="/dashBoardCharts" element={<DashboardCharts />} />
           </Route>
           <Route element={<UserProfileLayout />}>
             <Route path="/profile/myProfile" element={<ProfilePage />} />
