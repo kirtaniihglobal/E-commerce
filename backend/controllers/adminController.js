@@ -41,7 +41,7 @@ const updateOrdersAdmin = async (req, res) => {
             <p>Size: <strong>${product?.size}</strong></p>
             <p>Color:<strong> ${product?.color}</strong></p>
             <p>Price: <strong>₹${product?.productId?.price}</strong></p>
-            </div>`
+            </div>`;
     });
 
     if (pending) {
@@ -73,7 +73,7 @@ const updateOrdersAdmin = async (req, res) => {
         <p>We’ll notify you once your items are Delivered.</p>
         <p>Thank you for shopping with us!</p>
       </div>
-    </div>`
+    </div>`,
       });
       return res
         .status(200)
@@ -167,6 +167,67 @@ const blockUser = async (req, res) => {
     return res.status(500).json({ status: false, msg: "User block error" });
   }
 };
+const getAnalyticsData = async (req, res) => {
+  try {
+    const monthlySales = await Order.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          totalSales: { $sum: "$total" },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    const userGrowth = await User.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    const orderStatus = await Order.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+    const productStatus = await Product.aggregate([
+      {
+        $match: {
+          stock: { $lt: 100 },
+        },
+      },
+      {
+        $group: {
+          _id: "$name",
+          stock: { $sum: "$stock" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$_id",
+          stock: 1,
+        },
+      },
+    ]);
+    console.log(productStatus);
+    console.log(monthlySales);
+    console.log(userGrowth);
+    console.log(orderStatus);
+
+    res.json({ productStatus, monthlySales, userGrowth, orderStatus });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to get analytics data" });
+  }
+};
 
 module.exports = {
   getAllOrdersAdmin,
@@ -175,4 +236,5 @@ module.exports = {
   updateUserByAdmin,
   getAllCount,
   blockUser,
+  getAnalyticsData,
 };
