@@ -106,26 +106,26 @@ function ProductDetailPage() {
     setSelectedSize(name);
   };
 
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="inherit" href="/">
-      HOME
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/">
-      Shop
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/">
-      Men
-    </Link>,
-    <Typography key="3" sx={{ color: "text.primary" }}>
-      T-shirts
-    </Typography>,
-  ];
+  // const breadcrumbs = [
+  //   <Link underline="hover" key="1" color="inherit" href="/">
+  //     HOME
+  //   </Link>,
+  //   <Link underline="hover" key="2" color="inherit" href="/">
+  //     Shop
+  //   </Link>,
+  //   <Link underline="hover" key="2" color="inherit" href="/">
+  //     Men
+  //   </Link>,
+  //   <Typography key="3" sx={{ color: "text.primary" }}>
+  //     T-shirts
+  //   </Typography>,
+  // ];
   return (
     <>
       <Header />
       <Container maxWidth="xl">
         <Grid container>
-          <Box
+          {/* <Box
             sx={{
               width: "100%",
             }}
@@ -136,7 +136,7 @@ function ProductDetailPage() {
             >
               {breadcrumbs}
             </Breadcrumbs>
-          </Box>
+          </Box> */}
           {product ? (
             <Box
               sx={{
@@ -215,21 +215,21 @@ function ProductDetailPage() {
                     gap: 1,
                   }}
                 >
-                         {product.rating == 0 ? (
-                <Typography variant="h6">No rating</Typography>
-              ) : (
-                <>
-                  <Rating
-                    name="read-only"
-                    value={Number(product.rating?.toFixed(1))}
-                    precision={0.5}
-                    readOnly
-                  />
-                  <Typography variant="h6">
-                    {product.rating?.toFixed(1)}/5
-                  </Typography>
-                </>
-              )}
+                  {product.rating == null ? (
+                    <Typography variant="h6">No rating</Typography>
+                  ) : (
+                    <>
+                      <Rating
+                        name="read-only"
+                        value={Number(product.rating?.toFixed(1))}
+                        precision={0.5}
+                        readOnly
+                      />
+                      <Typography variant="h6">
+                        {product.rating?.toFixed(1)}/5
+                      </Typography>
+                    </>
+                  )}
                 </Box>
                 <Box
                   sx={{
@@ -443,55 +443,6 @@ function ProductDetailPage() {
                   ({OneProductRatingData.length})
                 </Typography>
               </Grid>
-              <Grid
-                sx={{
-                  width: "45%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <Grid
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <img
-                    // src={filter}
-                    style={{
-                      width: "100%",
-                    }}
-                    alt=""
-                  />
-                </Grid>
-                <Grid>
-                  <Chip
-                    sx={{
-                      px: 3,
-                      py: 3,
-                      borderRadius: 6,
-                    }}
-                    label="Latest"
-                    deleteIcon={<KeyboardArrowDownIcon />}
-                  />
-                </Grid>
-                <Grid>
-                  <Button
-                    sx={{
-                      px: 3,
-                      py: 1.5,
-                      borderRadius: 6,
-                    }}
-                    variant="contained"
-                    className="black"
-                  >
-                    Write a Review
-                  </Button>
-                </Grid>
-              </Grid>
             </Grid>
             <Grid
               container
@@ -543,25 +494,6 @@ function ProductDetailPage() {
                 {topSelling.map((product, index) => (
                   <ProductCard key={index} product={product} />
                 ))}
-                <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    className="white"
-                    sx={{
-                      width: "20%",
-                      p: 1.5,
-                      borderRadius: 10,
-                    }}
-                  >
-                    View All
-                  </Button>
-                </Box>
               </Box>
             </Box>
           </Box>

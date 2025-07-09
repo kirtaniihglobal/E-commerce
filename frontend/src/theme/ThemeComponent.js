@@ -2,40 +2,40 @@ export const MuiButton = {
   styleOverrides: {
     root: {
       cursor: "pointer",
-      fontFamily: "",
+      fontFamily: "'Roboto', sans-serif",
       transition: "background-color 0.3s ease",
+      textTransform: "none",
     },
   },
   variants: [
     {
       props: { variant: "contained" },
-      style: ({ theme, ownerState }) => ({
+      style: {
         "&.black": {
           backgroundColor: "#000",
           color: "#fff",
           fontWeight: 500,
           "&:hover": {
-            backgroundColor: "#ffff",
+            backgroundColor: "#fff",
             color: "#000",
           },
         },
-      }),
+      },
     },
-
     {
       props: { variant: "outlined" },
-      style: ({ theme, ownerState }) => ({
+      style: {
         "&.white": {
           backgroundColor: "#fff",
           color: "#000",
           fontWeight: 500,
-          border: "1 solid #000",
+          border: "1px solid #000",
           "&:hover": {
             backgroundColor: "#000",
             color: "#fff",
           },
         },
-      }),
+      },
     },
   ],
 };
@@ -59,9 +59,6 @@ export const MuiTypography = {
         fontSize: "64px",
         fontWeight: 700,
         color: "#000",
-        "&.success": {
-          color: "success",
-        },
       },
     },
 

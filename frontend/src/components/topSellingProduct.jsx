@@ -6,17 +6,23 @@ import { useState, useEffect } from "react";
 
 function TopSellingProduct() {
   const dispatch = useDispatch();
-  const { topSelling } = useSelector((state) => state.products);
   const { products } = useSelector((state) => state.products);
+
+  const topSellingProduct = products.filter(
+    (product) => product.productType === "topSelling"
+  );
+
   const [visible, setVisible] = useState(4);
+
   useEffect(() => {
-    dispatch(getAllproductsData({ skip: 0, limit: 9 }));
+    dispatch(getAllproductsData({ skip: 0, limit: 41 }));
   }, [dispatch]);
+
   const handleViewAll = () => {
-    setVisible(topSelling.length);
+    setVisible(topSellingProduct.length);
   };
 
-  const displayProducts = products.slice(0, 4);
+  const displayProducts = topSellingProduct.slice(0, visible);
 
   return (
     <>
@@ -71,7 +77,7 @@ function TopSellingProduct() {
                 justifyContent: "center",
               }}
             >
-              {visible < topSelling.length && (
+              {visible < topSellingProduct.length && (
                 <Button
                   variant="outlined"
                   className="white"

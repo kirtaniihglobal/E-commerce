@@ -18,10 +18,10 @@ import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/header/header";
 function CategoryPage() {
   const dispatch = useDispatch();
-  const minmin = 0;
-  const maxmax = 1000;
+  // const minmin = 0;
+  // const maxmax = 1000;
   const { products, total } = useSelector((state) => state.products);
-  const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
+  // const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const limit = 9;
@@ -30,9 +30,9 @@ function CategoryPage() {
     setSkip(limit);
   }, [dispatch]);
 
-  const handlePriceRangeChange = (event, newValue) => {
-    setPriceRangeValue(newValue);
-  };
+  // const handlePriceRangeChange = (event, newValue) => {
+  //   setPriceRangeValue(newValue);
+  // };
   const loadMoreProducts = () => {
     if (loading || products.length >= total) return;
     setLoading(true);
@@ -52,7 +52,7 @@ function CategoryPage() {
           flexDirection: "row",
         }}
       >
-        <Box
+        {/* <Box
           sx={{
             width: "25%",
             p: 2,
@@ -299,17 +299,19 @@ function CategoryPage() {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </Box> */}
         <Box
           sx={{
-            width: "75%",
+            width: "100%",
           }}
         >
           <Box
             sx={{
+              width: "97%",
               p: 3,
               display: "flex",
               flexWrap: "wrap",
+              justifyContent: "center",
               gap: 3,
             }}
           >
@@ -321,7 +323,7 @@ function CategoryPage() {
           </Box>
           <Box
             sx={{
-              width: "85%",
+              width: "90%",
               display: "flex",
               justifyContent: "center",
               p: 5,
@@ -329,7 +331,7 @@ function CategoryPage() {
           >
             <Button
               sx={{
-                width: "70%",
+                width: "50%",
                 borderRadius: 7,
                 px: 2,
                 py: 2,

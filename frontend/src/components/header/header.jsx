@@ -1,4 +1,4 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -28,6 +28,7 @@ import { getAllCartData } from "../../Thunk/cartThunk";
 
 export default function Header() {
   const theme = useTheme();
+
   const { cartData } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -90,27 +91,10 @@ export default function Header() {
                       onClick={() => {
                         navigate("/categoryPage");
                       }}
-                      endIcon={<KeyboardArrowDownIcon />}
                     >
                       Shop
                     </Button>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    {/* <Button
-                      variant="text"
-                      onClick={() => {
-                        navigate("/checkOut");
-                      }}
-                    >
-                      On Sale
-                    </Button> */}
-                  </Grid>
-                  {/* <Grid item xs={12} sm={6}>
-                    <Button variant="text">New Arrivals</Button>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Button variant="text">Brands</Button>
-                  </Grid> */}
                 </Grid>
               </Stack>
 

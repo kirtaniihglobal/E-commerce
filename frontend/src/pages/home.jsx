@@ -1,4 +1,14 @@
-import { Box, Button, Divider, Grid, Rating, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Rating,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Header from "../components/header/header";
 import Footer from "../components/footer/footer";
 import hero from "../assets/hero.jpg";
@@ -12,8 +22,13 @@ import Frame4 from "../assets/Frame 4.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import GreenTik from "../assets/greentik.png";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const Review = [
     {
       id: 1,
@@ -37,8 +52,8 @@ function Home() {
   return (
     <>
       <Header />
-      <Grid container spacing={5} sx={{ height: "auto" }}>
-        <Box
+      <Container maxWidth={isMobile ? "sm" : isTab ? "md" : "xxl"}>
+        <Grid
           sx={{
             width: "100%",
             height: "633px",
@@ -50,12 +65,12 @@ function Home() {
             sx={{
               width: "100%",
               display: "flex",
-              flexDirection: "row",
+              flexDirection: isMobile ? "column" : "row",
             }}
           >
             <Box
               sx={{
-                width: "50%",
+                width: isMobile ? "100%" : "50%",
                 backgroundColor: "#F2F0F2",
                 p: 10,
                 display: "flex",
@@ -64,7 +79,7 @@ function Home() {
               }}
             >
               <Box>
-                <Typography variant="h2">
+                <Typography variant={isMobile ? "h5" : isTab ? "h4" : "h3"}>
                   FIND CLOTHES THAT MATCHES YOUR STYLE
                 </Typography>
               </Box>
@@ -81,6 +96,9 @@ function Home() {
                 }}
               >
                 <Button
+                  onClick={() => {
+                    navigate("/categoryPage");
+                  }}
                   variant="contained"
                   className="black"
                   sx={{
@@ -132,7 +150,7 @@ function Home() {
             </Box>
             <Box
               sx={{
-                width: "40%",
+                width: isMobile ? "100%" : "40%",
                 height: "100%",
               }}
             >
@@ -140,11 +158,10 @@ function Home() {
                 sx={{
                   width: "100%",
                   height: "100%",
-                  backgroundImage: `url(${hero})`,
-                  backgroundSize: "cover",
                   position: "relative",
                 }}
               >
+                <img src={hero} style={{ width: "100%" }} alt="" />
                 <img
                   src={star}
                   style={{
@@ -336,27 +353,10 @@ function Home() {
             sx={{
               width: "100%",
               mt: 5,
+              display: "flex",
               justifyContent: "center",
             }}
           >
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="h4">OUR HAPPY CUSTOMERS</Typography>
-              <Box>
-                <Button>
-                  <ArrowBackIcon />
-                </Button>
-                <Button>
-                  <ArrowForwardIcon />
-                </Button>
-              </Box>
-            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -365,7 +365,7 @@ function Home() {
               }}
             >
               {Review.map((item) => (
-                <Grid
+                <Box
                   key={item.id}
                   container
                   sx={{
@@ -405,13 +405,13 @@ function Home() {
                     </Box>
                     <Typography variant="body1">{item.review}</Typography>
                   </Box>
-                </Grid>
+                </Box>
               ))}
             </Box>
           </Box>
           <Footer />
-        </Box>
-      </Grid>
+        </Grid>
+      </Container>
     </>
   );
 }
