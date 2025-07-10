@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Grid,
   Typography,
   Divider,
   TextField,
@@ -12,6 +11,9 @@ import {
   FormControl,
   IconButton,
   CircularProgress,
+  useTheme,
+  useMediaQuery,
+  Container,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import Accordion from "@mui/material/Accordion";
@@ -33,6 +35,8 @@ import { openSnackbar } from "../redux/snackBarSlice";
 function CheckOut() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm", "ssm", "xs"));
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [open, setOpen] = useState(false);
@@ -108,22 +112,30 @@ function CheckOut() {
           <CircularProgress size={80} color="primary" />
         </Box>
       ) : (
-        <Grid container maxWidth="xl">
-          <Grid
+        <Container maxWidth={false} disableGutters>
+          <Box
             sx={{
               width: "100%",
               display: "flex",
-              flexDirection: "row",
+              flexDirection: {
+                xs: "column",
+                ssm: "column",
+                sm: "column",
+                md: "row",
+                lg: "row",
+                xl: "row",
+                xxl: "row",
+              },
             }}
           >
             {checked ? (
               <>
                 <Box
                   sx={{
-                    width: "60%",
+                    width: "100%",
                   }}
                 >
-                  <Box sx={{ width: "100%" }}>
+                  <Box sx={{ width: "auto" }}>
                     <Box
                       sx={{
                         textAlign: "center",
@@ -136,14 +148,15 @@ function CheckOut() {
                   </Box>
                   <Box
                     sx={{
-                      width: "100%",
+                      width: "auto",
                       display: "flex",
                       justifyContent: "center",
+                      mt: 5,
                     }}
                   >
                     <Box
                       sx={{
-                        width: "80%",
+                        width: "100%",
                         display: "flex",
                         flexDirection: "column",
                         gap: 2,
@@ -163,7 +176,7 @@ function CheckOut() {
                           <Box>
                             <FormControlLabel
                               control={<Radio />}
-                              label={total - (total / 100) * (20).toFixed(2)}
+                              label={total}
                             />
                           </Box>
                         </AccordionDetails>
@@ -295,30 +308,33 @@ function CheckOut() {
               <>
                 <Box
                   sx={{
-                    width: "60%",
+                    width: "100%",
                   }}
                 >
                   <Box
                     sx={{
-                      width: "100%",
+                      width: "auto",
                       textAlign: "center",
                     }}
                   >
-                    <Typography variant="h4"> PERSONAL DETAILS</Typography>
+                    <Typography variant={isMobile ? "h5" : "h4"}>
+                      {" "}
+                      PERSONAL DETAILS
+                    </Typography>
                   </Box>
                   {user && (
                     <Box
                       key={user._id}
                       style={{
-                        width: "100%",
-                        display: "flex",
+                        width: "auto",
+                        display: { xs: "flex" },
                         marginTop: "50px",
                         justifyContent: "center",
                       }}
                     >
                       <Box
                         sx={{
-                          width: "70%",
+                          width: { md: "90%", lg: "90%", xl: "90%" },
                           display: "flex",
                           flexDirection: "column",
                           gap: 2,
@@ -326,7 +342,7 @@ function CheckOut() {
                       >
                         <Box
                           sx={{
-                            width: "100%",
+                            width: "auto",
                             display: "flex",
                             p: 2,
                             flexDirection: "column",
@@ -335,9 +351,9 @@ function CheckOut() {
                         >
                           <Box
                             sx={{
-                              width: "100%",
-                              display: "flex",
-                              gap: 5,
+                              width: "auto",
+                              display: { xs: "flex", xl: "block" },
+                              gap: { xs: 2, sm: 5, md: 5, xl: 5 },
                             }}
                           >
                             <Box>
@@ -356,7 +372,7 @@ function CheckOut() {
                         </Box>
                         <Box
                           sx={{
-                            width: "100%",
+                            width: "auto",
                             p: 2,
                           }}
                         >
@@ -375,17 +391,21 @@ function CheckOut() {
                                     <>
                                       <Box
                                         sx={{
-                                          width: "100%",
+                                          width: "auto",
                                           display: "flex",
                                           flexDirection: "row",
-                                          gap: 5,
+                                          gap: 1,
                                         }}
                                       >
                                         <Box>
-                                          <Typography variant="h6">
+                                          <Typography
+                                            variant={isMobile ? "body1" : "h6"}
+                                          >
                                             {add.address}
                                           </Typography>
-                                          <Typography variant="h6">
+                                          <Typography
+                                            variant={isMobile ? "body1" : "h6"}
+                                          >
                                             {add.city}, {add.pincode},{" "}
                                             {add.country}
                                           </Typography>
@@ -421,7 +441,7 @@ function CheckOut() {
                         <Box
                           onClick={() => setOpen(true)}
                           sx={{
-                            width: "30%",
+                            width: { xs: "auto", md: "50%", xl: "50%" },
                             borderRadius: 10,
                             backgroundColor: "#f0f0f0",
                             p: 2,
@@ -452,7 +472,7 @@ function CheckOut() {
             />
             <Box
               sx={{
-                width: "40%",
+                width: { md: "70%", xl: "70%" },
               }}
             >
               {checked ? (
@@ -461,7 +481,7 @@ function CheckOut() {
                 <>
                   <Box
                     sx={{
-                      width: "90%",
+                      width: "auto",
                       mt: 5,
                     }}
                   >
@@ -470,15 +490,20 @@ function CheckOut() {
                         <Box
                           key={product.productId._id}
                           sx={{
-                            width: "90%",
+                            width: "auto",
                             display: "flex",
                             flexDirection: "row",
                           }}
                         >
                           <Box
                             sx={{
-                              width: "10%",
-                              p: 2,
+                              width: {
+                                xs: "20%",
+                                sm: "15%",
+                                md: "10%",
+                                xl: "10%",
+                              },
+                              p: { md: 2, xl: 2 },
                             }}
                           >
                             <img
@@ -491,9 +516,9 @@ function CheckOut() {
                           </Box>
                           <Box
                             sx={{
-                              width: "80%",
+                              width: "auto",
                               p: 1,
-                              display: "flex",
+                              display: { sm: "flex", md: "flex", xl: "flex" },
                               flexDirection: "row",
                               justifyContent: "space-between",
                               // gap: 15,
@@ -522,118 +547,119 @@ function CheckOut() {
 
               <Box
                 sx={{
-                  width: "80%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 3,
+                  width: "auto",
+                  height: "460px",
+                  mt: 5,
+                  p: { xs: 1.5, md: 3, xl: 3 },
                 }}
               >
                 <Box
                   sx={{
-                    width: "100%",
-                  }}
-                >
-                  <Typography variant="h4">Order Summary</Typography>
-                </Box>
-                <Box
-                  sx={{
-                    width: "100%",
                     display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    gap: 3,
                   }}
                 >
-                  <Typography variant="h5">Subtotal</Typography>
-                  <Typography variant="h5">${total}</Typography>
-                </Box>
-                {/* <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="h5" color="red">
-                    Discount (-20%)
-                  </Typography>
-                  <Typography variant="h5" color="red">
-                    -$ {(total / 100) * (20).toFixed(2)}
-                  </Typography>
-                </Box> */}
-                <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="h5" color="green">
-                    Delivery Free
-                  </Typography>
-                  <Typography variant="h5" color="green">
-                    $0
-                  </Typography>
-                </Box>
-                <Divider
-                  sx={{
-                    width: "100%",
-                  }}
-                />
-                <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="h4">Total</Typography>
-                  <Typography variant="h4">
-                    $ {total}
-                  </Typography>
-                </Box>
-              </Box>
-              {checked ? (
-                <Box sx={{ width: "100%" }}>
-                  <Button
-                    onClick={() => {
-                      handlePlaceOrder();
-                    }}
-                    className="black"
-                    variant="contained"
-                    sx={{ width: "80%", p: 1.5, mt: 10, borderRadius: 7 }}
-                  >
-                    Place Order
-                  </Button>
-                </Box>
-              ) : (
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <Button
-                    onClick={() => {
-                      handlePayment();
-                    }}
+                  <Box
                     sx={{
-                      width: "80%",
-                      borderRadius: 7,
-                      p: 1.5,
-                      mt: 10,
+                      width: "100%",
                     }}
-                    variant="contained"
-                    className="black"
                   >
-                    Make A Payment
-                  </Button>
+                    <Typography variant={isMobile ? "h4" : "h3"}>
+                      Order Summary
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      width: "auto",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant={isMobile ? "h6" : "h5"}>
+                      Subtotal
+                    </Typography>
+                    <Typography variant={isMobile ? "h6" : "h5"}>
+                      ${total}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant={isMobile ? "h6" : "h5"} color="green">
+                      Delivery Free
+                    </Typography>
+                    <Typography variant={isMobile ? "h6" : "h5"} color="green">
+                      $0
+                    </Typography>
+                  </Box>
+                  <Divider
+                    sx={{
+                      width: "100%",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant={isMobile ? "h5" : "h4"}>
+                      Total
+                    </Typography>
+                    <Typography variant={isMobile ? "h5" : "h4"}>
+                      ${total}
+                    </Typography>
+                  </Box>
                 </Box>
-              )}
+                {checked ? (
+                  <Box sx={{ width: "auto" }}>
+                    <Button
+                      onClick={() => {
+                        handlePlaceOrder();
+                      }}
+                      className="black"
+                      variant="contained"
+                      sx={{ width: "100%", p: 1.5, mt: 10, borderRadius: 7 }}
+                    >
+                      Place Order
+                    </Button>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      width: "auto",
+                    }}
+                  >
+                    <Button
+                      onClick={() => {
+                        handlePayment();
+                      }}
+                      sx={{
+                        width: "100%",
+                        borderRadius: 7,
+                        p: 1.5,
+                        mt: 10,
+                      }}
+                      variant="contained"
+                      className="black"
+                    >
+                      Make A Payment
+                    </Button>
+                  </Box>
+                )}
+              </Box>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Container>
       )}
     </>
   );
