@@ -1,5 +1,4 @@
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
@@ -13,41 +12,37 @@ import paymenttype3 from "../../assets/paymenttype3.png";
 import paymenttype4 from "../../assets/paymenttype4.png";
 import paymenttype5 from "../../assets/paymenttype5.png";
 import { useTheme } from "@emotion/react";
-import { TextField, useMediaQuery, Button } from "@mui/material";
+import { useMediaQuery, Button } from "@mui/material";
 import { Box } from "@mui/material";
 
 function Footer() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  // const isTab = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <>
       <Container
-        maxWidth="xl"
+        maxWidth={false}
+        disableGutters
         sx={{
-          height: "auto",
           mt: 20,
           backgroundColor: "#f0f0f0",
           position: "relative",
         }}
       >
-        <Grid
-          container
-          spacing={isMobile ? 1 : 2}
+        <Box
           sx={{
             padding: isMobile ? "10px" : "50px",
             display: "flex",
-            gap: isMobile ? "30px" : "",
-            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: { xs: 4, sm: 7, md: 10, lg: 15, xl: 16 },
             alignItems: "flex-start",
-            mt: "80px",
+            mt: 20,
           }}
         >
           <Box
             sx={{
               display: "flex",
               gap: 3,
-
               flexDirection: "column",
               alignItems: "flex-start",
               justifyContent: "center",
@@ -121,7 +116,7 @@ function Footer() {
             }}
           >
             <Box>
-              <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
+              <Typography variant="h5" fontWeight="bold">
                 COMPANY
               </Typography>
             </Box>
@@ -148,21 +143,21 @@ function Footer() {
             }}
           >
             <Box>
-              <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
+              <Typography variant="h5" fontWeight="bold">
                 HELP
               </Typography>
             </Box>
             <Box>
-              <Typography varia> Customer Support</Typography>
+              <Typography variant="body1"> Customer Support</Typography>
             </Box>
             <Box>
-              <Typography varia>Delivery Details</Typography>
+              <Typography variant="body1">Delivery Details</Typography>
             </Box>
             <Box>
-              <Typography varia> Terms & Conditions</Typography>
+              <Typography variant="body1"> Terms & Conditions</Typography>
             </Box>
             <Box>
-              <Typography varia>Privacy Policy</Typography>
+              <Typography variant="body1">Privacy Policy</Typography>
             </Box>
           </Box>
           <Box
@@ -175,21 +170,21 @@ function Footer() {
             }}
           >
             <Box>
-              <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
+              <Typography variant="h5" fontWeight="bold">
                 FAQ
               </Typography>
             </Box>
             <Box>
-              <Typography varia> Account</Typography>
+              <Typography variant="body1"> Account</Typography>
             </Box>
             <Box>
-              <Typography varia>Manage Deliveries</Typography>
+              <Typography variant="body1">Manage Deliveries</Typography>
             </Box>
             <Box>
-              <Typography varia> Orders</Typography>
+              <Typography variant="body1"> Orders</Typography>
             </Box>
             <Box>
-              <Typography varia>Payments</Typography>
+              <Typography variant="body1">Payments</Typography>
             </Box>
           </Box>
           <Box
@@ -202,24 +197,24 @@ function Footer() {
             }}
           >
             <Box>
-              <Typography variant="h5" fontWeight={isMobile ? "bold" : ""}>
+              <Typography variant="h5" fontWeight="bold">
                 RESOURCES
               </Typography>
             </Box>
             <Box>
-              <Typography varia> Free eBooks</Typography>
+              <Typography variant="body1"> Free eBooks</Typography>
             </Box>
             <Box>
-              <Typography varia>Development Tutorial</Typography>
+              <Typography variant="body1">Development Tutorial</Typography>
             </Box>
             <Box>
-              <Typography varia> How to - Blog</Typography>
+              <Typography variant="body1"> How to - Blog</Typography>
             </Box>
             <Box>
-              <Typography varia>Youtube Playlist</Typography>
+              <Typography variant="body1">Youtube Playlist</Typography>
             </Box>
           </Box>
-        </Grid>
+        </Box>
 
         <Divider />
         <Box
@@ -244,34 +239,54 @@ function Footer() {
 
         <Box
           sx={{
-            width: "95%",
-            height: "180px",
+            width: "100%",
+            height: "auto",
             borderRadius: "20px",
             backgroundColor: "#000",
             position: "absolute",
-            top: "-90px",
+            top: "-100px",
           }}
         >
           <Box
             sx={{
-              width: "90%",
+              gap: 3,
+              width: "auto",
               display: "flex",
-              p: 5,
+              flexDirection: {
+                xs: "column",
+                ssm: "column",
+                sm: "column",
+                md: "row",
+                lg: "row",
+                xl: "row",
+                xxl: "row",
+              },
+              p: 3,
               justifyContent: "space-between",
             }}
           >
             <Box
               sx={{
-                width: "40%",
+                width: { md: "50%", lg: "60%" },
               }}
             >
-              <Typography variant="h4" color="#fff">
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "1.25rem",
+                    ssm: "1.5rem",
+                    sm: "2rem",
+                    md: "2.5rem",
+                  },
+                  color: "#fff",
+                }}
+              >
                 STAY UPTO DATE ABOUT OUR LATEST OFFERS
               </Typography>
             </Box>
             <Box
               sx={{
-                width: "30%",
+                width: { md: "50%", lg: "40%", xl: "30%" },
                 height: "100px",
                 color: "#fff",
                 display: "flex",
