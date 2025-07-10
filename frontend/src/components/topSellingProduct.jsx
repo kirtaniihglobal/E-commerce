@@ -1,4 +1,11 @@
-import { Grid, Typography, Button } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  useTheme,
+  useMediaQuery,
+  Container,
+} from "@mui/material";
 import { getAllproductsData } from "../Thunk/productThunk";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../comon/productCard";
@@ -6,6 +13,8 @@ import { useState, useEffect } from "react";
 
 function TopSellingProduct() {
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { products } = useSelector((state) => state.products);
 
   const topSellingProduct = products.filter(
@@ -26,13 +35,7 @@ function TopSellingProduct() {
 
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: "100%",
-        }}
-      >
+      <Container maxWidth={false} disableGutters>
         <Grid
           item
           xs={12}
@@ -44,7 +47,7 @@ function TopSellingProduct() {
             height: "180px",
           }}
         >
-          <Typography variant="h2" component="h2">
+          <Typography variant={isMobile ? "h4" : "h2"} component="h2">
             TOP SELLING
           </Typography>
         </Grid>
@@ -59,7 +62,7 @@ function TopSellingProduct() {
         >
           <Grid
             sx={{
-              width: "90%",
+              width: "100%",
               display: "flex",
               flexDirection: "row",
               flexWrap: "wrap",
@@ -94,7 +97,7 @@ function TopSellingProduct() {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Container>
     </>
   );
 }

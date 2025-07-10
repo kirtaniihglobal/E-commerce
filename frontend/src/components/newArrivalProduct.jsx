@@ -1,8 +1,13 @@
-import { Grid, Typography, Button } from "@mui/material";
 import {
-  getAllproductsData,
-  // getNewArrivalsProductData,
-} from "../Thunk/productThunk";
+  Grid,
+  Typography,
+  Button,
+  Container,
+  useTheme,
+  useMediaQuery,
+  Box,
+} from "@mui/material";
+import { getAllproductsData } from "../Thunk/productThunk";
 import { useEffect } from "react";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 function NewArrivalProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { products } = useSelector((state) => state.products);
   const newArrivalProduct = products.filter(
     (product) => product.productType === "newArrival"
@@ -23,16 +30,8 @@ function NewArrivalProduct() {
   const displayProducts = newArrivalProduct.slice(0, 4);
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: "100%",
-        }}
-      >
-        <Grid
-          item
-          xs={12}
+      <Container maxWidth={false} disableGutters>
+        <Box
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -41,22 +40,20 @@ function NewArrivalProduct() {
             height: "180px",
           }}
         >
-          <Typography variant="h2" component="h2">
+          <Typography variant={isMobile ? "h4" : "h2"} component="h2">
             NEW ARRIVALS
           </Typography>
-        </Grid>
-        <Grid
-          container
-          spacing={0}
+        </Box>
+        <Box
           sx={{
             width: "100%",
             display: "flex",
             justifyContent: "center",
           }}
         >
-          <Grid
+          <Box
             sx={{
-              width: "90%",
+              width: "100%",
               display: "flex",
               flexDirection: "row",
               flexWrap: "wrap",
@@ -82,7 +79,7 @@ function NewArrivalProduct() {
                   window.scroll(0, 0);
                 }}
                 sx={{
-                  width: "20%",
+                  width: { xs: "100%", md: "20%" },
                   p: 1.5,
                   borderRadius: 10,
                 }}
@@ -90,9 +87,9 @@ function NewArrivalProduct() {
                 View All
               </Button>
             </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+          </Box>
+        </Box>
+      </Container>
     </>
   );
 }

@@ -48,7 +48,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Grid key={product._id}>
+    <Box key={product._id}>
       <Box
         sx={{
           maxWidth: "295px",
@@ -149,7 +149,7 @@ const ProductCard = ({ product }) => {
           </Box>
         </Box>
       </Box>
-    </Grid>
+    </Box>
   );
 };
 

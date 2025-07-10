@@ -16,7 +16,6 @@ export const theme = createTheme({
     MuiButton,
     MuiTypography,
   },
-
   breakpoints: {
     xs: 375,
     ssm: 541,
