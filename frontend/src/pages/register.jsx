@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Container,
-  CssBaseline,
   Grid,
   TextField,
   Typography,
@@ -93,15 +92,9 @@ export default function RegisterPage() {
 
   return (
     <>
-      <Container
-        component="main"
-        maxWidth={isMobile ? "sm" : isTab ? "md" : "xl"}
-      >
-        <CssBaseline />
+      <Container maxWidth={false} disableGutters>
 
-        <Grid
-          container
-          spacing={4}
+        <Box
           sx={{
             width: "100%",
           }}
@@ -109,6 +102,7 @@ export default function RegisterPage() {
           <Box
             sx={{
               width: "100%",
+              height: "100px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -124,14 +118,21 @@ export default function RegisterPage() {
             }}
           >
             <Box
-              xs={12}
               sx={{
-                width: isMobile ? "90%" : isTab ? "60%" : "35%",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
               }}
             >
               <Box
                 sx={{
-                  width: "100%",
+                  width: {
+                    xs: "90%",
+                    sm: "60%",
+                    md: "50%",
+                    lg: "40%",
+                    xl: "30%",
+                  },
                   border: "2px solid black",
                   borderRadius: 3,
                   p: isMobile ? 2 : isTab ? 2 : 4,
@@ -314,7 +315,7 @@ export default function RegisterPage() {
               </Box>
             </Box>
           </Box>
-        </Grid>
+        </Box>
       </Container>
     </>
   );
