@@ -181,6 +181,11 @@ const getAnalyticsData = async (req, res) => {
 
     const userGrowth = await User.aggregate([
       {
+        $match: {
+          role: "user",
+        },
+      },
+      {
         $group: {
           _id: { $month: "$createdAt" },
           count: { $sum: 1 },
@@ -218,10 +223,10 @@ const getAnalyticsData = async (req, res) => {
         },
       },
     ]);
-    console.log(productStatus);
-    console.log(monthlySales);
-    console.log(userGrowth);
-    console.log(orderStatus);
+    // console.log(productStatus);
+    // console.log(monthlySales);
+    // console.log(userGrowth);
+    // console.log(orderStatus);
 
     res.json({ productStatus, monthlySales, userGrowth, orderStatus });
   } catch (err) {
