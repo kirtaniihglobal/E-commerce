@@ -8,6 +8,7 @@ import {
   Chip,
   ButtonBase,
   Skeleton,
+  Container,
 } from "@mui/material";
 
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -45,14 +46,15 @@ function CategoryPage() {
   return (
     <>
       <Header />
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
-        {/* <Box
+      <Container maxWidth={false} disableGutters>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          {/* <Box
           sx={{
             width: "25%",
             p: 2,
@@ -300,95 +302,96 @@ function CategoryPage() {
             </Box>
           </Box>
         </Box> */}
-        <Box
-          sx={{
-            width: "100%",
-          }}
-        >
           <Box
-            sx={{
-              width: "97%",
-              p: 3,
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: 3,
-            }}
-          >
-            {products.map((product, index) => (
-              <Grid key={index}>
-                <ProductCard product={product} />
-              </Grid>
-            ))}
-          </Box>
-          <Box
-            sx={{
-              width: "90%",
-              display: "flex",
-              justifyContent: "center",
-              p: 5,
-            }}
-          >
-            <Button
-              sx={{
-                width: "50%",
-                borderRadius: 7,
-                px: 2,
-                py: 2,
-              }}
-              variant="outlined"
-              className="white"
-              onClick={loadMoreProducts}
-              disabled={loading || products.length >= total}
-            >
-              {loading
-                ? "Loading..."
-                : products.length >= total
-                ? "No More Products"
-                : "Load More"}
-            </Button>
-          </Box>
-          <Box
-            id="loader"
             sx={{
               width: "100%",
-              display: "flex",
-              flexWrap: "wrap",
             }}
           >
-            {loading &&
-              Array.from({ length: 6 }).map((_, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    width: 295,
-                    height: 508,
-                    borderRadius: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                    p: 2,
-                  }}
-                >
-                  <Skeleton
-                    variant="rectangular"
-                    height={298}
-                    sx={{ borderRadius: 2 }}
-                  />
-                  <Skeleton variant="text" height={40} width="80%" />
-                  <Skeleton variant="text" height={30} width="60%" />
-                  <Skeleton variant="text" height={30} width="40%" />
-                  <Skeleton
-                    variant="rectangular"
-                    height={50}
-                    width="100%"
-                    sx={{ borderRadius: 2 }}
-                  />
-                </Box>
+            <Box
+              sx={{
+                width: "97%",
+                p: 3,
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 3,
+              }}
+            >
+              {products.map((product, index) => (
+                <Grid key={index}>
+                  <ProductCard product={product} />
+                </Grid>
               ))}
+            </Box>
+            <Box
+              sx={{
+                width: "90%",
+                display: "flex",
+                justifyContent: "center",
+                p: 5,
+              }}
+            >
+              <Button
+                sx={{
+                  width: "50%",
+                  borderRadius: 7,
+                  px: 2,
+                  py: 2,
+                }}
+                variant="outlined"
+                className="white"
+                onClick={loadMoreProducts}
+                disabled={loading || products.length >= total}
+              >
+                {loading
+                  ? "Loading..."
+                  : products.length >= total
+                  ? "No More Products"
+                  : "Load More"}
+              </Button>
+            </Box>
+            <Box
+              id="loader"
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexWrap: "wrap",
+              }}
+            >
+              {loading &&
+                Array.from({ length: 6 }).map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: 295,
+                      height: 508,
+                      borderRadius: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                      p: 2,
+                    }}
+                  >
+                    <Skeleton
+                      variant="rectangular"
+                      height={298}
+                      sx={{ borderRadius: 2 }}
+                    />
+                    <Skeleton variant="text" height={40} width="80%" />
+                    <Skeleton variant="text" height={30} width="60%" />
+                    <Skeleton variant="text" height={30} width="40%" />
+                    <Skeleton
+                      variant="rectangular"
+                      height={50}
+                      width="100%"
+                      sx={{ borderRadius: 2 }}
+                    />
+                  </Box>
+                ))}
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </Container>
     </>
   );
 }
