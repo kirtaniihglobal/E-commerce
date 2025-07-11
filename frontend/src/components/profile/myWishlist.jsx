@@ -47,26 +47,33 @@ function MyWishlist() {
   };
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box sx={{ padding: 1 }}>
       <Typography variant="h4" gutterBottom fontWeight={600}>
         My Wishlist
       </Typography>
-      <Grid container spacing={4}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: 1,
+        }}
+      >
         {userLikes?.length > 0 ? (
           userLikes.map((likes) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={likes._id}>
+            <Box key={likes._id}>
               <Box
-                sx={{ position: "relative", width: "200px" }}
+                sx={{ position: "relative", width: "auto" }}
                 onClick={() => {
                   handleSelect(likes.productId._id);
                 }}
               >
                 <img
-                  style={{ width: "100%" }}
+                  style={{ width: "auto" }}
                   src={`http://192.168.2.222:5000/${likes.productId.image}`}
                   alt=""
                 />
-                <Tooltip title="Remove" placement="top" arrow>
+                <Tooltip title="Remove Like" placement="top" arrow>
                   <IconButton
                     sx={{
                       position: "absolute",
@@ -87,36 +94,19 @@ function MyWishlist() {
                   <Typography variant="h6" noWrap>
                     {likes.productId.name}
                   </Typography>
-                  {/* <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                    {likes.productId.rating == null ? (
-                      <Typography variant="h6">No rating</Typography>
-                    ) : (
-                      <>
-                        <Rating
-                          name="read-only"
-                          value={Number(likes.productId.rating?.toFixed(1))}
-                          precision={0.5}
-                          readOnly
-                        />
-                        <Typography variant="h6">
-                          {likes.productId.rating?.toFixed(1)}/5
-                        </Typography>
-                      </>
-                    )}
-                  </Box> */}
                   <Typography variant="h6" color="primary" mt={1}>
                     ${likes.productId.price}
                   </Typography>
                 </CardContent>
               </Box>
-            </Grid>
+            </Box>
           ))
         ) : (
           <Typography variant="h6" sx={{ m: 2 }}>
             Your wishlist is empty.
           </Typography>
         )}
-      </Grid>
+      </Box>
     </Box>
   );
 }

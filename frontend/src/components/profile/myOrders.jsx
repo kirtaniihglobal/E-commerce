@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cancelOrderData, getAllOrderData } from "../../Thunk/orderThunk";
 import {
-  Grid,
   Typography,
   Card,
   CardContent,
@@ -106,7 +105,7 @@ function MyOrders() {
 
   return (
     <>
-      <Container>
+      <Container maxWidth={false} disableGutters>
         {loading ? (
           <Box
             sx={{
@@ -121,7 +120,7 @@ function MyOrders() {
           </Box>
         ) : (
           <>
-            <Grid container direction="column" p={3}>
+            <Box direction="column" p={2}>
               <Typography variant="h4" gutterBottom>
                 Order Details
               </Typography>
@@ -131,7 +130,7 @@ function MyOrders() {
               ) : (
                 orderData.map((order) => (
                   <>
-                    <Card key={order._id} sx={{ mb: 3, p: 2 }}>
+                    <Card key={order._id} sx={{ mb: 3 }}>
                       <CardContent>
                         <Typography variant="h5" gutterBottom>
                           Order ID: {order._id}
@@ -172,10 +171,16 @@ function MyOrders() {
                         <Typography variant="h6" gutterBottom>
                           Products
                         </Typography>
-                        <Grid container spacing={2}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            flexWrap: "wrap",
+                          }}
+                        >
                           {order.status === "delivered" ? (
                             order.orderData?.products?.map((productItem) => (
-                              <Grid item xs={12} md={8} key={productItem._id}>
+                              <Box key={productItem._id}>
                                 <Card
                                   variant="outlined"
                                   sx={{ display: "flex", p: 1 }}
@@ -183,8 +188,8 @@ function MyOrders() {
                                   <img
                                     src={`http://192.168.2.222:5000/${productItem.productId.image}`}
                                     alt={productItem.productId.name}
-                                    width={150}
-                                    height={150}
+                                    width={70}
+                                    height={100}
                                     style={{
                                       objectFit: "cover",
                                       marginRight: 10,
@@ -226,12 +231,12 @@ function MyOrders() {
                                     </Box>
                                   </Box>
                                 </Card>
-                              </Grid>
+                              </Box>
                             ))
                           ) : (
                             <>
                               {order.orderData?.products?.map((productItem) => (
-                                <Grid item xs={12} md={8} key={productItem._id}>
+                                <Box key={productItem._id}>
                                   <Card
                                     variant="outlined"
                                     sx={{ display: "flex", p: 1 }}
@@ -239,8 +244,8 @@ function MyOrders() {
                                     <img
                                       src={`http://192.168.2.222:5000/${productItem.productId.image}`}
                                       alt={productItem.productId.name}
-                                      width={120}
-                                      height={120}
+                                      width={70}
+                                      height={100}
                                       style={{
                                         objectFit: "cover",
                                         marginRight: 10,
@@ -264,11 +269,11 @@ function MyOrders() {
                                       </Typography>
                                     </Box>
                                   </Card>
-                                </Grid>
+                                </Box>
                               ))}
                             </>
                           )}
-                        </Grid>
+                        </Box>
                         {order.status == "pending" ? (
                           <Box
                             sx={{
@@ -417,7 +422,7 @@ function MyOrders() {
                   </>
                 ))
               )}
-            </Grid>
+            </Box>
           </>
         )}
       </Container>

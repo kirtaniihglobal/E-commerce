@@ -6,6 +6,7 @@ import {
   Box,
   Avatar,
   TextField,
+  Container,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { fetchUser, updateUser } from "../redux/authSlice";
@@ -91,124 +92,125 @@ export default function ProfilePage() {
 
   return (
     <>
-      <Grid container maxWidth="xl" sx={{ mt: 10 }}>
-        <Box>
-          <Box></Box>
-        </Box>
-        {user && (
-          <Box sx={{ width: "100%", ml: 10 }}>
-            <Box sx={{ width: "100%" }}>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 3,
-                  maxWidth: 500,
-                }}
-              >
-                {isEditing ? (
-                  <>
-                    <Box>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        style={{ display: "none" }}
-                      />
+      <Container maxWidth={false} disableGutters>
+        <Box
+          sx={{
+            width: "100%",
+            alignItems: "center",
+            mt: 5,
+          }}
+        >
+          {user && (
+            <Box
+              sx={{
+                width: "auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: 3,
+                maxWidth: 700,
+              }}
+            >
+              {isEditing ? (
+                <>
+                  <Box>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      style={{ display: "none" }}
+                    />
 
-                      <Box
-                        onClick={handleAvatarClick}
-                        sx={{ cursor: "pointer", display: "inline-block" }}
-                      >
-                        <Avatar
-                          src={
-                            imageFile
-                              ? typeof imageFile === "string"
-                                ? imageFile
-                                : URL.createObjectURL(imageFile)
-                              : ""
-                          }
-                          alt="User Avatar"
-                          sx={{ width: 80, height: 80 }}
-                        />
-                      </Box>
-                    </Box>
-                    <TextField
-                      label="Full Name"
-                      name="fullName"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                    <TextField
-                      label="Email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                    <TextField
-                      label="Mobile Number"
-                      name="number"
-                      value={formData.number}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                    <TextField
-                      label="Address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                    <Box sx={{ display: "flex", gap: 2 }}>
-                      <Button variant="contained" onClick={handleSave}>
-                        Save
-                      </Button>
-                      <Button variant="outlined" onClick={handleCancel}>
-                        Cancel
-                      </Button>
-                    </Box>
-                  </>
-                ) : (
-                  <>
                     <Box
-                      sx={{
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 4,
-                        position: "relative",
-                      }}
+                      onClick={handleAvatarClick}
+                      sx={{ cursor: "pointer", display: "inline-block" }}
                     >
                       <Avatar
-                        src={`http://192.168.2.222:5000/${user.image}`}
+                        src={
+                          imageFile
+                            ? typeof imageFile === "string"
+                              ? imageFile
+                              : URL.createObjectURL(imageFile)
+                            : ""
+                        }
                         alt="User Avatar"
                         sx={{ width: 80, height: 80 }}
                       />
-                      <Typography variant="h5">{user.fullName}</Typography>
-                      <Typography variant="h6">{user.email}</Typography>
-                      <Typography variant="h6">{user.number}</Typography>
-                      <Typography variant="h6">{user.address}</Typography>
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          right: 0,
-                          top: 10,
-                        }}
-                      >
-                        <EditIcon onClick={handleEditToggle} color="info" />
-                      </Box>
                     </Box>
-                  </>
-                )}
-              </Box>
+                  </Box>
+                  <TextField
+                    label="Full Name"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                  <TextField
+                    label="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                  <TextField
+                    label="Mobile Number"
+                    name="number"
+                    value={formData.number}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                  <TextField
+                    label="Address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <Button variant="contained" onClick={handleSave}>
+                      Save
+                    </Button>
+                    <Button variant="outlined" onClick={handleCancel}>
+                      Cancel
+                    </Button>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 4,
+                      position: "relative",
+                    }}
+                  >
+                    <Avatar
+                      src={`http://192.168.2.222:5000/${user.image}`}
+                      alt="User Avatar"
+                      sx={{ width: 80, height: 80 }}
+                    />
+                    <Typography variant="h5">{user.fullName}</Typography>
+                    <Typography variant="h6">{user.email}</Typography>
+                    <Typography variant="h6">{user.number}</Typography>
+                    <Typography variant="h6">{user.address}</Typography>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        right: 0,
+                        top: 10,
+                      }}
+                    >
+                      <EditIcon onClick={handleEditToggle} color="info" />
+                    </Box>
+                  </Box>
+                </>
+              )}
             </Box>
-          </Box>
-        )}
-      </Grid>
+          )}
+        </Box>
+      </Container>
     </>
   );
 }

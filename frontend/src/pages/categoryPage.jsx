@@ -49,7 +49,7 @@ function CategoryPage() {
       <Container maxWidth={false} disableGutters>
         <Box
           sx={{
-            width: "100%",
+            width: "auto",
             display: "flex",
             flexDirection: "row",
           }}
@@ -309,7 +309,7 @@ function CategoryPage() {
           >
             <Box
               sx={{
-                width: "97%",
+                width: "auto",
                 p: 3,
                 display: "flex",
                 flexWrap: "wrap",
@@ -325,7 +325,7 @@ function CategoryPage() {
             </Box>
             <Box
               sx={{
-                width: "90%",
+                width: "auto",
                 display: "flex",
                 justifyContent: "center",
                 p: 5,
@@ -333,7 +333,7 @@ function CategoryPage() {
             >
               <Button
                 sx={{
-                  width: "50%",
+                  width: "100%",
                   borderRadius: 7,
                   px: 2,
                   py: 2,

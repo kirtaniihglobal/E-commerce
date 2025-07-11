@@ -41,19 +41,18 @@ function MyAddress() {
 
   return (
     <>
-      <Container maxWidth="xl">
-        <Grid
-          container
+      <Container maxWidth={false} disableGutters>
+        <Box
           sx={{
             width: "100%",
           }}
         >
           <Box
             sx={{
-              width: "100%",
+              width: "auto",
               display: "flex",
               justifyContent: "flex-end",
-              p: 2,
+              mt: 3,
             }}
           >
             <Button variant="contained" onClick={() => setOpen(true)}>
@@ -70,13 +69,13 @@ function MyAddress() {
               setEditAddMode(false);
             }}
           />
-          <Grid
+          <Box
             sx={{
-              ml: 5,
               width: "100%",
               display: "flex",
-              gap: 3,
-              flexDirection: "column",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 2,
             }}
           >
             {address?.length === 0 ? (
@@ -93,13 +92,14 @@ function MyAddress() {
                 <Box
                   key={add._id}
                   sx={{
-                    width: "100%",
+                    width: "auto",
+                    mt: 3,
                   }}
                 >
                   <Box
                     sx={{
                       p: 3,
-                      width: "400px",
+                      width: "auto",
                       borderRadius: 2,
                       border: "1px solid black",
                       display: "flex",
@@ -133,8 +133,8 @@ function MyAddress() {
                 </Box>
               ))
             )}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Container>
     </>
   );
