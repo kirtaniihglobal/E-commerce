@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Grid } from "@mui/material";
+import { Card, CardContent, Typography, Container, Box } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useEffect } from "react";
@@ -40,8 +40,15 @@ const DashboardCharts = () => {
     users: item.count,
   }));
   return (
-    <Grid container spacing={3} mt={2}>
-      <Grid item xs={12} md={6}>
+    <Container maxWidth={false} disableGutters>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 3,
+        }}
+      >
         <Card>
           <CardContent>
             <Typography variant="h6" mb={2}>
@@ -51,13 +58,12 @@ const DashboardCharts = () => {
               dataset={monthlyView}
               xAxis={[{ dataKey: "month", label: "Month" }]}
               series={[{ dataKey: "sales", label: "Sales (₹)" }]}
-              width={480}
+              width={565}
               height={175}
             />
           </CardContent>
         </Card>
-      </Grid>
-      <Grid item xs={12} md={6}>
+
         <Card>
           <CardContent>
             <Typography variant="h6" mb={2}>
@@ -68,13 +74,12 @@ const DashboardCharts = () => {
               dataset={userGrowthData}
               xAxis={[{ dataKey: "month", label: "Month" }]}
               series={[{ dataKey: "users", label: "Users Registered" }]}
-              width={480}
+              width={565}
               height={175}
             />
           </CardContent>
         </Card>
-      </Grid>
-      <Grid item xs={12} md={6}>
+
         <Card>
           <CardContent>
             <Typography variant="h6" mb={2}>
@@ -90,14 +95,13 @@ const DashboardCharts = () => {
                   })),
                 },
               ]}
-              width={390}
+              width={475}
               height={200}
               colors={colors}
             />
           </CardContent>
         </Card>
-      </Grid>
-      <Grid item xs={12} md={6}>
+
         <Card>
           <CardContent>
             <Typography variant="h6" mb={2}>
@@ -107,14 +111,14 @@ const DashboardCharts = () => {
               dataset={productStock}
               xAxis={[{ dataKey: "name", label: "Product" }]}
               series={[{ dataKey: "stock", label: "Stock" }]}
-              width={480}
+              width={565}
               height={175}
-              colors={"#FFFF"}
+              colors={"#fff"}
             />
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+      </Box>
+    </Container>
   );
 };
 

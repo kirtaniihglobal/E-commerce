@@ -1,5 +1,4 @@
-import { Box, Card, Container, Grid, Typography } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
+import { Box, Card, Container, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllCountByAdminData } from "../Thunk/adminThunk";
@@ -18,23 +17,22 @@ function AdminDashboard() {
     dispatch(getAllCountByAdminData());
   }, [dispatch]);
   return (
-    <Container maxWidth="">
-      <Grid
-        container
-        spacing={2}
+    <Container maxWidth={false} disableGutters>
+      <Box
         sx={{
           width: "100%",
+          p: 2,
         }}
       >
         <Box
           sx={{
-            width: "100%",
+            width: "auto",
             display: "flex",
             flexDirection: "row",
             gap: 3,
           }}
         >
-          <Card sx={{ p: 2, mb: 2, width: "300px", height: "100px" }}>
+          <Card sx={{ p: 2, mb: 2, width: "33%" }}>
             <Box
               sx={{
                 width: "100%",
@@ -72,7 +70,7 @@ function AdminDashboard() {
             </Box>
           </Card>
 
-          <Card sx={{ p: 2, mb: 2, width: "300px", height: "100px" }}>
+          <Card sx={{ p: 2, mb: 2, width: "33%" }}>
             <Box
               sx={{
                 width: "100%",
@@ -110,7 +108,7 @@ function AdminDashboard() {
             </Box>
           </Card>
 
-          <Card sx={{ p: 2, mb: 2, width: "300px", height: "100px" }}>
+          <Card sx={{ p: 2, mb: 2, width: "33%" }}>
             <Box
               sx={{
                 width: "100%",
@@ -149,7 +147,7 @@ function AdminDashboard() {
           </Card>
         </Box>
         <DashboardCharts />
-      </Grid>
+      </Box>
     </Container>
   );
 }
