@@ -35,9 +35,10 @@ function ProductDetailPage() {
   const { id } = useParams();
   const { products } = useSelector((state) => state.products);
   const selectedProduct = products.find((p) => p._id === id);
+  const newProducts = products.slice(0, 4);
   console.log("selectedProduct", selectedProduct);
   useEffect(() => {
-    dispatch(getAllproductsData({ skip: 0, limit: 9 }));
+    dispatch(getAllproductsData({}));
   }, [dispatch]);
 
   useEffect(() => {
@@ -438,7 +439,7 @@ function ProductDetailPage() {
                   gap: "20px",
                 }}
               >
-                {products.map((product, index) => (
+                {newProducts.map((product, index) => (
                   <ProductCard key={index} product={product} />
                 ))}
               </Box>
