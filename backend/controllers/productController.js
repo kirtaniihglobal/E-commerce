@@ -39,11 +39,13 @@ const createProduct = async (req, res) => {
 
 const getAllproducts = async (req, res) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.user.id);
-    const limit = parseInt(req.query.limit);
-    const skip = parseInt(req.query.skip);
+    const userId = req.user?.id
+      ? new mongoose.Types.ObjectId(req.user.id)
+      : null;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = parseInt(req.query.skip) || 0;
 
-    const products = await Product.aggregate([
+    const pipeline = [
       { $match: {} },
       {
         $lookup: {
@@ -53,7 +55,10 @@ const getAllproducts = async (req, res) => {
           as: "ratings",
         },
       },
-      {
+    ];
+
+    if (userId) {
+      pipeline.push({
         $lookup: {
           from: "likes",
           let: { pid: "$_id" },
@@ -71,17 +76,22 @@ const getAllproducts = async (req, res) => {
           ],
           as: "wishlistslike",
         },
-      },
+      });
+    }
+
+    pipeline.push(
       {
         $addFields: {
           rating: { $round: [{ $avg: "$ratings.rating" }, 1] },
-          isLiked: {
-            $cond: {
-              if: { $gt: [{ $size: "$wishlistslike" }, 0] },
-              then: true,
-              else: false,
-            },
-          },
+          isLiked: userId
+            ? {
+                $cond: {
+                  if: { $gt: [{ $size: "$wishlistslike" }, 0] },
+                  then: true,
+                  else: false,
+                },
+              }
+            : false,
         },
       },
       {
@@ -91,9 +101,10 @@ const getAllproducts = async (req, res) => {
         },
       },
       { $skip: skip },
-      { $limit: limit },
-    ]);
-    // console.log(products);
+      { $limit: limit }
+    );
+
+    const products = await Product.aggregate(pipeline);
     const total = await Product.countDocuments();
 
     return res.status(200).json({

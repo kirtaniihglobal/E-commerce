@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { getOneproductData } from "../Thunk/productThunk";
+import { getAllproductsData, getOneproductData } from "../Thunk/productThunk";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { openSnackbar } from "../redux/snackBarSlice";
@@ -18,12 +18,10 @@ import {
   addWishlistData,
   deleteUserWishlistData,
 } from "../Thunk/wishlistThunk";
-import { useState } from "react";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [liked, setLiked] = useState(product.isLiked);
   const handleSelect = async (id) => {
     try {
       await dispatch(getOneproductData(id));
@@ -35,13 +33,12 @@ const ProductCard = ({ product }) => {
   };
   const handleChange = async (id) => {
     try {
-      if (liked) {
-        setLiked(false);
+      if (product.isLiked) {
         await dispatch(deleteUserWishlistData({ id }));
       } else {
-        setLiked(true);
         await dispatch(addWishlistData({ id }));
       }
+      dispatch(getAllproductsData({ skip: 0, limit: 9 }));
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +63,11 @@ const ProductCard = ({ product }) => {
             src={`http://192.168.2.222:5000/${product.image}`}
             alt=""
           />
-          <Tooltip title={liked ? "Remove Like" : "Like"} placement="top" arrow>
+          <Tooltip
+            title={product.isLiked ? "Remove Like" : "Like"}
+            placement="top"
+            arrow
+          >
             <IconButton
               sx={{
                 position: "absolute",
@@ -78,7 +79,7 @@ const ProductCard = ({ product }) => {
                 handleChange(product._id);
               }}
             >
-              {liked ? (
+              {product.isLiked ? (
                 <FavoriteIcon color="error" />
               ) : (
                 <FavoriteBorderIcon color="primary" />

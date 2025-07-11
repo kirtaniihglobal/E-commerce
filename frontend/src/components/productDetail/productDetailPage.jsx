@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  Breadcrumbs,
   Container,
   Grid,
-  Link,
   Typography,
   Box,
   Chip,
@@ -15,49 +13,38 @@ import {
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import {
-  getOneproductData,
-  getTopSellingProductData,
-} from "../../Thunk/productThunk";
+import { getAllproductsData } from "../../Thunk/productThunk";
 import { addToCartData } from "../../Thunk/cartThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ProductCard from "../../comon/productCard";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Header from "../header/header";
 import Footer from "../footer/footer";
-import img1 from "../../assets/image 1.png";
-import img2 from "../../assets/image 2.png";
-import img3 from "../../assets/image 3.png";
+// import img1 from "../../assets/image 1.png";
+// import img2 from "../../assets/image 2.png";
+// import img3 from "../../assets/image 3.png";
 import { openSnackbar } from "../../redux/snackBarSlice";
 import { getOneProductRatingData } from "../../Thunk/ratingThunk";
 import RatingCard from "../../comon/ratingCard";
-import { getUserWishlistData } from "../../Thunk/wishlistThunk";
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
-  const product = useSelector((state) => state.products.selectedProduct);
-  const { topSelling } = useSelector((state) => state.products);
   const { OneProductRatingData } = useSelector((state) => state.rating);
   const { id } = useParams();
-
-  const { userLikes } = useSelector((state) => state.wishList);
-  const isLiked = userLikes?.find((like) => like.productId._id === product._id);
-
+  const { products } = useSelector((state) => state.products);
+  const selectedProduct = products.find((p) => p._id === id);
+  console.log("selectedProduct", selectedProduct);
   useEffect(() => {
-    dispatch(getUserWishlistData());
+    dispatch(getAllproductsData({ skip: 0, limit: 9 }));
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getTopSellingProductData());
     dispatch(getOneProductRatingData(id));
-    dispatch(getOneproductData(id));
   }, [dispatch, id]);
 
   const handlePlus = () => {
@@ -85,13 +72,13 @@ function ProductDetailPage() {
     } else {
       dispatch(
         openSnackbar({
-          massage: `${product.name}add to Cart`,
+          massage: `${selectedProduct.name}add to Cart`,
           severity: "success",
         })
       );
       dispatch(
         addToCartData({
-          productId: product._id,
+          productId: selectedProduct._id,
           quantity,
           size: selectedSize,
           color: selectedColor,
@@ -105,39 +92,12 @@ function ProductDetailPage() {
   const handleChangeSize = (name) => {
     setSelectedSize(name);
   };
-
-  // const breadcrumbs = [
-  //   <Link underline="hover" key="1" color="inherit" href="/">
-  //     HOME
-  //   </Link>,
-  //   <Link underline="hover" key="2" color="inherit" href="/">
-  //     Shop
-  //   </Link>,
-  //   <Link underline="hover" key="2" color="inherit" href="/">
-  //     Men
-  //   </Link>,
-  //   <Typography key="3" sx={{ color: "text.primary" }}>
-  //     T-shirts
-  //   </Typography>,
-  // ];
   return (
     <>
       <Header />
       <Container maxWidth="xl">
         <Grid container>
-          {/* <Box
-            sx={{
-              width: "100%",
-            }}
-          >
-            <Breadcrumbs
-              separator={<NavigateNextIcon fontSize="small" />}
-              aria-label="breadcrumb"
-            >
-              {breadcrumbs}
-            </Breadcrumbs>
-          </Box> */}
-          {product ? (
+          {selectedProduct ? (
             <Box
               sx={{
                 width: "100%",
@@ -154,7 +114,7 @@ function ProductDetailPage() {
                   gap: 3,
                 }}
               >
-                <Box
+                {/* <Box
                   sx={{
                     width: "152px",
                     display: "flex",
@@ -165,7 +125,7 @@ function ProductDetailPage() {
                   <img src={img1} alt="" />
                   <img src={img2} alt="" />
                   <img src={img3} alt="" />
-                </Box>
+                </Box> */}
                 <Box
                   sx={{
                     width: "70%",
@@ -173,7 +133,7 @@ function ProductDetailPage() {
                   }}
                 >
                   <img
-                    src={`http://192.168.2.222:5000/${product.image}`}
+                    src={`http://192.168.2.222:5000/${selectedProduct.image}`}
                     style={{
                       width: "100%",
                     }}
@@ -185,11 +145,8 @@ function ProductDetailPage() {
                       top: "20px",
                       right: "20px",
                     }}
-                    onClick={() => {
-                      // handleChange(product._id);
-                    }}
                   >
-                    {isLiked ? (
+                    {selectedProduct.isLiked ? (
                       <FavoriteIcon color="error" />
                     ) : (
                       <FavoriteBorderIcon color="primary" />
@@ -206,7 +163,7 @@ function ProductDetailPage() {
                 }}
               >
                 <Box>
-                  <Typography variant="h4">{product.name}</Typography>
+                  <Typography variant="h4">{selectedProduct.name}</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -215,18 +172,18 @@ function ProductDetailPage() {
                     gap: 1,
                   }}
                 >
-                  {product.rating == null ? (
+                  {selectedProduct.rating == null ? (
                     <Typography variant="h6">No rating</Typography>
                   ) : (
                     <>
                       <Rating
                         name="read-only"
-                        value={Number(product.rating?.toFixed(1))}
+                        value={Number(selectedProduct.rating?.toFixed(1))}
                         precision={0.5}
                         readOnly
                       />
                       <Typography variant="h6">
-                        {product.rating?.toFixed(1)}/5
+                        {selectedProduct.rating?.toFixed(1)}/5
                       </Typography>
                     </>
                   )}
@@ -239,7 +196,7 @@ function ProductDetailPage() {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="h4">${product.price}</Typography>
+                  <Typography variant="h4">${selectedProduct.price}</Typography>
                   <Typography
                     variant="h5"
                     sx={{
@@ -253,7 +210,9 @@ function ProductDetailPage() {
                   <Chip label="- 40%" color="error" />
                 </Box>
                 <Box>
-                  <Typography variant="body1">{product.description}</Typography>
+                  <Typography variant="body1">
+                    {selectedProduct.description}
+                  </Typography>
                 </Box>
                 <Divider />
                 <Box>
@@ -273,7 +232,7 @@ function ProductDetailPage() {
                       gap: 1,
                     }}
                   >
-                    {product.color?.map((color, index) => (
+                    {selectedProduct.color?.map((color, index) => (
                       <Box
                         value={selectedColor}
                         key={index}
@@ -302,7 +261,7 @@ function ProductDetailPage() {
                     gap: "10px",
                   }}
                 >
-                  {product.size?.map((name, index) => (
+                  {selectedProduct.size?.map((name, index) => (
                     <Chip
                       clickable
                       onClick={() => handleChangeSize(name)}
@@ -491,7 +450,7 @@ function ProductDetailPage() {
                   gap: "20px",
                 }}
               >
-                {topSelling.map((product, index) => (
+                {products.map((product, index) => (
                   <ProductCard key={index} product={product} />
                 ))}
               </Box>
