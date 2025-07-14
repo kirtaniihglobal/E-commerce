@@ -5,6 +5,9 @@ import {
   Grid,
   Typography,
   IconButton,
+  Paper,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,6 +19,8 @@ import AddAddress from "../addAddress/addAddress";
 
 function MyAddress() {
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [open, setOpen] = useState(false);
   const [editAddMode, setEditAddMode] = useState(false);
   const [editAddId, setEditAddId] = useState(null);
@@ -44,20 +49,27 @@ function MyAddress() {
       <Container maxWidth={false} disableGutters>
         <Box
           sx={{
-            width: "100%",
+            p: 1,
           }}
         >
           <Box
             sx={{
               width: "auto",
               display: "flex",
-              justifyContent: "flex-end",
-              mt: 3,
+              justifyContent: "space-between",
+              alignItems: "flex-start",
             }}
           >
-            <Button variant="contained" onClick={() => setOpen(true)}>
-              + Add New Address
-            </Button>
+            <Box>
+              <Typography variant={isMobile ? "h6" : "h4"} fontWeight={600}>
+                My Address
+              </Typography>
+            </Box>
+            <Box>
+              <Button variant="contained" onClick={() => setOpen(true)}>
+                + Add New Address
+              </Button>
+            </Box>
           </Box>
           <AddAddress
             open={open}
@@ -71,16 +83,17 @@ function MyAddress() {
           />
           <Box
             sx={{
+              mt: 3,
               width: "100%",
               display: "flex",
               flexDirection: "row",
               flexWrap: "wrap",
-              gap: 2,
+              gap: 3,
             }}
           >
             {address?.length === 0 ? (
               <Typography
-                variant="h4"
+                variant="body1"
                 sx={{
                   textAlign: "center",
                 }}
@@ -92,16 +105,14 @@ function MyAddress() {
                 <Box
                   key={add._id}
                   sx={{
-                    width: "auto",
-                    mt: 3,
+                    maxWidth: "350px",
+                    maxHeight: "350px",
                   }}
                 >
-                  <Box
+                  <Paper
+                    elevation={2}
                     sx={{
-                      p: 3,
-                      width: "auto",
-                      borderRadius: 2,
-                      border: "1px solid black",
+                      p: 2,
                       display: "flex",
                     }}
                   >
@@ -111,25 +122,33 @@ function MyAddress() {
                         {add.city}, {add.pincode}, {add.country}
                       </Typography>
                     </Box>
-                    <Box>
-                      <IconButton
-                        onClick={() => {
-                          handleDeleteAddress(add._id);
-                        }}
-                      >
-                        <DeleteIcon color="error" />
-                      </IconButton>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Box>
+                        <IconButton
+                          onClick={() => {
+                            handleDeleteAddress(add._id);
+                          }}
+                        >
+                          <DeleteIcon color="error" />
+                        </IconButton>
+                      </Box>
+                      <Box>
+                        <IconButton
+                          onClick={() => {
+                            handleEditAddress(add);
+                          }}
+                        >
+                          <EditIcon color="info" />
+                        </IconButton>
+                      </Box>
                     </Box>
-                    <Box>
-                      <IconButton
-                        onClick={() => {
-                          handleEditAddress(add);
-                        }}
-                      >
-                        <EditIcon color="info" />
-                      </IconButton>
-                    </Box>
-                  </Box>
+                  </Paper>
                 </Box>
               ))
             )}
