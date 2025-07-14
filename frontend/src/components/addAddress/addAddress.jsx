@@ -18,9 +18,7 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
   const validationSchema = yup.object({
     address: yup.string().required("address is required"),
     city: yup.string().required("city is required"),
-
     pincode: yup.string().required("pincode is required"),
-
     country: yup.string().required("country is required"),
   });
   const formik = useFormik({
@@ -34,17 +32,12 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
     onSubmit: async (values) => {
       try {
         if (editAddMode && editData) {
-          await dispatch(updateAddress({ id: editId, values: values }))
-            .unwrap()
-            .then(onClose());
-
-          onClose();
-          formik.resetForm();
+          await dispatch(updateAddress({ id: editId, values })).unwrap();
         } else {
           await dispatch(addAddress(values)).unwrap();
-          onClose();
-          formik.resetForm();
         }
+        formik.resetForm();
+        onClose();
       } catch (error) {
         console.log(error);
       }
@@ -63,7 +56,7 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
         country: editData.country || "",
       });
     }
-  }, [editAddMode, editData, formik]);
+  }, [editAddMode, editData]);
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
@@ -144,7 +137,11 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
                   justifyContent: "flex-end",
                 }}
               >
-                <Button variant="contained" type="submit">
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                >
                   {editAddMode ? "Update" : "Add"}
                 </Button>
               </Box>

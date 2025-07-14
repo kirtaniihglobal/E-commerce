@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Container, IconButton } from "@mui/material";
+import { Box, Container, IconButton } from "@mui/material";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/snackBarSlice";
@@ -15,7 +15,6 @@ function UserProfileLayout() {
     fontSize: "20px",
     padding: "8px 16px",
     textDecoration: "none",
-    borderRadius: "5px",
   };
 
   const inactiveStyle = {

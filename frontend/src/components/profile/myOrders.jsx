@@ -18,6 +18,8 @@ import {
   Rating,
   TextField,
   CircularProgress,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import { openSnackbar } from "../../redux/snackBarSlice";
@@ -28,6 +30,8 @@ import {
 } from "../../Thunk/ratingThunk";
 function MyOrders() {
   const dispatch = useDispatch();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { orderData } = useSelector((state) => state.order);
   const { UserProductRatingData } = useSelector((state) => state.rating);
   const [open, setOpen] = useState(false);
@@ -120,9 +124,9 @@ function MyOrders() {
           </Box>
         ) : (
           <>
-            <Box direction="column" p={2}>
-              <Typography variant="h4" gutterBottom>
-                Order Details
+            <Box direction="column" p={1}>
+              <Typography variant={isMobile ? "h6" : "h4"} gutterBottom fontWeight={600}>
+                My Orders
               </Typography>
 
               {orderData?.length === 0 ? (

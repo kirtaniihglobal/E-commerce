@@ -4,6 +4,8 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 function MyWishlist() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { userLikes } = useSelector((state) => state.wishList);
   console.log(userLikes);
   useEffect(() => {
@@ -43,7 +47,11 @@ function MyWishlist() {
 
   return (
     <Box sx={{ padding: 1 }}>
-      <Typography variant="h4" gutterBottom fontWeight={600}>
+      <Typography
+        variant={isMobile ? "h6" : "h4"}
+        gutterBottom
+        fontWeight={600}
+      >
         My Wishlist
       </Typography>
       <Box
