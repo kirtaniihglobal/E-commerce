@@ -1,5 +1,4 @@
 import {
-  Grid,
   Box,
   Typography,
   Button,
@@ -9,7 +8,7 @@ import {
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { getAllproductsData, getOneproductData } from "../Thunk/productThunk";
+import { getOneproductData } from "../Thunk/productThunk";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { openSnackbar } from "../redux/snackBarSlice";
@@ -18,10 +17,12 @@ import {
   addWishlistData,
   deleteUserWishlistData,
 } from "../Thunk/wishlistThunk";
+import { useState } from "react";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [like, setLike] = useState(product.isLiked);
   const handleSelect = async (id) => {
     try {
       await dispatch(getOneproductData(id));
@@ -33,12 +34,13 @@ const ProductCard = ({ product }) => {
   };
   const handleChange = async (id) => {
     try {
-      if (product.isLiked) {
+      if (like) {
+        setLike(false);
         await dispatch(deleteUserWishlistData({ id }));
       } else {
+        setLike(true);
         await dispatch(addWishlistData({ id }));
       }
-      dispatch(getAllproductsData({ skip: 0, limit: 9 }));
     } catch (error) {
       console.log(error);
     }
@@ -63,11 +65,7 @@ const ProductCard = ({ product }) => {
             src={`http://192.168.2.222:5000/${product.image}`}
             alt=""
           />
-          <Tooltip
-            title={product.isLiked ? "Remove Like" : "Like"}
-            placement="top"
-            arrow
-          >
+          <Tooltip title={like ? "Remove Like" : "Like"} placement="top" arrow>
             <IconButton
               sx={{
                 position: "absolute",
@@ -79,7 +77,7 @@ const ProductCard = ({ product }) => {
                 handleChange(product._id);
               }}
             >
-              {product.isLiked ? (
+              {like ? (
                 <FavoriteIcon color="error" />
               ) : (
                 <FavoriteBorderIcon color="primary" />

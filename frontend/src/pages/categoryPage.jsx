@@ -25,7 +25,7 @@ function CategoryPage() {
   // const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
-  const limit = 9;
+  const limit = 12;
   useEffect(() => {
     dispatch(getAllproductsData({ skip: 0, limit }));
     setSkip(limit);
@@ -333,7 +333,7 @@ function CategoryPage() {
             >
               <Button
                 sx={{
-                  width: "100%",
+                  width: "50%",
                   borderRadius: 7,
                   px: 2,
                   py: 2,
@@ -355,11 +355,12 @@ function CategoryPage() {
               sx={{
                 width: "100%",
                 display: "flex",
+                justifyContent: "center",
                 flexWrap: "wrap",
               }}
             >
               {loading &&
-                Array.from({ length: 6 }).map((_, index) => (
+                Array.from({ length: 4 }).map((_, index) => (
                   <Box
                     key={index}
                     sx={{
@@ -367,6 +368,7 @@ function CategoryPage() {
                       height: 508,
                       borderRadius: 2,
                       display: "flex",
+
                       flexDirection: "column",
                       gap: 1,
                       p: 2,

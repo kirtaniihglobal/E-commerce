@@ -173,9 +173,32 @@ function MyOrders() {
                         </Typography>
                         <Box
                           sx={{
-                            display: "flex",
+                            display:
+                              order.orderData?.products?.length <= 3
+                                ? "flex"
+                                : "grid",
+                            justifyContent:
+                              order.orderData?.products?.length <= 3
+                                ? "flex-start"
+                                : "center",
+                            alignItems: "flex-start",
                             gap: 2,
-                            flexWrap: "wrap",
+                            flexWrap:
+                              order.orderData?.products?.length <= 3
+                                ? "wrap"
+                                : undefined,
+                            gridTemplateColumns:
+                              order.orderData?.products?.length > 3
+                                ? "repeat(auto-fit, minmax(300px, 1fr))"
+                                : undefined,
+                            mx:
+                              order.orderData?.products?.length > 3
+                                ? "auto"
+                                : undefined,
+                            width:
+                              order.orderData?.products?.length > 3
+                                ? "100%"
+                                : undefined,
                           }}
                         >
                           {order.status === "delivered" ? (

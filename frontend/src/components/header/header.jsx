@@ -52,6 +52,7 @@ export default function Header() {
           sx={{
             height: "50px",
             display: "flex",
+
             justifyContent: "flex-end",
           }}
         >
@@ -404,6 +405,7 @@ export default function Header() {
           sx={{
             backgroundColor: theme.palette.background.default,
             boxShadow: "none",
+            borderBottom: "2px solid black",
             p: 1,
           }}
         >
