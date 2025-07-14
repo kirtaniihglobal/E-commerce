@@ -14,10 +14,31 @@ import paymenttype5 from "../../assets/paymenttype5.png";
 import { useTheme } from "@emotion/react";
 import { useMediaQuery, Button } from "@mui/material";
 import { Box } from "@mui/material";
+import { openSnackbar } from "../../redux/snackBarSlice";
+import { addNewSletterData } from "../../Thunk/newSletterThunk";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 function Footer() {
+  const dispatch = useDispatch();
   const theme = useTheme();
+  const [email, setEmail] = useState("");
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      openSnackbar({ massage: "Please enter your email", severity: "error" });
+      return;
+    }
+    try {
+      console.log(email);
+      dispatch(addNewSletterData({ email }));
+      setEmail("");
+    } catch (err) {
+      openSnackbar({ massage: err.message, severity: "error" });
+    }
+  };
+
   return (
     <>
       <Container
@@ -268,6 +289,8 @@ function Footer() {
             <Box
               sx={{
                 width: { md: "50%", lg: "60%" },
+                display: "flex",
+                alignItems: "center",
               }}
             >
               <Typography
@@ -296,12 +319,18 @@ function Footer() {
             >
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 style={{
-                  width: "100%",
                   height: "100%",
+                  padding: "0 20px",
                   backgroundColor: "#FFF",
                   borderRadius: "62px",
+                  fontSize: "1rem",
+                  border: "none",
+                  outline: "none",
                 }}
+                placeholder="Enter your email"
                 required
               />
               <Button
@@ -312,6 +341,7 @@ function Footer() {
                   width: "100%",
                   borderRadius: "62px",
                 }}
+                onClick={handleSubscribe}
               >
                 {" "}
                 Subscribe to Newsletter
