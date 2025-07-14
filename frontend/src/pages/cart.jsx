@@ -84,27 +84,27 @@ function Cart() {
             gap: 3,
           }}
         >
-          <Box
-            sx={{
-              width: "auto",
-              border: "2px solid #0000001A",
-              borderRadius: 3,
-              p: 3,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            {cartData?.length === 0 ? (
-              <Typography
-                variant="h4"
-                sx={{
-                  textAlign: "center",
-                }}
-              >
-                Cart is Empty
-              </Typography>
-            ) : (
+          {cartData?.length === 0 ? (
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              Cart is Empty
+            </Typography>
+          ) : (
+            <Box
+              sx={{
+                width: "auto",
+                border: "2px solid #0000001A",
+                borderRadius: 3,
+                p: 3,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+              }}
+            >
               <>
                 {cartData.map((product) => {
                   return (
@@ -212,163 +212,168 @@ function Cart() {
                   );
                 })}
               </>
-            )}
-          </Box>
-
-          <Box
-            sx={{
-              width: "auto",
-              height: "460px",
-              border: "2px solid #0000001A",
-              borderRadius: 3,
-              p: { xs: 1.5, md: 3, xl: 3 },
-            }}
-          >
+            </Box>
+          )}
+          {cartData?.length === 0 ? (
+            <></>
+          ) : (
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 3,
+                width: "auto",
+                height: "460px",
+                border: "2px solid #0000001A",
+                borderRadius: 3,
+                p: { xs: 1.5, md: 3, xl: 3 },
               }}
             >
               <Box
                 sx={{
-                  width: "100%",
-                }}
-              >
-                <Typography variant={isMobile ? "h4" : "h3"}>
-                  Order Summary
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: "auto",
                   display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant={isMobile ? "h6" : "h5"}>
-                  Subtotal
-                </Typography>
-                <Typography variant={isMobile ? "h6" : "h5"}>
-                  ${total}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant={isMobile ? "h6" : "h5"} color="green">
-                  Delivery Free
-                </Typography>
-                <Typography variant={isMobile ? "h6" : "h5"} color="green">
-                  $0
-                </Typography>
-              </Box>
-              <Divider
-                sx={{
-                  width: "100%",
-                }}
-              />
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant={isMobile ? "h5" : "h4"}>Total</Typography>
-                <Typography variant={isMobile ? "h5" : "h4"}>
-                  ${total}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: "auto",
-                  display: "flex",
-                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  gap: 3,
                 }}
               >
                 <Box
                   sx={{
-                    width: "70%",
-                    backgroundColor: "#f0f0f0",
-                    borderRadius: 7,
-                    display: "flex",
-                    alignItems: "center",
-                    px: 2,
+                    width: "100%",
                   }}
                 >
-                  <TextField
-                    variant="standard"
-                    fullWidth
-                    name="code"
-                    placeholder="Add promo code"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    sx={{
-                      backgroundColor: "transparent",
-                    }}
-                  />
+                  <Typography variant={isMobile ? "h4" : "h3"}>
+                    Order Summary
+                  </Typography>
                 </Box>
-
                 <Box
                   sx={{
-                    width: "25%",
+                    width: "auto",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography variant={isMobile ? "h6" : "h5"}>
+                    Subtotal
+                  </Typography>
+                  <Typography variant={isMobile ? "h6" : "h5"}>
+                    ${total}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography variant={isMobile ? "h6" : "h5"} color="green">
+                    Delivery Free
+                  </Typography>
+                  <Typography variant={isMobile ? "h6" : "h5"} color="green">
+                    $0
+                  </Typography>
+                </Box>
+                <Divider
+                  sx={{
+                    width: "100%",
+                  }}
+                />
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography variant={isMobile ? "h5" : "h4"}>
+                    Total
+                  </Typography>
+                  <Typography variant={isMobile ? "h5" : "h4"}>
+                    ${total}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    width: "auto",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "70%",
+                      backgroundColor: "#f0f0f0",
+                      borderRadius: 7,
+                      display: "flex",
+                      alignItems: "center",
+                      px: 2,
+                    }}
+                  >
+                    <TextField
+                      variant="standard"
+                      fullWidth
+                      name="code"
+                      placeholder="Add promo code"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                      sx={{
+                        backgroundColor: "transparent",
+                      }}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      width: "25%",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      className="black"
+                      sx={{
+                        borderRadius: 7,
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      Apply
+                    </Button>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    width: "100%",
+                    textAlign: "center",
                   }}
                 >
                   <Button
+                    onClick={() => {
+                      if (cartData == "") {
+                        dispatch(
+                          openSnackbar({
+                            massage: "The cart is empty",
+                            severity: "error",
+                          })
+                        );
+                      } else {
+                        navigate("/checkOut");
+                      }
+                    }}
+                    sx={{
+                      width: "100%",
+                      borderRadius: 7,
+                      p: 2,
+                    }}
                     variant="contained"
                     className="black"
-                    sx={{
-                      borderRadius: 7,
-                      width: "100%",
-                      height: "100%",
-                    }}
                   >
-                    Apply
+                    Go to Checkout
                   </Button>
                 </Box>
               </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  textAlign: "center",
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    if (cartData == "") {
-                      dispatch(
-                        openSnackbar({
-                          massage: "The cart is empty",
-                          severity: "error",
-                        })
-                      );
-                    } else {
-                      navigate("/checkOut");
-                    }
-                  }}
-                  sx={{
-                    width: "100%",
-                    borderRadius: 7,
-                    p: 2,
-                  }}
-                  variant="contained"
-                  className="black"
-                >
-                  Go to Checkout
-                </Button>
-              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
       </Container>
     </>

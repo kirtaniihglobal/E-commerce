@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   Divider,
+  keyframes,
   Rating,
   Typography,
   useMediaQuery,
@@ -46,6 +47,19 @@ function Home() {
         "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.",
     },
   ];
+  const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+  const brands = ["VERSACE", "ZARA", "GUCCI", "PRADA", "Calvin Klein"];
   return (
     <>
       <Header />
@@ -247,10 +261,9 @@ function Home() {
           <Box
             sx={{
               width: "auto",
-              height: isMobile ? "auto" : "122px",
               backgroundColor: "#000",
               display: "flex",
-              flexWrap: { xs: "wrap", md: "wrap" },
+              flexWrap: "wrap",
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
@@ -258,18 +271,23 @@ function Home() {
               py: 2,
             }}
           >
-            {["VERSACE", "ZARA", "GUCCI", "PRADA", "Calvin Klein"].map(
-              (brand) => (
-                <Box key={brand}>
-                  <Typography
-                    variant={isMobile ? "h6" : "h3"}
-                    sx={{ color: "#fff", textAlign: "center" }}
-                  >
-                    {brand}
-                  </Typography>
-                </Box>
-              )
-            )}
+            {brands.map((brand, index) => (
+              <Box
+                key={brand}
+                sx={{
+                  opacity: 0,
+                  animation: `${fadeIn} 0.5s ease forwards`,
+                  animationDelay: `${index * 0.3}s`,
+                }}
+              >
+                <Typography
+                  variant={isMobile ? "h6" : "h3"}
+                  sx={{ color: "#fff", textAlign: "center" }}
+                >
+                  {brand}
+                </Typography>
+              </Box>
+            ))}
           </Box>
 
           <NewArrivalProduct />

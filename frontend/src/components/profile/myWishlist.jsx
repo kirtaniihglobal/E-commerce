@@ -1,12 +1,7 @@
 import {
   Box,
-  Button,
-  Card,
   CardContent,
-  CardMedia,
-  Grid,
   IconButton,
-  Rating,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -55,15 +50,15 @@ function MyWishlist() {
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "center",
-          gap: 1,
+          justifyContent: "flex-start",
+          gap: 5,
         }}
       >
         {userLikes?.length > 0 ? (
           userLikes.map((likes) => (
             <Box key={likes._id}>
               <Box
-                sx={{ position: "relative", width: "auto" }}
+                sx={{ position: "relative", maxWidth: "295px" }}
                 onClick={() => {
                   handleSelect(likes.productId._id);
                 }}
