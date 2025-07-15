@@ -2,18 +2,27 @@ import {
   Box,
   Button,
   Container,
-  Grid,
   Typography,
   IconButton,
   Paper,
   useTheme,
   useMediaQuery,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+  Checkbox,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { deleteAddress } from "../../redux/authSlice";
+import {
+  deleteAddress,
+  getAddress,
+  setDefaultAddressData,
+} from "../../redux/authSlice";
 import { useEffect, useState } from "react";
-import { getAddress } from "../../redux/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import AddAddress from "../addAddress/addAddress";
 
@@ -26,9 +35,11 @@ function MyAddress() {
   const [editAddId, setEditAddId] = useState(null);
   const [editAddData, setEditAddData] = useState("");
   const { address } = useSelector((state) => state.auth);
+
   useEffect(() => {
     dispatch(getAddress());
   }, [dispatch]);
+
   const handleDeleteAddress = async (id) => {
     try {
       await dispatch(deleteAddress(id)).unwrap();
@@ -44,14 +55,41 @@ function MyAddress() {
     setEditAddData(add);
   };
 
+  const handleSetDefault = async (id) => {
+    try {
+      await dispatch(setDefaultAddressData(id)).unwrap();
+      dispatch(getAddress());
+    } catch (error) {
+      console.error("Failed to set default address", error);
+    }
+  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemPerPage = 5;
+
+  const startIndex = (currentPage - 1) * itemPerPage;
+  const endIndex = startIndex + itemPerPage;
+
+  const currentItems = (address || []).slice(startIndex, endIndex);
+  const totalPage = Math.ceil((address?.length || 0) / itemPerPage);
+
+  const handleClickPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+  const goNext = () => {
+    if (currentPage < totalPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+  const goPrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
   return (
     <>
       <Container maxWidth={false} disableGutters>
-        <Box
-          sx={{
-            p: 1,
-          }}
-        >
+        <Box sx={{ p: 1 }}>
           <Box
             sx={{
               width: "auto",
@@ -81,78 +119,107 @@ function MyAddress() {
               setEditAddMode(false);
             }}
           />
-          <Box
-            sx={{
-              mt: 3,
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 3,
-            }}
-          >
-            {address?.length === 0 ? (
-              <Typography
-                variant="body1"
+          <Paper elevation={3} sx={{ mt: 2, p: 1 }}>
+            <TableContainer style={{ height: 430 }}>
+              <Table
+                stickyHeader
+                aria-label="sticky table"
+                sx={{ width: "100%" }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Default</TableCell>
+                    <TableCell>S. No</TableCell>
+                    <TableCell>Address</TableCell>
+                    <TableCell>City</TableCell>
+                    <TableCell>Pincode</TableCell>
+                    <TableCell>State</TableCell>
+                    <TableCell>Country</TableCell>
+                    <TableCell align="center">Action</TableCell>
+                  </TableRow>
+                </TableHead>
+
+                {currentItems?.length === 0 ? (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell colSpan={8}>No address found</TableCell>
+                    </TableRow>
+                  </TableBody>
+                ) : (
+                  <TableBody>
+                    {currentItems?.map((add, index) => (
+                      <TableRow key={add._id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={add.default || false}
+                            onChange={() => handleSetDefault(add._id)}
+                          />
+                        </TableCell>
+                        <TableCell>{startIndex + index + 1}</TableCell>
+                        <TableCell>{add.address}</TableCell>
+                        <TableCell>{add.city}</TableCell>
+                        <TableCell>{add.pincode}</TableCell>
+                        <TableCell>{add.state}</TableCell>
+                        <TableCell>{add.country}</TableCell>
+                        <TableCell align="center">
+                          <Box
+                            sx={{ display: "flex", justifyContent: "center" }}
+                          >
+                            <IconButton
+                              onClick={() => handleDeleteAddress(add._id)}
+                            >
+                              <DeleteIcon color="error" />
+                            </IconButton>
+                            <IconButton onClick={() => handleEditAddress(add)}>
+                              <EditIcon color="info" />
+                            </IconButton>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                )}
+              </Table>
+            </TableContainer>
+            {address?.length > 5 && (
+              <Box
                 sx={{
-                  textAlign: "center",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  p: 1,
+                  gap: 2,
+                  justifyContent: "flex-end",
                 }}
               >
-                Dont have Address
-              </Typography>
-            ) : (
-              address.map((add) => (
-                <Box
-                  key={add._id}
-                  sx={{
-                    maxWidth: "350px",
-                    maxHeight: "350px",
-                  }}
-                >
-                  <Paper
-                    elevation={2}
-                    sx={{
-                      p: 2,
-                      display: "flex",
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="h6">{add.address}</Typography>
-                      <Typography variant="h6">
-                        {add.city}, {add.pincode}, {add.country}
-                      </Typography>
+                <Button onClick={goPrev} disabled={currentPage === 1}>
+                  Previous
+                </Button>
+                {Array.from({ length: totalPage }, (_, index) => {
+                  const page = index + 1;
+                  return (
+                    <Box sx={{}} key={page}>
+                      <Button
+                        onClick={() => handleClickPage(page)}
+                        sx={{
+                          borderRadius: 5,
+                          backgroundColor:
+                            currentPage === page ? "#000" : "#fff",
+                          color: currentPage === page ? "#fff" : "#000",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {page}
+                      </Button>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Box>
-                        <IconButton
-                          onClick={() => {
-                            handleDeleteAddress(add._id);
-                          }}
-                        >
-                          <DeleteIcon color="error" />
-                        </IconButton>
-                      </Box>
-                      <Box>
-                        <IconButton
-                          onClick={() => {
-                            handleEditAddress(add);
-                          }}
-                        >
-                          <EditIcon color="info" />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                  </Paper>
-                </Box>
-              ))
+                  );
+                })}
+                <Button onClick={goNext} disabled={currentPage === totalPage}>
+                  Next
+                </Button>
+              </Box>
             )}
-          </Box>
+          </Paper>
         </Box>
       </Container>
     </>
