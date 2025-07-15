@@ -21,6 +21,9 @@ import ForgotPassword from "../components/password/forgotPassword";
 import ResetPassword from "../components/password/resetPassword";
 import MyWishlist from "../components/profile/myWishlist";
 import DashboardCharts from "../admin/dashBoardCharts";
+import NewsLetter from "../admin/newsLetter";
+import NewsLetterList from "../admin/newsLetter/newsLetterList";
+import EmailList from "../admin/newsLetter/emailList";
 
 const RoutesComponent = () => {
   return (
@@ -43,6 +46,9 @@ const RoutesComponent = () => {
             <Route path="/admin/manageProducts" element={<ManageProducts />} />
             <Route path="/admin/manageOrders" element={<ManageOrders />} />
             <Route path="/admin/manageUsers" element={<ManageUsers />} />
+            <Route path="/admin/manageNewsLetter" element={<NewsLetter />} />
+            <Route path="/admin/newsLetterList" element={<NewsLetterList />} />
+            <Route path="/admin/emailLIst" element={<EmailList />} />
             <Route path="/dashBoardCharts" element={<DashboardCharts />} />
           </Route>
           <Route element={<UserProfileLayout />}>

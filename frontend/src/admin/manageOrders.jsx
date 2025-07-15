@@ -27,8 +27,8 @@ function ManageOrders() {
   useEffect(() => {
     dispatch(getAllOrderAdminData(filter));
   }, [filter, dispatch]);
-
-  const [value, setValue] = React.useState(0);
+  console.log("allOrders", allOrders);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -159,19 +159,22 @@ function ManageOrders() {
                               variant="outlined"
                               sx={{ display: "flex", p: 1 }}
                             >
-                              <img
-                                src={`http://192.168.2.222:5000/${productItem.productId.image}`}
-                                alt={productItem.productId.name}
-                                width={120}
-                                height={120}
-                                style={{
-                                  objectFit: "cover",
-                                  marginRight: 10,
-                                }}
-                              />
+                              {productItem.productId && (
+                                <img
+                                  src={`http://192.168.2.222:5000/${productItem.productId.image}`}
+                                  alt={productItem.productId.name}
+                                  width={120}
+                                  height={120}
+                                  style={{
+                                    objectFit: "cover",
+                                    marginRight: 10,
+                                  }}
+                                />
+                              )}
+
                               <Box>
                                 <Typography>
-                                  Name: {productItem.productId.name}
+                                  Name: {productItem.productId?.name}
                                 </Typography>
                                 <Typography>
                                   Color: {productItem.color}
@@ -183,7 +186,7 @@ function ManageOrders() {
                                   Quantity: {productItem.quantity}
                                 </Typography>
                                 <Typography>
-                                  Price: ₹{productItem.productId.price}
+                                  Price: ₹{productItem.productId?.price}
                                 </Typography>
                               </Box>
                             </Card>
@@ -203,7 +206,7 @@ function ManageOrders() {
                             onClick={async () => {
                               setLoading(true);
                               try {
-                                await dispatch(updateOrderAdminData(order._id)); 
+                                await dispatch(updateOrderAdminData(order._id));
                               } catch (error) {
                                 console.error("Order update failed", error);
                               } finally {
