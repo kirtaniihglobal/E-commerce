@@ -9,27 +9,23 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  IconButton,
   CircularProgress,
   useTheme,
   useMediaQuery,
   Container,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect } from "react";
 import Header from "../components/header/header";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllCartData } from "../Thunk/cartThunk";
 import { addOrderData } from "../Thunk/orderThunk";
-import { deleteAddress, fetchUser } from "../redux/authSlice";
+import { fetchUser } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { getAddress } from "../redux/authSlice";
-import AddAddress from "../components/addAddress/addAddress";
 import { openSnackbar } from "../redux/snackBarSlice";
 
 function CheckOut() {
@@ -39,15 +35,10 @@ function CheckOut() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm", "ssm", "xs"));
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [editAddMode, setEditAddMode] = useState(false);
-  const [editAddId, setEditAddId] = useState(null);
-  const [editAddData, setEditAddData] = useState("");
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const { cartData, total } = useSelector((state) => state.cart);
   const { user, address } = useSelector((state) => state.auth);
-
   const handleChange = (event) => {
     const selectId = event.target.value;
     const fullAddress = address.find((a) => a._id === selectId);
@@ -76,25 +67,17 @@ function CheckOut() {
       console.log(error);
     }
   };
-  const handleDeleteAddress = async (id) => {
-    try {
-      await dispatch(deleteAddress(id)).unwrap();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleEditAddress = (add) => {
-    setOpen(true);
-    setEditAddMode(true);
-    setEditAddId(add._id);
-    setEditAddData(add);
-  };
-
   useEffect(() => {
     dispatch(getAllCartData());
     dispatch(getAddress());
     dispatch(fetchUser());
   }, [dispatch]);
+  useEffect(() => {
+    const defaultAddress = address.find((addr) => addr.default === true);
+    if (defaultAddress) {
+      setSelectedAddress(defaultAddress);
+    }
+  }, [address]);
 
   return (
     <>
@@ -406,30 +389,11 @@ function CheckOut() {
                                           <Typography
                                             variant={isMobile ? "body1" : "h6"}
                                           >
-                                            {add.city}, {add.pincode},{" "}
-                                            {add.country}
+                                            {add.city}, {add.pincode}
+                                            {add.state},{add.country}
                                           </Typography>
                                         </Box>
-                                        <Box>
-                                          <Box>
-                                            <IconButton
-                                              onClick={() => {
-                                                handleDeleteAddress(add._id);
-                                              }}
-                                            >
-                                              <DeleteIcon color="error" />
-                                            </IconButton>
-                                          </Box>
-                                          <Box>
-                                            <IconButton
-                                              onClick={() => {
-                                                handleEditAddress(add);
-                                              }}
-                                            >
-                                              <EditIcon color="info" />
-                                            </IconButton>
-                                          </Box>
-                                        </Box>
+                                        <Box></Box>
                                       </Box>
                                     </>
                                   }
@@ -438,38 +402,12 @@ function CheckOut() {
                             </RadioGroup>
                           </FormControl>
                         </Box>
-                        <Box
-                          onClick={() => setOpen(true)}
-                          sx={{
-                            width: { xs: "auto", md: "50%", xl: "50%" },
-                            borderRadius: 10,
-                            backgroundColor: "#f0f0f0",
-                            p: 2,
-                            cursor: "pointer",
-                          }}
-                        >
-                          <Typography variant="h6">
-                            {" "}
-                            + Add New Address
-                          </Typography>
-                        </Box>
                       </Box>
                     </Box>
                   )}
                 </Box>
               </>
             )}
-
-            <AddAddress
-              open={open}
-              editAddMode={editAddMode}
-              editData={editAddData}
-              editId={editAddId}
-              onClose={() => {
-                setOpen(false);
-                setEditAddMode(false);
-              }}
-            />
             <Box
               sx={{
                 width: { md: "70%", xl: "70%" },
