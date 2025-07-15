@@ -3,6 +3,7 @@ import {
   addNewSletterAPI,
   deleteEmailAPI,
   getAllEmailsAPI,
+  sendNewsLetterAPI,
 } from "../apis/newSletterAPI";
 import { openSnackbar } from "../redux/snackBarSlice";
 
@@ -53,6 +54,24 @@ export const deleteEmailData = createAsyncThunk(
       dispatch(
         openSnackbar({
           massage: response?.msg || "Email delete Successfully",
+          severity: "success",
+        })
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const sendNewsLetterData = createAsyncThunk(
+  "newSletter/sendNewsLetter",
+  async ({ values }, { dispatch }) => {
+    try {
+      console.log(values);
+      const response = await sendNewsLetterAPI(values);
+      dispatch(
+        openSnackbar({
+          massage: response?.msg || "NewsLetter send Successfully",
           severity: "success",
         })
       );

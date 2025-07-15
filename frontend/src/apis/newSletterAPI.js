@@ -14,3 +14,8 @@ export const deleteEmailAPI = async (id) => {
   const response = await api.delete(`newSletter/deleteEmail/${id}`);
   return response.data;
 };
+export const sendNewsLetterAPI = async (values) => {
+  console.log(values)
+  const response = await api.post(`newSletter/sendNewsLetter`, values);
+  return response.data;
+};
