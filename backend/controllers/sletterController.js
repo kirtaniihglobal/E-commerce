@@ -1,5 +1,6 @@
 const NewsLetter = require("../models/newsletter");
-
+const { emailLetter } = require("../util/emailLetter");
+const nodemailer = require("nodemailer");
 const addNewSletter = async (req, res) => {
   const { email } = req.body;
   try {
@@ -49,5 +50,36 @@ const deleteEmail = async (req, res) => {
       .json({ msg: "Failed to delete Email", status: false });
   }
 };
+const sendNewsLetter = async (req, res) => {
+  try {
+    const { subject, message, title } = req.body;
+    if (!subject || !message || !title) {
+      return res
+        .status(500)
+        .json({ status: false, msg: "ALL field are Requried !" });
+    }
+    const allEmails = await NewsLetter.find({});
+    const emails = allEmails.map((e) => e.email);
+    console.log(emails);
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    await transporter.sendMail({
+      to: emails,
+      html: emailLetter({ subject, message, title }),
+    });
+    return res
+      .status(200)
+      .json({ status: true, msg: "send NewsLetter SuccessFully" });
+  } catch (errro) {
+    return res
+      .status(500)
+      .json({ status: false, msg: "send NewsLetter failed" });
+  }
+};
 
-module.exports = { addNewSletter, getAllEmails, deleteEmail };
+module.exports = { addNewSletter, getAllEmails, deleteEmail, sendNewsLetter };

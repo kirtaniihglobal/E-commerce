@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Box,
-  Typography,
-  Button,
-  // useMediaQuery,
-  // useTheme,
-} from "@mui/material";
+import { Grid, Box, Typography, Button } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
   Inventory2 as ProductsIcon,
@@ -25,8 +18,6 @@ function Layout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navItems = [

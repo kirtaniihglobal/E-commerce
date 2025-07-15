@@ -5,8 +5,6 @@ import {
   TextField,
   Typography,
   Paper,
-  Snackbar,
-  Alert,
   Container,
   TableContainer,
   Table,
@@ -14,22 +12,25 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  CircularProgress,
 } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteEmailData, getAllEmailsData } from "../Thunk/newSletterThunk";
+import {
+  deleteEmailData,
+  getAllEmailsData,
+  sendNewsLetterData,
+} from "../Thunk/newSletterThunk";
 
 export default function NewsLetter() {
   const dispatch = useDispatch();
-  const { allEmails } = useSelector((state) => state.newSletter);
+  const { allEmails, loading } = useSelector((state) => state.newSletter);
   console.log("allEmails", allEmails);
   const [form, setForm] = useState({
     subject: "",
     title: "",
     message: "",
-    buttonLabel: "View More",
-    buttonUrl: "https://yourwebsite.com",
   });
   const [value, setValue] = useState(0);
 
@@ -39,6 +40,11 @@ export default function NewsLetter() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  const handleSubmit = () => {
+    dispatch(sendNewsLetterData({ values: form }));
+    setForm({ subject: "", title: "", message: "" });
+  };
+
   useEffect(() => {
     dispatch(getAllEmailsData());
   }, [dispatch]);
@@ -46,60 +52,79 @@ export default function NewsLetter() {
   return (
     <Container maxWidth={false} disableGutters>
       <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
-        <Tabs
-          value={value}
-          onChange={handleChangeTab}
-          sx={{ width: "100%" }}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Send NewsLetter" sx={{ width: "50%" }} />
-          <Tab label="Email List" sx={{ width: "50%" }} />
-          <Tab label="NewsLetter List" sx={{ width: "50%" }} />
+        <Tabs value={value} onChange={handleChangeTab} sx={{ width: "100%" }}>
+          <Tab label="Send NewsLetter" sx={{ width: "33%" }} />
+          <Tab
+            label={`Email List (${allEmails?.length || 0})`}
+            sx={{ width: "33%" }}
+          />
         </Tabs>
       </Box>
-      {value === 0 && (
-        <Paper sx={{ p: 4, m: 2 }}>
-          <Typography variant="h4" gutterBottom>
-            Send Newsletter
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <TextField
-              label="Subject"
-              name="subject"
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Title"
-              name="title"
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Message"
-              name="message"
-              multiline
-              rows={4}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Button Label"
-              name="buttonLabel"
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Button URL"
-              name="buttonUrl"
-              onChange={handleChange}
-              fullWidth
-            />
-            <Button variant="contained" className="black">
-              Send
-            </Button>
-          </Box>
-        </Paper>
+      {loading ? (
+        <Box
+          sx={{
+            width: "100%",
+            height: "80vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress size={80} color="primary" />
+        </Box>
+      ) : (
+        <>
+          {value === 0 && (
+            <Paper sx={{ p: 4, m: 2 }}>
+              <Typography variant="h4" gutterBottom>
+                Send Newsletter
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <TextField
+                  label="Subject"
+                  name="subject"
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                />
+                <TextField
+                  label="Title"
+                  name="title"
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                />
+                <TextField
+                  label="Message"
+                  name="message"
+                  multiline
+                  rows={4}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                />
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    className="black"
+                    sx={{ p: 1.5, borderRadius: 7, width: "30%" }}
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    Send
+                  </Button>
+                </Box>
+              </Box>
+            </Paper>
+          )}
+        </>
       )}
       {value === 1 && (
         <Paper sx={{ p: 4, m: 2 }}>
@@ -107,7 +132,7 @@ export default function NewsLetter() {
             Newsletter Subscribers
           </Typography>
 
-          <TableContainer component={Paper}>
+          <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>

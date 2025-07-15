@@ -3,10 +3,12 @@ import {
   addNewSletterData,
   deleteEmailData,
   getAllEmailsData,
+  sendNewsLetterData,
 } from "../Thunk/newSletterThunk";
 
 const initialState = {
   allEmails: [],
+  loading: null,
 };
 
 const newSletterSlice = createSlice({
@@ -55,6 +57,18 @@ const newSletterSlice = createSlice({
         );
       })
       .addCase(deleteEmailData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Error fetching Products";
+      })
+      /************************************sendNewsLetterData**************************/
+      .addCase(sendNewsLetterData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(sendNewsLetterData.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(sendNewsLetterData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Error fetching Products";
       });
