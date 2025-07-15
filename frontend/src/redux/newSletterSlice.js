@@ -1,7 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addNewSletterData } from "../Thunk/newSletterThunk";
+import {
+  addNewSletterData,
+  deleteEmailData,
+  getAllEmailsData,
+} from "../Thunk/newSletterThunk";
 
-const initialState = {};
+const initialState = {
+  allEmails: [],
+};
 
 const newSletterSlice = createSlice({
   name: "newSletter",
@@ -18,6 +24,37 @@ const newSletterSlice = createSlice({
         state.loading = false;
       })
       .addCase(addNewSletterData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Error fetching Products";
+      })
+
+      /************************************getAllEmailsData**************************/
+      .addCase(getAllEmailsData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllEmailsData.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log(action.payload.allEmails);
+        state.allEmails = action.payload.allEmails;
+      })
+      .addCase(getAllEmailsData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Error fetching Products";
+      })
+      /************************************deleteEmailData**************************/
+      .addCase(deleteEmailData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteEmailData.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log(action.payload.deleteEmail._id);
+        state.allEmails = state.allEmails.filter(
+          (e) => e._id !== action.payload.deleteEmail._id
+        );
+      })
+      .addCase(deleteEmailData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Error fetching Products";
       });

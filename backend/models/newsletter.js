@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
-const sletterSchema = new mongoose.Schema(
+const newsLetterSchema = new mongoose.Schema(
   {
-    email: { type: String},
+    email: { type: String, required: true, unique: true },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("Sletter", sletterSchema);
+module.exports = mongoose.model("NewsLetter", newsLetterSchema);

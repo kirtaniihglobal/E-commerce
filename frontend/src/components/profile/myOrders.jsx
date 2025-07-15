@@ -30,8 +30,8 @@ import {
 } from "../../Thunk/ratingThunk";
 function MyOrders() {
   const dispatch = useDispatch();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { orderData } = useSelector((state) => state.order);
   const { UserProductRatingData } = useSelector((state) => state.rating);
   const [open, setOpen] = useState(false);
@@ -125,7 +125,11 @@ function MyOrders() {
         ) : (
           <>
             <Box direction="column" p={1}>
-              <Typography variant={isMobile ? "h6" : "h4"} gutterBottom fontWeight={600}>
+              <Typography
+                variant={isMobile ? "h6" : "h4"}
+                gutterBottom
+                fontWeight={600}
+              >
                 My Orders
               </Typography>
 
@@ -212,25 +216,28 @@ function MyOrders() {
                                   variant="outlined"
                                   sx={{ display: "flex", p: 1 }}
                                 >
-                                  <img
-                                    src={`http://192.168.2.222:5000/${productItem.productId.image}`}
-                                    alt={productItem.productId.name}
-                                    width={70}
-                                    height={100}
-                                    style={{
-                                      objectFit: "cover",
-                                      marginRight: 10,
-                                    }}
-                                  />
+                                  {productItem.productId && (
+                                    <img
+                                      src={`http://192.168.2.222:5000/${productItem.productId.image}`}
+                                      alt={productItem.productId.name}
+                                      width={70}
+                                      height={100}
+                                      style={{
+                                        objectFit: "cover",
+                                        marginRight: 10,
+                                      }}
+                                    />
+                                  )}
+
                                   <Box sx={{ p: 2 }}>
                                     <Typography>
-                                      {productItem.productId.name}
+                                      {productItem.productId?.name}
                                     </Typography>
                                     <Typography
                                       variant="h6"
                                       sx={{ color: "green" }}
                                     >
-                                      ₹{productItem.productId.price}
+                                      ₹{productItem.productId?.price}
                                     </Typography>
                                     <Box
                                       sx={{
@@ -268,19 +275,21 @@ function MyOrders() {
                                     variant="outlined"
                                     sx={{ display: "flex", p: 1 }}
                                   >
-                                    <img
-                                      src={`http://192.168.2.222:5000/${productItem.productId.image}`}
-                                      alt={productItem.productId.name}
-                                      width={70}
-                                      height={100}
-                                      style={{
-                                        objectFit: "cover",
-                                        marginRight: 10,
-                                      }}
-                                    />
+                                    {productItem.productId && (
+                                      <img
+                                        src={`http://192.168.2.222:5000/${productItem.productId.image}`}
+                                        alt={productItem.productId.name}
+                                        width={70}
+                                        height={100}
+                                        style={{
+                                          objectFit: "cover",
+                                          marginRight: 10,
+                                        }}
+                                      />
+                                    )}
                                     <Box>
                                       <Typography>
-                                        Name: {productItem.productId.name}
+                                        Name: {productItem.productId?.name}
                                       </Typography>
                                       <Typography>
                                         Color: {productItem.color}
@@ -292,7 +301,7 @@ function MyOrders() {
                                         Quantity: {productItem.quantity}
                                       </Typography>
                                       <Typography>
-                                        Price: ₹{productItem.productId.price}
+                                        Price: ₹{productItem.productId?.price}
                                       </Typography>
                                     </Box>
                                   </Card>

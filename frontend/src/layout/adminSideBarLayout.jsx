@@ -13,6 +13,8 @@ import {
   People as UsersIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
+import SendIcon from "@mui/icons-material/Send";
+import admin from "../assets/admin.png";
 
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -40,6 +42,11 @@ function Layout() {
     },
     { label: "Orders", path: "/admin/manageOrders", icon: <OrdersIcon /> },
     { label: "Users", path: "/admin/manageUsers", icon: <UsersIcon /> },
+    {
+      label: "NewsLetter",
+      path: "/admin/manageNewsletter",
+      icon: <SendIcon />,
+    },
   ];
 
   const handleLogout = () => {
@@ -73,17 +80,14 @@ function Layout() {
             zIndex: 1200,
           }}
         >
-          <Typography
-            variant="h4"
+          <Box
             sx={{
-              fontWeight: "bold",
-              color: "#fff",
-              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
-            {sidebarOpen ? "Admin" : "AD"}
-          </Typography>
-
+            <img src={admin} alt="" width={50} />
+          </Box>
           <Box
             sx={{
               display: "flex",
