@@ -10,7 +10,7 @@ import {
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
-import { addAddress, updateAddress } from "../../redux/authSlice";
+import { addAddress, getAddress, updateAddress } from "../../redux/authSlice";
 import { useEffect } from "react";
 
 function AddAddress({ open, onClose, editData, editId, editAddMode }) {
@@ -40,6 +40,7 @@ function AddAddress({ open, onClose, editData, editId, editAddMode }) {
         }
         formik.resetForm();
         onClose();
+        await dispatch(getAddress()).unwrap();
       } catch (error) {
         console.log(error);
       }

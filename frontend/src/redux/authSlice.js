@@ -199,7 +199,6 @@ export const forgotPassword = createAsyncThunk(
   "user/forgotPassword",
   async (email, { dispatch, rejectWithValue }) => {
     try {
-      console.log(email);
       const response = await forgotPasswordAPI(email);
       dispatch(
         openSnackbar({
@@ -223,7 +222,6 @@ export const resetPassword = createAsyncThunk(
   "user/resetPassword",
   async (values, { dispatch, rejectWithValue }) => {
     try {
-      console.log(values);
       const response = await resetPasswordAPI(values);
       dispatch(
         openSnackbar({
@@ -323,9 +321,8 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(addAddress.fulfilled, (state, action) => {
+      .addCase(addAddress.fulfilled, (state) => {
         state.loading = false;
-        state.address = action.payload.data.addressData;
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.error = action.error.message;
@@ -339,7 +336,8 @@ const userSlice = createSlice({
       })
       .addCase(getAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.address = action.payload.data;
+        console.log(action.payload.addresses);
+        state.address = action.payload.addresses;
       })
       .addCase(getAddress.rejected, (state, action) => {
         state.error = action.error.message;
@@ -353,7 +351,10 @@ const userSlice = createSlice({
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.address = action.payload.updatedAddress.addressData;
+        console.log(action.payload);
+        state.address = state.address.filter(
+          (add) => add._id !== action.payload.deleteAddress._id
+        );
       })
       .addCase(deleteAddress.rejected, (state, action) => {
         state.error = action.error.message;
