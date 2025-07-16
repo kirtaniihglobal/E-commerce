@@ -1,41 +1,53 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  Grid,
-  Typography,
-  Button,
   Box,
+  Button,
+  Typography,
   Avatar,
   TextField,
   Container,
-  Paper,
-  IconButton,
-  Divider,
-  useMediaQuery,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUser, updateUser } from "../redux/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addAddress,
+  fetchUser,
+  getAddress,
+  updateAddress,
+  updateUser,
+} from "../redux/authSlice";
+import UploadIcon from "@mui/icons-material/Upload";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { user } = useSelector((state) => state.auth);
-  const [imageFile, setImageFile] = useState(null);
+  const { user, address } = useSelector((state) => state.auth);
   const fileInputRef = useRef(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const defaultAddress = Array.isArray(address)
+    ? address?.find((addr) => addr.default === true)
+    : null;
 
+  console.log(defaultAddress);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     number: "",
-    image: "",
+  });
+  const [addressFormData, setAddressFormData] = useState({
     address: "",
+    city: "",
+    pincode: "",
+    state: "",
+    country: "",
   });
 
   useEffect(() => {
     dispatch(fetchUser());
+    dispatch(getAddress());
   }, [dispatch]);
 
   useEffect(() => {
@@ -44,30 +56,34 @@ export default function ProfilePage() {
         fullName: user.fullName || "",
         email: user.email || "",
         number: user.number || "",
-        image: user.image || "",
-        address: user.address || "",
       });
       setImageFile(`http://192.168.2.222:5000/${user.image}`);
     }
-  }, [user]);
-
+    if (defaultAddress) {
+      setAddressFormData({
+        address: defaultAddress?.address || "",
+        city: defaultAddress?.city || "",
+        pincode: defaultAddress?.pincode || "",
+        state: defaultAddress?.state || "",
+        country: defaultAddress?.country || "",
+      });
+    }
+  }, [user, defaultAddress]);
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
-  const handleAvatarClick = () => {
-    if (isEditing) fileInputRef.current.click();
+  const handleRemoveImage = () => {
+    setImageFile(null);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleEditToggle = () => setIsEditing(true);
-
-  const handleCancel = () => {
-    setIsEditing(false);
+    if (["fullName", "email", "number"].includes(name)) {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    } else {
+      setAddressFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSave = async () => {
@@ -75,184 +91,206 @@ export default function ProfilePage() {
       const form = new FormData();
       form.append("fullName", formData.fullName);
       form.append("number", formData.number);
-      form.append("address", formData.address);
       if (imageFile instanceof File) {
         form.append("image", imageFile);
       }
       await dispatch(updateUser(form)).unwrap();
-      setIsEditing(false);
+      console.log(addressFormData);
+      if (defaultAddress) {
+        await dispatch(
+          updateAddress({ id: defaultAddress._id, values: addressFormData })
+        ).unwrap();
+      } else {
+        await dispatch(addAddress(addressFormData)).unwrap();
+      }
     } catch (error) {
       console.error("Update error:", error);
     }
   };
 
   return (
-    <Container maxWidth={false} disableGutters sx={{}}>
-      {user && (
-        <Box
-          sx={{
-            p: 1,
-          }}
+    <Container maxWidth={false} disableGutters>
+      <Box sx={{ p: 1 }}>
+        <Typography
+          variant={isMobile ? "h6" : "h4"}
+          gutterBottom
+          fontWeight={600}
         >
-          <Box>
-            <Typography variant={isMobile ? "h6" : "h4"} fontWeight={600}>
-              My Profile
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              mt: 5,
-            }}
+          My Profile
+        </Typography>
+        <Typography color="text.secondary" sx={{ mb: 3 }}>
+          Update your profile and preferences.
+        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+          <Avatar
+            src={
+              imageFile
+                ? typeof imageFile === "string"
+                  ? imageFile
+                  : URL.createObjectURL(imageFile)
+                : ""
+            }
+            sx={{ width: 80, height: 80 }}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          <Button
+            variant="contained"
+            startIcon={<UploadIcon />}
+            onClick={() => fileInputRef.current.click()}
           >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-              }}
-            >
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-              />
-              <Box
-                onClick={handleAvatarClick}
-                sx={{
-                  cursor: isEditing ? "pointer" : "default",
-                  display: "inline-block",
-                  position: "relative",
-                }}
-              >
-                <Avatar
-                  src={
-                    imageFile
-                      ? typeof imageFile === "string"
-                        ? imageFile
-                        : URL.createObjectURL(imageFile)
-                      : ""
-                  }
-                  alt="User Avatar"
-                  sx={{
-                    width: { xs: 50, md: 100 },
-                    height: { xs: 50, md: 100 },
-                    mx: "auto",
-                    border: "2px solid #ccc",
-                  }}
-                />
-              </Box>
-              <Typography variant={isMobile ? "h6" : "h4"} sx={{ mb: 1 }}>
-                {user.fullName}
-              </Typography>
-            </Box>
-
-            <Divider sx={{ my: 2, width: "100%" }} />
-
-            <Typography variant="subtitle2" color="text.secondary">
-              Email (read-only):
-            </Typography>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              {user.email}
-            </Typography>
-
-            <Typography variant="subtitle2" color="text.secondary">
-              Mobile:
-            </Typography>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              {user.number}
-            </Typography>
-
-            <Typography variant="subtitle2" color="text.secondary">
-              Address:
-            </Typography>
-            <Typography variant="h6">{user.address}</Typography>
-
-            {!isEditing && (
-              <Button
-                onClick={handleEditToggle}
-                variant="outlined"
-                color="info"
-                size="small"
-                sx={{ mt: 2 }}
-                startIcon={<EditIcon />}
-              >
-                Edit Profile
-              </Button>
-            )}
-          </Box>
-          {isEditing ? (
-            <Box
-              component="form"
-              sx={{
-                width: "100%",
-                mt: 5,
-                display: "flex",
-                flexDirection: "column",
-                gap: 3,
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                label="Full Name"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                fullWidth
-                disabled={!isEditing}
-              />
-              <TextField
-                label="Email"
-                name="email"
-                value={formData.email}
-                fullWidth
-                disabled
-              />
-              <TextField
-                label="Mobile Number"
-                name="number"
-                value={formData.number}
-                onChange={handleChange}
-                fullWidth
-                disabled={!isEditing}
-              />
-              <TextField
-                label="Address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                fullWidth
-                disabled={!isEditing}
-                multiline
-                minRows={3}
-              />
-
-              <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
-                <Button
-                  className="black"
-                  variant="contained"
-                  onClick={handleSave}
-                  sx={{ flex: 1 }}
-                >
-                  Save
-                </Button>
-                <Button
-                  className="white"
-                  variant="outlined"
-                  onClick={handleCancel}
-                  sx={{ flex: 1 }}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            </Box>
-          ) : (
-            <></>
-          )}
+            Upload
+          </Button>
+          <Button
+            variant="text"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={handleRemoveImage}
+          >
+            Remove
+          </Button>
         </Box>
-      )}
+        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+          Full Name
+        </Typography>
+
+        <TextField
+          placeholder="Enter your full name"
+          name="fullName"
+          value={formData.fullName}
+          onChange={handleChange}
+          fullWidth
+          sx={{
+            mb: 1,
+            backgroundColor: "#f5f5f5",
+            borderRadius: 1,
+          }}
+        />
+        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+          Email
+        </Typography>
+        <TextField
+          name="email"
+          value={formData.email}
+          disabled
+          fullWidth
+          sx={{
+            mb: 1,
+            backgroundColor: "#f5f5f5",
+            borderRadius: 1,
+          }}
+        />
+        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+          Number
+        </Typography>
+        <TextField
+          name="number"
+          value={formData.number}
+          onChange={handleChange}
+          fullWidth
+          sx={{
+            mb: 1,
+            backgroundColor: "#f5f5f5",
+            borderRadius: 1,
+          }}
+          InputProps={{
+            startAdornment: (
+              <Box sx={{ mr: 1, display: "flex", alignItems: "center" }}>
+                🇮🇳 +91
+              </Box>
+            ),
+          }}
+        />
+        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+          Address
+        </Typography>
+        <TextField
+          name="address"
+          value={addressFormData.address}
+          onChange={handleChange}
+          fullWidth
+          sx={{
+            mb: 1,
+            backgroundColor: "#f5f5f5",
+            borderRadius: 1,
+          }}
+        />
+        <Box sx={{ width: "100%", display: "flex", gap: 3 }}>
+          <Box sx={{ width: "40%", display: "flex", flexDirection: "column" }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              City
+            </Typography>
+            <TextField
+              name="city"
+              value={addressFormData.city}
+              onChange={handleChange}
+              sx={{
+                mb: 1,
+                backgroundColor: "#f5f5f5",
+                borderRadius: 1,
+              }}
+            />
+          </Box>
+          <Box sx={{ width: "60%", display: "flex", flexDirection: "column" }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              Pincode
+            </Typography>
+            <TextField
+              name="pincode"
+              value={addressFormData.pincode}
+              onChange={handleChange}
+              sx={{
+                mb: 1,
+                backgroundColor: "#f5f5f5",
+                borderRadius: 1,
+              }}
+            />
+          </Box>
+        </Box>
+        <Box sx={{ width: "100%", display: "flex", gap: 3 }}>
+          <Box sx={{ width: "60%", display: "flex", flexDirection: "column" }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              State
+            </Typography>
+            <TextField
+              name="state"
+              value={addressFormData.state}
+              onChange={handleChange}
+              sx={{
+                mb: 1,
+                backgroundColor: "#f5f5f5",
+                borderRadius: 1,
+              }}
+            />
+          </Box>
+          <Box sx={{ width: "40%", display: "flex", flexDirection: "column" }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              Country
+            </Typography>
+            <TextField
+              name="country"
+              value={addressFormData.country}
+              onChange={handleChange}
+              sx={{
+                mb: 1,
+                backgroundColor: "#f5f5f5",
+                borderRadius: 1,
+              }}
+            />
+          </Box>
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button variant="contained" className="black" onClick={handleSave}>
+            Save Changes
+          </Button>
+        </Box>
+      </Box>
     </Container>
   );
 }

@@ -22,6 +22,7 @@ export const addAddressAPI = async (values) => {
 };
 export const getAddressAPI = async () => {
   const response = await api.get(`address/getAddress`);
+  console.log(response);
   return response.data;
 };
 export const deleteAddressAPI = async (id) => {
