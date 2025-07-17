@@ -90,7 +90,7 @@ function Home() {
             <Box
               sx={{
                 width: "auto",
-                backgroundColor: "#F2F0F2",
+                backgroundColor: theme.palette.background.primary,
                 p: isMobile ? 2 : 10,
                 display: "flex",
                 flexDirection: "column",
@@ -130,7 +130,6 @@ function Home() {
                     borderRadius: 10,
                     p: isMobile ? 1 : 1.5,
                   }}
-                  color="primary"
                 >
                   shop now
                 </Button>
@@ -147,12 +146,8 @@ function Home() {
                 }}
               >
                 <Box className="Box">
-                  <Typography variant="h4" sx={{ color: "primary.main" }}>
-                    200 +
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "primary.main" }}>
-                    International Brands
-                  </Typography>
+                  <Typography variant="h4">200 +</Typography>
+                  <Typography variant="body2">International Brands</Typography>
                 </Box>
                 <Divider
                   orientation="vertical"
@@ -161,12 +156,8 @@ function Home() {
                 />
 
                 <Box className="Box">
-                  <Typography variant="h4" sx={{ color: "primary.main" }}>
-                    2,000 +
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "primary.main" }}>
-                    High-Quality Products
-                  </Typography>
+                  <Typography variant="h4">2,000 +</Typography>
+                  <Typography variant="body2">High-Quality Products</Typography>
                 </Box>
                 <Divider
                   orientation="vertical"
@@ -175,12 +166,8 @@ function Home() {
                 />
 
                 <Box className="Box">
-                  <Typography variant="h4" sx={{ color: "primary.main" }}>
-                    30,000 +
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "primary.main" }}>
-                    Happy Customers
-                  </Typography>
+                  <Typography variant="h4">30,000 +</Typography>
+                  <Typography variant="body2">Happy Customers</Typography>
                 </Box>
               </Box>
             </Box>
@@ -302,7 +289,7 @@ function Home() {
             <Box
               sx={{
                 width: "auto",
-                backgroundColor: "#f0f0f0",
+                backgroundColor: theme.palette.background.primary,
                 borderRadius: "40px",
                 mt: 6,
               }}
@@ -317,10 +304,7 @@ function Home() {
                     height: "auto",
                   }}
                 >
-                  <Typography
-                    variant={isMobile ? "h5" : "h3"}
-                    sx={{ color: "#000" }}
-                  >
+                  <Typography variant={isMobile ? "h5" : "h3"}>
                     BROWSE BY DRESS STYLE
                   </Typography>
                 </Box>

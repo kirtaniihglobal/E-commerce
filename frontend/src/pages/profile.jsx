@@ -17,12 +17,14 @@ import {
   updateAddress,
   updateUser,
 } from "../redux/authSlice";
+
 import UploadIcon from "@mui/icons-material/Upload";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
   const theme = useTheme();
+
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { user, address } = useSelector((state) => state.auth);
   const fileInputRef = useRef(null);
@@ -167,7 +169,7 @@ export default function ProfilePage() {
           fullWidth
           sx={{
             mb: 1,
-            backgroundColor: "#f5f5f5",
+            // backgroundColor: "#f5f5f5",
             borderRadius: 1,
           }}
         />
@@ -181,7 +183,7 @@ export default function ProfilePage() {
           fullWidth
           sx={{
             mb: 1,
-            backgroundColor: "#f5f5f5",
+            // backgroundColor: "#f5f5f5",
             borderRadius: 1,
           }}
         />
@@ -195,7 +197,7 @@ export default function ProfilePage() {
           fullWidth
           sx={{
             mb: 1,
-            backgroundColor: "#f5f5f5",
+            // backgroundColor: "#f5f5f5",
             borderRadius: 1,
           }}
           InputProps={{
@@ -216,7 +218,7 @@ export default function ProfilePage() {
           fullWidth
           sx={{
             mb: 1,
-            backgroundColor: "#f5f5f5",
+            // backgroundColor: "#f5f5f5",
             borderRadius: 1,
           }}
         />
@@ -231,7 +233,7 @@ export default function ProfilePage() {
               onChange={handleChange}
               sx={{
                 mb: 1,
-                backgroundColor: "#f5f5f5",
+                // backgroundColor: "#f5f5f5",
                 borderRadius: 1,
               }}
             />
@@ -246,7 +248,7 @@ export default function ProfilePage() {
               onChange={handleChange}
               sx={{
                 mb: 1,
-                backgroundColor: "#f5f5f5",
+                // backgroundColor: "#f5f5f5",
                 borderRadius: 1,
               }}
             />
@@ -263,7 +265,7 @@ export default function ProfilePage() {
               onChange={handleChange}
               sx={{
                 mb: 1,
-                backgroundColor: "#f5f5f5",
+                // backgroundColor: "#f5f5f5",
                 borderRadius: 1,
               }}
             />
@@ -278,7 +280,7 @@ export default function ProfilePage() {
               onChange={handleChange}
               sx={{
                 mb: 1,
-                backgroundColor: "#f5f5f5",
+                // backgroundColor: "#f5f5f5",
                 borderRadius: 1,
               }}
             />

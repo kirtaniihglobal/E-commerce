@@ -1,4 +1,4 @@
-export const MuiButton = {
+export const MuiButton = (theme) => ({
   styleOverrides: {
     root: {
       cursor: "pointer",
@@ -12,12 +12,13 @@ export const MuiButton = {
       props: { variant: "contained" },
       style: {
         "&.black": {
-          backgroundColor: "#000",
-          color: "#fff",
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.secondary.main,
           fontWeight: 500,
           "&:hover": {
-            backgroundColor: "#fff",
-            color: "#000",
+            backgroundColor: theme.palette.secondary.main,
+            border: `1px solid  ${theme.palette.primary.main}`,
+            color: theme.palette.primary.main,
           },
         },
       },
@@ -26,21 +27,21 @@ export const MuiButton = {
       props: { variant: "outlined" },
       style: {
         "&.white": {
-          backgroundColor: "#fff",
-          color: "#000",
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.primary.main,
           fontWeight: 500,
-          border: "1px solid #000",
+          border: `1px solid ${theme.palette.primary.main}`,
           "&:hover": {
-            backgroundColor: "#000",
-            color: "#fff",
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.secondary.main,
           },
         },
       },
     },
   ],
-};
+});
 
-export const MuiTypography = {
+export const MuiTypography = (theme) => ({
   styleOverrides: {
     root: {},
   },
@@ -48,42 +49,41 @@ export const MuiTypography = {
     {
       props: { variant: "h1" },
       style: {
-        fontSize: "70px",
+        fontSize: "60px",
         fontWeight: 700,
-        color: "#000",
+        color: theme.palette.text.primary,
       },
     },
     {
       props: { variant: "h2" },
       style: {
-        fontSize: "64px",
+        fontSize: "48px",
         fontWeight: 700,
-        color: "#000",
+        color: theme.palette.text.primary,
       },
     },
-
     {
       props: { variant: "h3" },
       style: {
-        fontSize: "50px",
+        fontSize: "40px",
         fontWeight: 600,
-        color: "#000",
+        color: theme.palette.text.primary,
       },
     },
     {
       props: { variant: "h4" },
       style: {
-        fontSize: "35px",
+        fontSize: "32px",
         fontWeight: 500,
-        color: "#000",
+        color: theme.palette.text.primary,
       },
     },
     {
       props: { variant: "h5" },
       style: {
-        fontSize: "25px",
-        fontWeight: 400,
-        color: "#333",
+        fontSize: "24px",
+        fontWeight: 500,
+        color: theme.palette.text.primary,
       },
     },
     {
@@ -91,7 +91,7 @@ export const MuiTypography = {
       style: {
         fontSize: "20px",
         fontWeight: 500,
-        color: "#333",
+        color: theme.palette.text.primary,
       },
     },
     {
@@ -99,7 +99,7 @@ export const MuiTypography = {
       style: {
         fontSize: "16px",
         fontWeight: 400,
-        color: "#333",
+        color: theme.palette.text.primary,
       },
     },
     {
@@ -107,8 +107,8 @@ export const MuiTypography = {
       style: {
         fontSize: "14px",
         fontWeight: 400,
-        color: "#000",
+        color: theme.palette.text.primary,
       },
     },
   ],
-};
+});

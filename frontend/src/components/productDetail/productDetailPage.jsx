@@ -307,13 +307,15 @@ function ProductDetailPage() {
                       }}
                     >
                       <IconButton onClick={handleMins} size="small">
-                        <RemoveIcon />
+                        <RemoveIcon sx={{ color: "#000000" }} />
                       </IconButton>
 
-                      <Typography variant="body1">{quantity}</Typography>
+                      <Typography variant="body1" sx={{ color: "#000000" }}>
+                        {quantity}
+                      </Typography>
 
                       <IconButton onClick={handlePlus} size="small">
-                        <AddIcon />
+                        <AddIcon sx={{ color: "#000000" }} />
                       </IconButton>
                     </Box>
 

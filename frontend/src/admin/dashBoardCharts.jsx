@@ -113,7 +113,6 @@ const DashboardCharts = () => {
               series={[{ dataKey: "stock", label: "Stock" }]}
               width={565}
               height={175}
-              colors={"#fff"}
             />
           </CardContent>
         </Card>

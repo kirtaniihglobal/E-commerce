@@ -30,7 +30,11 @@ function NewArrivalProduct() {
   const displayProducts = newArrivalProduct.slice(0, 4);
   return (
     <>
-      <Container maxWidth={false} disableGutters>
+      <Container
+        maxWidth={false}
+        disableGutters
+        sx={{ backgroundColor: theme.palette.background.container }}
+      >
         <Box
           sx={{
             display: "flex",

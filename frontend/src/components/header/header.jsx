@@ -403,7 +403,7 @@ export default function Header() {
         <AppBar
           position="static"
           sx={{
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.background.container,
             boxShadow: "none",
             borderBottom: "2px solid black",
             p: 1,

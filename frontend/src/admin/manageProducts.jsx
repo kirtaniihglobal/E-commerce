@@ -200,8 +200,8 @@ function ManageProducts() {
   };
   return (
     <>
-      <Container maxWidth="xl">
-        <Grid container>
+      <Container maxWidth={false} disableGutters sx={{ p: 2 }}>
+        <Box>
           <Box
             sx={{
               width: "100%",
@@ -647,7 +647,7 @@ function ManageProducts() {
               </Box>
             </TableContainer>
           </Box>
-        </Grid>
+        </Box>
       </Container>
     </>
   );
