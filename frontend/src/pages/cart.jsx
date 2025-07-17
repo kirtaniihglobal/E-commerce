@@ -187,10 +187,11 @@ function Cart() {
                                 }}
                                 size="small"
                               >
-                                <RemoveIcon />
+                                <RemoveIcon sx={{ color: "#000000" }} />
                               </IconButton>
 
                               <Typography
+                                sx={{ color: "#000000" }}
                                 variant={isMobile ? "body2" : "body1"}
                               >
                                 {product.quantity}
@@ -202,7 +203,7 @@ function Cart() {
                                 }}
                                 size="small"
                               >
-                                <AddIcon />
+                                <AddIcon sx={{ color: "#000000" }} />
                               </IconButton>
                             </Box>
                           </Box>

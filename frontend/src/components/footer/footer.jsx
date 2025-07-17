@@ -46,7 +46,7 @@ function Footer() {
         disableGutters
         sx={{
           mt: 20,
-          backgroundColor: "#f0f0f0",
+          backgroundColor: theme.palette.background.primary,
           position: "relative",
         }}
       >
@@ -334,6 +334,7 @@ function Footer() {
                 required
               />
               <Button
+                className="white"
                 variant="outlined"
                 sx={{
                   backgroundColor: "#fff",

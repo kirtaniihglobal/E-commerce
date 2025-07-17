@@ -80,7 +80,7 @@ const ProductCard = ({ product }) => {
               {like ? (
                 <FavoriteIcon color="error" />
               ) : (
-                <FavoriteBorderIcon color="primary" />
+                <FavoriteBorderIcon sx={{ color: "#000000" }} />
               )}
             </IconButton>
           </Tooltip>

@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import {
   Avatar,
   Container,
-  Grid,
   Box,
   Table,
   TableBody,
@@ -13,6 +12,7 @@ import {
   Button,
   IconButton,
   TextField,
+  Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import BlockIcon from "@mui/icons-material/Block";
@@ -121,14 +121,18 @@ function ManageUsers() {
 
   return (
     <>
-      <Container maxWidth="xl">
-        <Grid container>
+      <Container maxWidth={false} disableGutters sx={{ p: 2 }}>
+        <Box
+          sx={{
+            width: "100%",
+          }}
+        >
           <Box
             sx={{
               width: "100%",
             }}
           >
-            <h1>Users </h1>
+            <Typography variant="h4">Users</Typography>
           </Box>
           <Box
             sx={{
@@ -140,7 +144,7 @@ function ManageUsers() {
               <Table
                 stickyHeader
                 aria-label="sticky table"
-                sx={{ Width: "100%" }}
+                sx={{ width: "100%" }}
               >
                 <TableHead>
                   <TableRow>
@@ -346,7 +350,7 @@ function ManageUsers() {
               </Box>
             )}
           </Box>
-        </Grid>
+        </Box>
       </Container>
     </>
   );

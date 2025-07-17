@@ -35,7 +35,7 @@ function TopSellingProduct() {
 
   return (
     <>
-      <Container maxWidth={false} disableGutters>
+      <Container maxWidth={false} disableGutters  sx={{ backgroundColor: theme.palette.background.container }}>
         <Grid
           item
           xs={12}

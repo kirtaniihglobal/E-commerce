@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Container } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
   Inventory2 as ProductsIcon,
@@ -52,15 +52,15 @@ function Layout() {
 
   return (
     <>
-      <Grid container sx={{ width: "100%", height: "100vh" }}>
+      <Container maxWidth={false} disableGutters>
         <Box
           onMouseEnter={() => setSidebarOpen(true)}
           onMouseLeave={() => setSidebarOpen(false)}
           sx={{
-            width: sidebarOpen ? 220 : 50,
+            width: sidebarOpen ? 220 : 70,
             backgroundColor: "#000",
             color: "#fff",
-            height: "95%",
+            height: "100%",
             position: "fixed",
             left: 0,
             p: 2,
@@ -153,18 +153,16 @@ function Layout() {
 
         <Box
           sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-            ml: sidebarOpen ? "240px" : "70px",
+            width: "auto",
+            ml: sidebarOpen ? "220px" : "70px",
             transition: "margin 0.3s",
           }}
         >
-          <Box sx={{ width: "100%", p: 2 }}>
+          <Box>
             <Outlet />
           </Box>
         </Box>
-      </Grid>
+      </Container>
     </>
   );
 }

@@ -14,6 +14,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Container,
 } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -35,7 +36,7 @@ function ManageOrders() {
   };
   return (
     <>
-      <Grid container direction="column" sx={{ width: "100%" }}>
+      <Container maxWidth={false} disableGutters sx={{ p: 2 }}>
         <Typography variant="h4" gutterBottom>
           Order Details
         </Typography>
@@ -233,7 +234,7 @@ function ManageOrders() {
             </Box>
           </Box>
         )}
-      </Grid>
+      </Container>
     </>
   );
 }

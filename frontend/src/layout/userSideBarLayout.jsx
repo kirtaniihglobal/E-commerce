@@ -1,13 +1,16 @@
-import { Box, Container, IconButton } from "@mui/material";
+import { Box, Container, IconButton, Tooltip } from "@mui/material";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/snackBarSlice";
 import Header from "../components/header/header";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
+import { useThemeContext } from "../context/themeContext";
 
 function UserProfileLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { mode, toggleTheme } = useThemeContext();
 
   const activeStyle = {
     backgroundColor: "#333",
@@ -104,6 +107,15 @@ function UserProfileLayout() {
               >
                 <LogoutIcon color="error" />
               </IconButton>
+              <Tooltip title="Toggle Theme">
+                <IconButton onClick={toggleTheme}>
+                  {mode === "dark" ? (
+                    <Brightness7 sx={{ color: "#ffffff" }} />
+                  ) : (
+                    <Brightness4 sx={{ color: "#ffffff" }} />
+                  )}
+                </IconButton>
+              </Tooltip>
             </Box>
           </Box>
 
