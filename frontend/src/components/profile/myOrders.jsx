@@ -364,6 +364,7 @@ function MyOrders() {
                             } catch (error) {
                               console.error("Order canceled failed", error);
                             } finally {
+                              dispatch(getAllOrderData());
                               setLoading(false);
                             }
                           }}

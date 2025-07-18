@@ -10,34 +10,91 @@ import {
   Skeleton,
   Container,
 } from "@mui/material";
-
+import { useRef, useEffect, useState } from "react";
+import useIntersectionObserver from "../components/myHook/intersaction";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { getAllproductsData } from "../Thunk/productThunk";
-import { useEffect, useState } from "react";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/header/header";
+
 function CategoryPage() {
   const dispatch = useDispatch();
-  // const minmin = 0;
-  // const maxmax = 1000;
+  const loaderRef = useRef(null);
+  const minmin = 0;
+  const maxmax = 1000;
   const { products, total } = useSelector((state) => state.products);
-  // const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
+  const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
-  const limit = 12;
-  useEffect(() => {
-    dispatch(getAllproductsData({ skip: 0, limit }));
-    setSkip(limit);
-  }, [dispatch]);
+  const limit = 9;
+  const [filters, setFilters] = useState({
+    color: [],
+    size: [],
+    price: [],
+    productType: [],
+  });
+  const handleColorChange = (color) => {
+    setFilters((prev) => ({
+      ...prev,
+      color: prev.color.includes(color)
+        ? prev.color.filter((c) => c !== color)
+        : [...prev.color, color],
+    }));
+  };
 
-  // const handlePriceRangeChange = (event, newValue) => {
-  //   setPriceRangeValue(newValue);
-  // };
+  const handleSizeChange = (size) => {
+    setFilters((prev) => ({
+      ...prev,
+      size: prev.size.includes(size)
+        ? prev.size.filter((s) => s !== size)
+        : [...prev.size, size],
+    }));
+  };
+
+  const handlePriceRangeChange = (event, newValue) => {
+    setPriceRangeValue(newValue);
+    setFilters((prev) => ({ ...prev, price: newValue }));
+  };
+  const handleProductTypeChange = (type) => {
+    setFilters((prev) => ({
+      ...prev,
+      productType: prev.productType.includes(type)
+        ? prev.productType.filter((t) => t !== type)
+        : [...prev.productType, type],
+    }));
+  };
+
+  const handleResetFilters = () => {
+    window.scroll(0, 0);
+    setFilters({
+      color: [],
+      size: [],
+      price: [100, 500],
+      productType: [],
+    });
+    setPriceRangeValue([100, 500]);
+  };
+
+  useEffect(() => {
+    dispatch(getAllproductsData({ skip: 0, limit, filters }));
+    setSkip(limit);
+  }, [dispatch, filters]);
+
+  useIntersectionObserver({
+    target: loaderRef,
+    onIntersect: () => {
+      if (!loading && products.length < total) {
+        loadMoreProducts();
+      }
+    },
+    enabled: true,
+  });
+
   const loadMoreProducts = () => {
     if (loading || products.length >= total) return;
     setLoading(true);
-    dispatch(getAllproductsData({ skip, limit })).finally(() => {
+    dispatch(getAllproductsData({ skip, limit, filters })).finally(() => {
       setSkip((prev) => prev + limit);
       setLoading(false);
     });
@@ -49,318 +106,186 @@ function CategoryPage() {
       <Container maxWidth={false} disableGutters>
         <Box
           sx={{
-            width: "auto",
             display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          {/* <Box
-          sx={{
-            width: "25%",
-            p: 2,
+            flexDirection: { xs: "column", sm: "row" },
+            width: "100%",
+            justifyContent: "center",
           }}
         >
           <Box
             sx={{
-              position: "sticky",
-              top: 100,
-              left: 0,
-              width: "80%",
-              border: "1px solid black",
+              width: { sm: "40%", md: "30%", lg: "25%", xl: "25%" },
+              height: "100%",
+              overflowY: "auto",
+              p: 2,
+              position: { xs: "unset", sm: "sticky" },
+              top: 80,
             }}
           >
-            <Box
-              sx={{
-                width: "90%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                p: 3,
-              }}
-            >
-              <Typography variant="h5">Filters</Typography>
-              <Button size="small">
-                <FilterAltIcon />
-              </Button>
-            </Box>
-            <Divider sx={{ width: "100%" }} />
-            <Box sx={{ width: "100%" }}>
+            <Box sx={{ borderRadius: 2, boxShadow: 2, p: 2 }}>
               <Box
                 sx={{
-                  width: "100%",
                   display: "flex",
                   justifyContent: "space-between",
-                  p: 1,
+                  alignItems: "center",
+                  mb: 2,
                 }}
               >
-                <Typography>Tshirt</Typography>
-                <Button>h</Button>
+                <Typography variant="h6">Filters</Typography>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={handleResetFilters}
+                >
+                  <FilterAltIcon sx={{ mr: 0.5 }} />
+                  Reset
+                </Button>
               </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  p: 1,
-                }}
-              >
-                <Typography>Tshirt</Typography>
-                <Button>h</Button>
-              </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  p: 1,
-                }}
-              >
-                <Typography>Tshirt</Typography>
-                <Button>h</Button>
-              </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  p: 1,
-                }}
-              >
-                <Typography>Tshirt</Typography>
-                <Button>h</Button>
-              </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  p: 1,
-                }}
-              >
-                <Typography>Tshirt</Typography>
-                <Button>h</Button>
-              </Box>
-            </Box>
-            <Divider sx={{ width: "100%" }} />
-            <Box sx={{ width: "100%" }}>
-              <Box
-                sx={{
-                  width: "90%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  p: 3,
-                }}
-              >
-                <Typography variant="h5">Price</Typography>
-                <Button>hello</Button>
-              </Box>
-              <Box>
-                <Slider
-                  getAriaLabel={() => "Price range"}
-                  value={priceRangeValue}
-                  onChange={handlePriceRangeChange}
-                  valueLabelDisplay="auto"
-                  min={minmin}
-                  max={maxmax}
-                />
-              </Box>
-            </Box>
-            <Divider sx={{ width: "100%" }} />
-            <Box sx={{ width: "100%" }}>
-              <Box
-                sx={{
-                  width: "90%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  p: 3,
-                }}
-              >
-                <Typography variant="h5">Colors</Typography>
-                <Button>hello</Button>
-              </Box>
-              <Box
-                sx={{
-                  width: "90%",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 2,
-                  ml: 2,
-                }}
-              >
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "black",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "red",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "green",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "yellow",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "gray",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "pink",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "blue",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-                <ButtonBase
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: "orange",
-                    border: "2px solid white",
-                    boxShadow: "0 0 0 1px #ccc",
-                  }}
-                />
-              </Box>
-            </Box>
-            <Divider sx={{ width: "100%" }} />
+              <Divider sx={{ my: 2 }} />
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                  Product Type
+                </Typography>
 
-            <Box
-              sx={{
-                width: "100%",
-              }}
-            >
-              <Box
-                sx={{
-                  width: "90%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  p: 3,
-                }}
-              >
-                <Typography variant="h5">Sizes</Typography>
-                <Button>hello</Button>
+                {["newArrival", "topSelling"].map((type, i) => (
+                  <Box
+                    key={i}
+                    sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={filters.productType?.includes(type)}
+                      onChange={() => handleProductTypeChange(type)}
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <Typography
+                      sx={{ ml: 1, fontSize: "1.1rem", fontWeight: 500 }}
+                    >
+                      {type === "newArrival" ? "New Arrival" : "Top Selling"}
+                    </Typography>
+                  </Box>
+                ))}
               </Box>
-              <Box>
-                <Chip
-                  sx={{
-                    p: 2,
-                  }}
-                  clickable
-                  label="big"
-                />
+              <Divider sx={{ my: 2 }} />
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                  Colors
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                  {["black", "red", "green", "grey", "blue"].map((color, i) => {
+                    const isSelected = filters.color.includes(color);
+                    return (
+                      <ButtonBase
+                        key={i}
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: "50%",
+                          backgroundColor: color,
+                          border: isSelected
+                            ? "2px solid #000000"
+                            : "2px solid white",
+                          boxShadow: isSelected
+                            ? "0 0 0 1px #000000"
+                            : "0 0 0 1px #ccc",
+                        }}
+                        onClick={() => handleColorChange(color)}
+                      />
+                    );
+                  })}
+                </Box>
+              </Box>
+              <Divider sx={{ my: 2 }} />
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                  Sizes
+                </Typography>
+                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  {["Small", "Medium", "Large", "X-Large"].map((size, i) => (
+                    <Chip
+                      key={i}
+                      label={size}
+                      onClick={() => handleSizeChange(size)}
+                      variant={
+                        filters.size.includes(size) ? "filled" : "outlined"
+                      }
+                      color={
+                        filters.size.includes(size) ? "primary" : "default"
+                      }
+                      sx={{ px: 2, py: 1, fontWeight: 500 }}
+                    />
+                  ))}
+                </Box>
+                <Divider sx={{ my: 2 }} />
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Price
+                  </Typography>
+                  <Slider
+                    getAriaLabel={() => "Price range"}
+                    value={priceRangeValue}
+                    onChange={handlePriceRangeChange}
+                    valueLabelDisplay="auto"
+                    min={minmin}
+                    max={maxmax}
+                    sx={{ mx: 1 }}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box> */}
-          <Box
-            sx={{
-              width: "100%",
-            }}
-          >
-            <Box
-              sx={{
-                width: "auto",
-                p: 3,
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: 3,
-              }}
-            >
-              {products.map((product, index) => (
-                <Grid key={index}>
-                  <ProductCard product={product} />
-                </Grid>
-              ))}
-            </Box>
-            <Box
-              sx={{
-                width: "auto",
-                display: "flex",
-                justifyContent: "center",
-                p: 5,
-              }}
-            >
-              <Button
+
+          <Box sx={{ flex: 1, overflowY: "auto" }}>
+            {products ? (
+              <Box
                 sx={{
-                  width: "50%",
-                  borderRadius: 7,
-                  px: 2,
-                  py: 2,
+                  p: 3,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  ml: { xs: 0, sm: 0, md: 0, lg: 5 },
+                  justifyContent: {
+                    xs: "center",
+                    md: "center",
+                    xl: "flex-start",
+                  },
+                  gap: 3,
                 }}
-                variant="outlined"
-                className="white"
-                onClick={loadMoreProducts}
-                disabled={loading || products.length >= total}
               >
-                {loading
-                  ? "Loading..."
-                  : products.length >= total
-                  ? "No More Products"
-                  : "Load More"}
-              </Button>
-            </Box>
+                {products.map((product) => (
+                  <Grid key={product._id || product.id}>
+                    <ProductCard product={product} />
+                  </Grid>
+                ))}
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography variant="h3">Products Not Found</Typography>
+              </Box>
+            )}
+
             <Box
               id="loader"
+              ref={loaderRef}
               sx={{
                 width: "100%",
+                height: 40,
+                marginTop: 4,
                 display: "flex",
                 justifyContent: "center",
-                flexWrap: "wrap",
               }}
             >
               {loading &&
-                Array.from({ length: 4 }).map((_, index) => (
+                Array.from({ length: 3 }).map((_, index) => (
                   <Box
                     key={index}
                     sx={{
@@ -368,7 +293,6 @@ function CategoryPage() {
                       height: 508,
                       borderRadius: 2,
                       display: "flex",
-
                       flexDirection: "column",
                       gap: 1,
                       p: 2,
