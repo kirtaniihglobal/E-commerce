@@ -457,7 +457,7 @@ export default function Header() {
                     aria-label="menu"
                   >
                     <Badge badgeContent={cartData?.length || 0} color="error">
-                      <MenuIcon style={{ color: "#1B1B1B" }} />
+                      <MenuIcon />
                     </Badge>
                   </IconButton>
                 </Tooltip>

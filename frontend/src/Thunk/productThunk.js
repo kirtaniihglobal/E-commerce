@@ -10,18 +10,26 @@ import {
 } from "../apis/productsAPI";
 import { openSnackbar } from "../redux/snackBarSlice";
 
+// export const getAllproductsData = createAsyncThunk(
+//   "products/getAllProducts",
+//   async ({ skip, limit }) => {
+//     try {
+//       const response = await getAllproductsAPI({ skip, limit });
+//       return {
+//         ...response,
+//         skip,
+//       };
+//     } catch (error) {
+//       return error.response?.data || "Failed to fetch Products";
+//     }
+//   }
+// );
 export const getAllproductsData = createAsyncThunk(
   "products/getAllProducts",
-  async ({ skip, limit }) => {
-    try {
-      const response = await getAllproductsAPI({ skip, limit });
-      return {
-        ...response,
-        skip,
-      };
-    } catch (error) {
-      return error.response?.data || "Failed to fetch Products";
-    }
+  async ({ skip, limit, filters = {} }) => {
+    const res = await getAllproductsAPI({ skip, limit, filters });
+    console.log(res)
+    return res;
   }
 );
 export const getOneproductData = createAsyncThunk(

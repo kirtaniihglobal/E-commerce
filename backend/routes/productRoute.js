@@ -14,7 +14,7 @@ const {
 const { verifyToken } = require("../middleware/auth");
 
 router.post("/", upload.single("image"), createProduct);
-router.get("/", verifyToken, getAllproducts);
+router.post("/getAllProduct", verifyToken, getAllproducts);
 router.get("/new", getNewArrivalproducts);
 router.get("/top", getTopSellingproducts);
 router.get("/:id", getOneproduct);

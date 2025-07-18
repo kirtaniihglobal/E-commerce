@@ -44,18 +44,31 @@ const getAllproducts = async (req, res) => {
       : null;
     const limit = parseInt(req.query.limit) || 10;
     const skip = parseInt(req.query.skip) || 0;
+    const { filters = {} } = req.body;
 
-    const pipeline = [
-      { $match: {} },
-      {
-        $lookup: {
-          from: "ratings",
-          localField: "_id",
-          foreignField: "productId",
-          as: "ratings",
-        },
+    const match = {};
+
+    if (filters.productType?.length)
+      match.productType = { $in: filters.productType };
+    if (filters.color?.length) match.color = { $in: filters.color };
+    if (filters.size?.length) match.size = { $in: filters.size };
+    if (Array.isArray(filters.price) && filters.price.length === 2) {
+      match.price = {
+        $gte: filters.price[0] || 0,
+        $lte: filters.price[1] || Infinity,
+      };
+    }
+
+    const pipeline = [{ $match: match }];
+    console.log(pipeline);
+    pipeline.push({
+      $lookup: {
+        from: "ratings",
+        localField: "_id",
+        foreignField: "productId",
+        as: "ratings",
       },
-    ];
+    });
 
     if (userId) {
       pipeline.push({
@@ -105,7 +118,7 @@ const getAllproducts = async (req, res) => {
     );
 
     const products = await Product.aggregate(pipeline);
-    const total = await Product.countDocuments();
+    const total = await Product.countDocuments(match);
 
     return res.status(200).json({
       status: 200,

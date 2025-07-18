@@ -29,14 +29,12 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(getAllproductsData.fulfilled, (state, action) => {
-        // console.log(action.payload);
         const { products, total, skip } = action.payload;
         if (skip === 0) {
           state.products = products;
         } else {
           state.products = [...state.products, ...products];
         }
-
         state.total = total;
         state.loading = false;
       })
