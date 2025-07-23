@@ -93,6 +93,20 @@ function UserProfileLayout() {
                   My Wishlist
                 </NavLink>
               </Box>
+              {/* <button
+                // onClick={handleSubscribe}
+                style={{
+                  // padding: "12px 24px",
+                  fontSize: "16px",
+                  backgroundColor: "#635BFF",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              >
+                Subscribe Now
+              </button> */}
               <IconButton
                 onClick={() => {
                   dispatch(

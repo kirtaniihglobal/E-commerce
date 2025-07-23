@@ -7,92 +7,49 @@ const addOrder = async (req, res) => {
   try {
     const { address, pincode, city, country } = req.body;
     const id = req.user.id;
+
     if (!address || !pincode || !city || !country) {
       return res
-        .status(500)
+        .status(400)
         .json({ status: false, msg: "Please Select Address" });
     }
+
     const findUser = await User.findById(id);
     if (!findUser) {
-      return res.status(500).json({ status: false, msg: "user not found!" });
+      return res.status(404).json({ status: false, msg: "User not found!" });
     }
 
     const cart = await Cart.findOne({ userId: id }).populate(
       "products.productId"
     );
-
-    if (!cart) {
-      return res.status(500).json({ status: false, msg: "cart not found!" });
+    if (!cart || cart.products.length === 0) {
+      return res
+        .status(400)
+        .json({ status: false, msg: "Cart is empty or not found!" });
     }
-    if (cart.products == "") {
-      return res.status(500).json({ status: false, msg: "cart is empty" });
-    } else {
-      const newOrder = new Order({
-        userId: id,
-        orderData: { products: cart.products },
-        total: cart.total,
-        info: [
-          { country: country, address: address, pincode: pincode, city: city },
-        ],
-        status: "pending",
-      });
 
-      await newOrder.save();
-      const productList = newOrder.orderData.products
-        .map((product) => {
-          return `
-      <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
-        <p><strong>${product?.productId?.name}</strong></p>
-        <p>Quantity: <strong>${product?.quantity}</strong></p>
-        <p>Size: <strong>${product?.size}</strong></p>
-        <p>Color: <strong>${product?.color}</strong></p>
-        <p>Price: <strong>₹${product?.productId?.price}</strong></p>
-      </div>
-    `;
-        })
-        .join("");
+    const newOrder = new Order({
+      userId: id,
+      orderData: { products: cart.products },
+      total: cart.total,
+      info: {
+        country,
+        address,
+        pincode,
+        city,
+      },
+      status: "pending",
+    });
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
-      await transporter.sendMail({
-        to: findUser.email,
-        subject: "Your Order Detail",
-        html: `    <div>
-      <div>
-        <h2>🧾 Thank you for your order, ${findUser.fullName}!</h2>
-        <p>Order placed on: <strong>${newOrder.createdAt}</strong></p>
-        <p><strong>Shipping to:</strong> ${address}, ${city}, ${pincode}, ${country}</p>
-        <hr/>
-        ${productList}
-        <hr/>
-        <p><strong>Total:</strong> ₹${cart.total}</p>
-        <p>Your Order Status is:<h1 style="color:orange;">${newOrder.status}</h1></p>
+    await newOrder.save();
 
-        <p>We’ll notify you once your items are shipped.</p>
-        <p>Thank you for shopping with us!</p>
-        <div>
-          This is an automated email. Please do not reply.
-        </div>
-      </div>
-    </div>`,
-      });
-      cart.products = [];
-      cart.total = 0;
-      await cart.save();
-      return res.status(201).json({
-        status: true,
-        message: "order created and product added",
-        newOrder,
-        cart,
-      });
-    }
+    return res.status(201).json({
+      status: true,
+      message: "Order created",
+      orderId: newOrder._id,
+    });
   } catch (error) {
-    return res.status(500).json({ status: false, msg: "order error" });
+    return res.status(500).json({ status: false, msg: "Order error", error });
   }
 };
 

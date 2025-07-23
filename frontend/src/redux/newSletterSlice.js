@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const newSletterSlice = createSlice({
-  name: "newSletter",
+  name: "newSletter", 
   initialState,
   reducers: {},
   extraReducers: (builder) => {

@@ -22,6 +22,7 @@ import ResetPassword from "../components/password/resetPassword";
 import MyWishlist from "../components/profile/myWishlist";
 import DashboardCharts from "../admin/dashBoardCharts";
 import NewsLetter from "../admin/newsLetter";
+import SuccessPage from "../pages/success";
 
 const RoutesComponent = () => {
   return (
@@ -38,7 +39,8 @@ const RoutesComponent = () => {
           <Route path="/productDetail/:id" element={<ProductDetail />} />
           <Route path="/categoryPage" element={<CategoryPage />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkOut" element={<CheckOut />} />
+          <Route path="/checkout" element={<CheckOut />} />
+          <Route path="/success" element={<SuccessPage />} />
           <Route element={<Layout />}>
             <Route path="/admin/adminDashboard" element={<AdminDashboard />} />
             <Route path="/admin/manageProducts" element={<ManageProducts />} />
