@@ -7,6 +7,7 @@ import orderReducer from "../redux/orderSlice";
 import ratingReducer from "../redux/ratingSlice";
 import wishlistReducer from "../redux/wishlistSlice";
 import adminReducer from "../redux/adminSlice";
+import paymentReducer from "../redux/paymentSlice";
 import newSletterReducer from "../redux/newSletterSlice";
 
 export const store = configureStore({
@@ -20,5 +21,6 @@ export const store = configureStore({
     rating: ratingReducer,
     wishList: wishlistReducer,
     newSletter: newSletterReducer,
+    payment: paymentReducer,
   },
 });

@@ -18,23 +18,31 @@ const orderSchema = new mongoose.Schema(
       ],
     },
     total: Number,
-    info: [
-      {
-        address: String,
-        pincode: Number,
-        city: String,
-        country: String,
-      },
-    ],
+    currency: { type: String, default: "INR" },
+    info: {
+      address: String,
+      pincode: Number,
+      city: String,
+      country: String,
+    },
+
     status: {
       type: String,
       enum: ["pending", "confirmed", "shipped", "delivered", "canceled"],
       default: "pending",
     },
+
     paymentDetail: {
-      paymentMode: String,
+      paymentIntentId: { type: String },
+      paymentMode: { type: String },
+      paymentStatus: {
+        type: String,
+        enum: ["pending", "complete", "failed"],
+        default: "pending",
+      },
     },
   },
+
   {
     timestamps: true,
   }

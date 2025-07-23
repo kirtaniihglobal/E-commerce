@@ -161,20 +161,12 @@ function MyOrders() {
                         <Typography variant="h6" gutterBottom>
                           Shipping Address
                         </Typography>
-                        {order.info && order.info.length > 0 && (
-                          <Box>
-                            <Typography>
-                              Address: {order.info[0].address}
-                            </Typography>
-                            <Typography>City: {order.info[0].city}</Typography>
-                            <Typography>
-                              Pincode: {order.info[0].pincode}
-                            </Typography>
-                            <Typography>
-                              Country: {order.info[0].country}
-                            </Typography>
-                          </Box>
-                        )}
+                        <Box>
+                          <Typography>Address: {order.info.address}</Typography>
+                          <Typography>City: {order.info.city}</Typography>
+                          <Typography>Pincode: {order.info.pincode}</Typography>
+                          <Typography>Country: {order.info.country}</Typography>
+                        </Box>
                         <Divider sx={{ my: 2 }} />
                         <Typography variant="h6" gutterBottom>
                           Products

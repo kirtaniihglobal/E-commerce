@@ -63,7 +63,7 @@ const updateOrdersAdmin = async (req, res) => {
         html: `<div>
         <div>
         <h2>🧾 your order is Delivered, ${order.userId.fullName}!</h2>
-        <p><strong>Delivered to:</strong> ${order.info[0].address}, ${order.info[0].city}, ${order.info[0].pincode}, ${order.info[0].country}</p>
+        <p><strong>Delivered to:</strong> ${order.info.address}, ${order.info.city}, ${order.info.pincode}, ${order.info.country}</p>
         <hr/>
         ${productList}
         <hr/>
