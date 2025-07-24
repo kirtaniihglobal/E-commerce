@@ -90,12 +90,12 @@ const cancelOrder = async (req, res) => {
     const productList = order.orderData.products
       .map((product) => {
         return `
-      <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
-        <p><strong>${product?.productId?.name}</strong></p>
-        <p>Quantity: <strong>${product?.quantity}</strong></p>
-        <p>Size: <strong>${product?.size}</strong></p>
-        <p>Color: <strong>${product?.color}</strong></p>
-        <p>Price: <strong>₹${product?.productId?.price}</strong></p>
+      <div style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+        <h4 style="margin: 0 0 8px 0;">🛍️ ${product?.productId?.name}</h4>
+        <p style="margin: 4px 0;">Quantity: <strong>${product?.quantity}</strong></p>
+        <p style="margin: 4px 0;">Size: <strong>${product?.size}</strong></p>
+        <p style="margin: 4px 0;">Color: <strong>${product?.color}</strong></p>
+        <p style="margin: 4px 0;">Price: <strong>₹${product?.productId?.price}</strong></p>
       </div>
     `;
       })
@@ -107,6 +107,7 @@ const cancelOrder = async (req, res) => {
         { status: "canceled" },
         { new: true }
       );
+
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         auth: {
@@ -114,22 +115,45 @@ const cancelOrder = async (req, res) => {
           pass: process.env.EMAIL_PASS,
         },
       });
+
       await transporter.sendMail({
         to: order.userId.email,
-        subject: "Your Order Detail",
+        subject: "❌ Your SHOP.IN Order Has Been Canceled",
         html: `
-  <div style="font-family: Arial, sans-serif;">
-    <h2>🧾 Your order is Canceled, ${order.userId.fullName}!</h2>
-    <hr/>
-    ${productList}
-    <hr/>
-    <p><strong>Total:</strong> ₹${order.total}</p>
-    <p>Your Order Status is: <h1 style="color:red; font-weight: bold;">${updateOrder.status}</h1></p>
-    <p>We’ll notify you once your order is processed.</p>
-    <p>Thank you for shopping with us!</p>
+  <div style="font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h1 style="color: #d32f2f; margin: 0;">SHOP.IN</h1>
+      <p style="font-size: 16px; color: #888;">Premium Online Shopping Experience</p>
+    </div>
+
+    <h2 style="color: #d32f2f;">🚫 Order Canceled</h2>
+    <p style="font-size: 16px;">Dear <strong>${
+      order.userId.fullName
+    }</strong>,</p>
+    <p style="font-size: 15px;">We're sorry to inform you that your order placed on <strong>${new Date(
+      order.createdAt
+    ).toDateString()}</strong> has been <span style="color: red;"><strong>canceled</strong></span>.</p>
+
+    <hr style="margin: 20px 0;" />
+    <div>${productList}</div>
+    <hr style="margin: 20px 0;" />
+
+    <p style="font-size: 16px;"><strong>Total Amount:</strong> ₹${
+      order.total
+    }</p>
+    <p style="font-size: 16px;"><strong>Order Status:</strong> <span style="color: red; font-weight: bold;">${
+      updateOrder.status
+    }</span></p>
+
+    <div style="margin-top: 30px; padding: 15px; background-color: #fff3cd; border-left: 5px solid #ffeeba; border-radius: 6px;">
+      <p style="margin: 0; font-size: 15px;">We hope to serve you again in the future. If you have any questions, feel free to reply to this email.</p>
+    </div>
+
+    <p style="margin-top: 40px; font-size: 14px; color: #888;">This is an automated email from <strong>SHOP.IN</strong>. Please do not reply directly to this email.</p>
   </div>
 `,
       });
+
       return res
         .status(200)
         .json({ status: true, msg: "order canceled", updateOrder });
