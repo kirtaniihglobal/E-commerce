@@ -4,9 +4,7 @@ import { paymentAPI } from "../apis/paymentAPI";
 export const sendPaymentData = createAsyncThunk(
   "payment/sendPayment",
   async ({ orderId }) => {
-    console.log(orderId);
-    const response = await paymentAPI({orderId});
-    console.log(response.data);
+    const response = await paymentAPI({ orderId });
     return response.data;
   }
 );

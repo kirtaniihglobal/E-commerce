@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema(
     role: { type: String, enum: ["admin", "user"] },
     address: String,
     image: String,
+    subscriptionId: { type: String, default: null },
     isBlocked: { type: Boolean, default: false },
+    isSubscribe: { type: String, enum: ["basic", "premium", ""], default: "" },
     resetToken: String,
   },
   {

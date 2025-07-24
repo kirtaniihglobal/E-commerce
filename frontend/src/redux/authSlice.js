@@ -258,6 +258,11 @@ const userSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
+    updateUserSubscription(state, action) {
+      if (state.user) {
+        state.user.isSubscribe = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -382,7 +387,6 @@ const userSlice = createSlice({
       })
       .addCase(setDefaultAddressData.fulfilled, (state) => {
         state.loading = false;
-        // state.address = action.payload.addressData;
       })
       .addCase(setDefaultAddressData.rejected, (state, action) => {
         state.error = action.error.message;
@@ -396,7 +400,6 @@ const userSlice = createSlice({
       })
       .addCase(forgotPassword.fulfilled, (state) => {
         state.loading = false;
-        // state.address = action.payload.addressData
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.error = action.error.message;
@@ -410,7 +413,6 @@ const userSlice = createSlice({
       })
       .addCase(resetPassword.fulfilled, (state) => {
         state.loading = false;
-        // state.address = action.payload.addressData
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.error = action.error.message;
@@ -419,5 +421,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { login } = userSlice.actions;
+export const { login, updateUserSubscription } = userSlice.actions;
 export default userSlice.reducer;

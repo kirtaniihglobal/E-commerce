@@ -1,17 +1,22 @@
-import { Box, Container, IconButton, Tooltip } from "@mui/material";
+import { Box, Chip, Container, IconButton, Tooltip } from "@mui/material";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openSnackbar } from "../redux/snackBarSlice";
 import Header from "../components/header/header";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Brightness4, Brightness7 } from "@mui/icons-material";
 import { useThemeContext } from "../context/themeContext";
+import { fetchUser } from "../redux/authSlice";
+import { useEffect } from "react";
 
 function UserProfileLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
   const { mode, toggleTheme } = useThemeContext();
-
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
   const activeStyle = {
     backgroundColor: "#333",
     color: "#fff",
@@ -92,21 +97,36 @@ function UserProfileLayout() {
                 >
                   My Wishlist
                 </NavLink>
+                <NavLink
+                  to="/profile/mySubscription"
+                  style={({ isActive }) =>
+                    isActive ? activeStyle : inactiveStyle
+                  }
+                >
+                  My Subscription
+                </NavLink>
               </Box>
-              {/* <button
-                // onClick={handleSubscribe}
-                style={{
-                  // padding: "12px 24px",
-                  fontSize: "16px",
-                  backgroundColor: "#635BFF",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                Subscribe Now
-              </button> */}
+                {user ? (
+                  user.isSubscribe === "basic" ? (
+                    <Chip label="Basic Plan" color="warning" />
+                  ) : user.isSubscribe === "premium" ? (
+                    <Chip label="Premium Plan" color="success" />
+                  ) : (
+                    <Chip label="No Active Plan" color="info" />
+                  )
+                ) : (
+                  <></>
+                )}
+              </Box>
+
               <IconButton
                 onClick={() => {
                   dispatch(

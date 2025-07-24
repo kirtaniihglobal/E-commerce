@@ -2,6 +2,7 @@ const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const Order = require("../models/order");
 const Cart = require("../models/cart");
+const User = require("../models/user");
 const nodemailer = require("nodemailer");
 
 const webhook = async (req, res) => {
@@ -22,9 +23,33 @@ const webhook = async (req, res) => {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
+    const userId = session.client_reference_id;
+    const subscriptionType = session.amount_subtotal;
+    const subscribeId = session.subscription;
     const orderId = session.metadata.orderId;
-    console.log(session);
     try {
+      const user = await User.findById(userId);
+      if (user) {
+        if (subscriptionType == 49900) {
+          user.isSubscribe = "premium";
+        } else {
+          user.isSubscribe = "basic";
+        }
+        user.subscriptionId = subscribeId;
+        await user.save();
+        const transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
+        await transporter.sendMail({
+          to: user.email,
+          subject: "Welcome to Premium",
+          html: "<h1>Thank you for subscribing!</h1>",
+        });
+      }
       const order = await Order.findById(orderId)
         .populate("userId")
         .populate("orderData.products.productId");
@@ -37,7 +62,6 @@ const webhook = async (req, res) => {
           };
 
           await order.save();
-
           const cart = await Cart.findOne({ userId: order.userId });
           if (cart) {
             cart.products = [];

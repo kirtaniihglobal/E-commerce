@@ -41,13 +41,11 @@ const createCart = async (req, res) => {
       });
 
       await newCart.save();
-      return res
-        .status(201)
-        .json({
-          status: true,
-          message: "Cart created and product added",
-          newCart,
-        });
+      return res.status(201).json({
+        status: true,
+        message: "Cart created and product added",
+        newCart,
+      });
     } else {
       const productIndex = cart.products.findIndex(
         (p) => p.productId.toString() === productId
