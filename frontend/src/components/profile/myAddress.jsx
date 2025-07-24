@@ -34,7 +34,7 @@ function MyAddress() {
   const [editAddMode, setEditAddMode] = useState(false);
   const [editAddId, setEditAddId] = useState(null);
   const [editAddData, setEditAddData] = useState("");
-  const { address } = useSelector((state) => state.auth);
+  const { address, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getAddress());
@@ -103,10 +103,14 @@ function MyAddress() {
                 My Address
               </Typography>
             </Box>
+
             <Box>
-              <Button variant="contained" onClick={() => setOpen(true)}>
-                + Add New Address
-              </Button>
+              {user?.isSubscribe === "basic" ||
+              (user?.isSubscribe === "free" && address?.length >= 1) ? null : (
+                <Button variant="contained" onClick={() => setOpen(true)}>
+                  + Add New Address
+                </Button>
+              )}
             </Box>
           </Box>
           <AddAddress

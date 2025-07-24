@@ -22,8 +22,9 @@ import ResetPassword from "../components/password/resetPassword";
 import MyWishlist from "../components/profile/myWishlist";
 import DashboardCharts from "../admin/dashBoardCharts";
 import NewsLetter from "../admin/newsLetter";
-import SuccessPage from "../pages/success";
 import MySubscription from "../components/profile/mySubscription";
+import OrderSuccessPage from "../pages/orderSuccess";
+import SubscribSuccessPage from "../pages/subscribeSuccess";
 
 const RoutesComponent = () => {
   return (
@@ -41,7 +42,8 @@ const RoutesComponent = () => {
           <Route path="/categoryPage" element={<CategoryPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckOut />} />
-          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/orderSuccess" element={<OrderSuccessPage />} />
+          <Route path="/subscribSuccess" element={<SubscribSuccessPage />} />
           <Route element={<Layout />}>
             <Route path="/admin/adminDashboard" element={<AdminDashboard />} />
             <Route path="/admin/manageProducts" element={<ManageProducts />} />

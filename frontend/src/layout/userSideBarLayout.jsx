@@ -89,14 +89,16 @@ function UserProfileLayout() {
                 >
                   My Orders
                 </NavLink>
-                <NavLink
-                  to="/profile/myWishlist"
-                  style={({ isActive }) =>
-                    isActive ? activeStyle : inactiveStyle
-                  }
-                >
-                  My Wishlist
-                </NavLink>
+                {user?.isSubscribe !== "free" && (
+                  <NavLink
+                    to="/profile/myWishlist"
+                    style={({ isActive }) =>
+                      isActive ? activeStyle : inactiveStyle
+                    }
+                  >
+                    My Wishlist
+                  </NavLink>
+                )}
                 <NavLink
                   to="/profile/mySubscription"
                   style={({ isActive }) =>

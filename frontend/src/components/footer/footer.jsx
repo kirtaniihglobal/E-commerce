@@ -16,13 +16,15 @@ import { useMediaQuery, Button } from "@mui/material";
 import { Box } from "@mui/material";
 import { openSnackbar } from "../../redux/snackBarSlice";
 import { addNewSletterData } from "../../Thunk/newSletterThunk";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { fetchUser } from "../../redux/authSlice";
 
 function Footer() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const [email, setEmail] = useState("");
+  const { user } = useSelector((state) => state.auth);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleSubscribe = async () => {
@@ -38,7 +40,10 @@ function Footer() {
       openSnackbar({ massage: err.message, severity: "error" });
     }
   };
-
+  console.log(user);
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
   return (
     <>
       <Container
@@ -257,99 +262,94 @@ function Footer() {
             <img src={paymenttype5} alt="" />
           </Box>
         </Box>
-
-        <Box
-          sx={{
-            width: "100%",
-            height: "auto",
-            borderRadius: "20px",
-            backgroundColor: "#000",
-            position: "absolute",
-            top: "-100px",
-          }}
-        >
+        {user?.isSubscribe !== "free" && (
           <Box
             sx={{
-              gap: 3,
-              width: "auto",
-              display: "flex",
-              flexDirection: {
-                xs: "column",
-                ssm: "column",
-                sm: "column",
-                md: "row",
-                lg: "row",
-                xl: "row",
-                xxl: "row",
-              },
-              p: 3,
-              justifyContent: "space-between",
+              width: "100%",
+              height: "auto",
+              borderRadius: "20px",
+              backgroundColor: "#000",
+              position: "absolute",
+              top: "-100px",
             }}
           >
             <Box
               sx={{
-                width: { md: "50%", lg: "60%" },
+                gap: 3,
+                width: "auto",
                 display: "flex",
-                alignItems: "center",
+                flexDirection: {
+                  xs: "column",
+                  md: "row",
+                },
+                p: 3,
+                justifyContent: "space-between",
               }}
             >
-              <Typography
+              <Box
                 sx={{
-                  fontSize: {
-                    xs: "1.25rem",
-                    ssm: "1.5rem",
-                    sm: "2rem",
-                    md: "2.5rem",
-                  },
+                  width: { md: "50%", lg: "60%" },
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: {
+                      xs: "1.25rem",
+                      sm: "2rem",
+                      md: "2.5rem",
+                    },
+                    color: "#fff",
+                  }}
+                >
+                  STAY UPTO DATE ABOUT OUR LATEST OFFERS
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  width: { md: "50%", lg: "40%", xl: "30%" },
+                  height: "100px",
                   color: "#fff",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
                 }}
               >
-                STAY UPTO DATE ABOUT OUR LATEST OFFERS
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                width: { md: "50%", lg: "40%", xl: "30%" },
-                height: "100px",
-                color: "#fff",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{
-                  height: "100%",
-                  padding: "0 20px",
-                  backgroundColor: "#FFF",
-                  borderRadius: "62px",
-                  fontSize: "1rem",
-                  border: "none",
-                  outline: "none",
-                }}
-                placeholder="Enter your email"
-                required
-              />
-              <Button
-                className="white"
-                variant="outlined"
-                sx={{
-                  backgroundColor: "#fff",
-                  p: 1,
-                  width: "100%",
-                  borderRadius: "62px",
-                }}
-                onClick={handleSubscribe}
-              >
-                {" "}
-                Subscribe to Newsletter
-              </Button>
+                <input
+                  type="email"
+                  aria-label="Subscribe Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={{
+                    height: "100%",
+                    padding: "0 20px",
+                    backgroundColor: "#FFF",
+                    borderRadius: "62px",
+                    fontSize: "1rem",
+                    border: "none",
+                    outline: "none",
+                  }}
+                  placeholder="Enter your email"
+                  required
+                />
+                <Button
+                  variant="outlined"
+                  sx={{
+                    backgroundColor: "#fff",
+                    p: 1,
+                    width: "100%",
+                    borderRadius: "62px",
+                  }}
+                  onClick={handleSubscribe}
+                >
+                  Subscribe to Newsletter
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        )}
       </Container>
     </>
   );

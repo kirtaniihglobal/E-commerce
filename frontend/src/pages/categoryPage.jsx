@@ -17,12 +17,14 @@ import { getAllproductsData } from "../Thunk/productThunk";
 import ProductCard from "../comon/productCard";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/header/header";
+import { fetchUser } from "../redux/authSlice";
 
 function CategoryPage() {
   const dispatch = useDispatch();
   const loaderRef = useRef(null);
   const minmin = 0;
   const maxmax = 1000;
+  const { user } = useSelector((state) => state.auth);
   const { products, total } = useSelector((state) => state.products);
   const [priceRangeValue, setPriceRangeValue] = useState([100, 500]);
   const [skip, setSkip] = useState(0);
@@ -77,6 +79,7 @@ function CategoryPage() {
   };
 
   useEffect(() => {
+    dispatch(fetchUser());
     dispatch(getAllproductsData({ skip: 0, limit, filters }));
     setSkip(limit);
   }, [dispatch, filters]);
@@ -112,132 +115,136 @@ function CategoryPage() {
             justifyContent: "center",
           }}
         >
-          <Box
-            sx={{
-              width: { sm: "40%", md: "30%", lg: "25%", xl: "25%" },
-              height: "100%",
-              overflowY: "auto",
-              p: 2,
-              position: { xs: "unset", sm: "sticky" },
-              top: 80,
-            }}
-          >
-            <Box sx={{ borderRadius: 2, boxShadow: 2, p: 2 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: 2,
-                }}
-              >
-                <Typography variant="h6">Filters</Typography>
-                <Button
-                  size="small"
-                  color="primary"
-                  onClick={handleResetFilters}
+          {user?.isSubscribe !== "basic" && user?.isSubscribe !== "free" && (
+            <Box
+              sx={{
+                width: { sm: "40%", md: "30%", lg: "25%", xl: "25%" },
+                height: "100%",
+                overflowY: "auto",
+                p: 2,
+                position: { xs: "unset", sm: "sticky" },
+                top: 80,
+              }}
+            >
+              <Box sx={{ borderRadius: 2, boxShadow: 2, p: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 2,
+                  }}
                 >
-                  <FilterAltIcon sx={{ mr: 0.5 }} />
-                  Reset
-                </Button>
-              </Box>
-              <Divider sx={{ my: 2 }} />
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                  Product Type
-                </Typography>
-
-                {["newArrival", "topSelling"].map((type, i) => (
-                  <Box
-                    key={i}
-                    sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                  <Typography variant="h6">Filters</Typography>
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={handleResetFilters}
                   >
-                    <input
-                      type="checkbox"
-                      checked={filters.productType?.includes(type)}
-                      onChange={() => handleProductTypeChange(type)}
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        cursor: "pointer",
-                      }}
-                    />
-                    <Typography
-                      sx={{ ml: 1, fontSize: "1.1rem", fontWeight: 500 }}
-                    >
-                      {type === "newArrival" ? "New Arrival" : "Top Selling"}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-              <Divider sx={{ my: 2 }} />
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                  Colors
-                </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {["black", "red", "green", "grey", "blue"].map((color, i) => {
-                    const isSelected = filters.color.includes(color);
-                    return (
-                      <ButtonBase
-                        key={i}
-                        sx={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: "50%",
-                          backgroundColor: color,
-                          border: isSelected
-                            ? "2px solid #000000"
-                            : "2px solid white",
-                          boxShadow: isSelected
-                            ? "0 0 0 1px #000000"
-                            : "0 0 0 1px #ccc",
-                        }}
-                        onClick={() => handleColorChange(color)}
-                      />
-                    );
-                  })}
+                    <FilterAltIcon sx={{ mr: 0.5 }} />
+                    Reset
+                  </Button>
                 </Box>
-              </Box>
-              <Divider sx={{ my: 2 }} />
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                  Sizes
-                </Typography>
-                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                  {["Small", "Medium", "Large", "X-Large"].map((size, i) => (
-                    <Chip
+                <Divider sx={{ my: 2 }} />
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Product Type
+                  </Typography>
+
+                  {["newArrival", "topSelling"].map((type, i) => (
+                    <Box
                       key={i}
-                      label={size}
-                      onClick={() => handleSizeChange(size)}
-                      variant={
-                        filters.size.includes(size) ? "filled" : "outlined"
-                      }
-                      color={
-                        filters.size.includes(size) ? "primary" : "default"
-                      }
-                      sx={{ px: 2, py: 1, fontWeight: 500 }}
-                    />
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={filters.productType?.includes(type)}
+                        onChange={() => handleProductTypeChange(type)}
+                        style={{
+                          width: "24px",
+                          height: "24px",
+                          cursor: "pointer",
+                        }}
+                      />
+                      <Typography
+                        sx={{ ml: 1, fontSize: "1.1rem", fontWeight: 500 }}
+                      >
+                        {type === "newArrival" ? "New Arrival" : "Top Selling"}
+                      </Typography>
+                    </Box>
                   ))}
                 </Box>
                 <Divider sx={{ my: 2 }} />
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    Price
+                    Colors
                   </Typography>
-                  <Slider
-                    getAriaLabel={() => "Price range"}
-                    value={priceRangeValue}
-                    onChange={handlePriceRangeChange}
-                    valueLabelDisplay="auto"
-                    min={minmin}
-                    max={maxmax}
-                    sx={{ mx: 1 }}
-                  />
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {["black", "red", "green", "grey", "blue"].map(
+                      (color, i) => {
+                        const isSelected = filters.color.includes(color);
+                        return (
+                          <ButtonBase
+                            key={i}
+                            sx={{
+                              width: 36,
+                              height: 36,
+                              borderRadius: "50%",
+                              backgroundColor: color,
+                              border: isSelected
+                                ? "2px solid #000000"
+                                : "2px solid white",
+                              boxShadow: isSelected
+                                ? "0 0 0 1px #000000"
+                                : "0 0 0 1px #ccc",
+                            }}
+                            onClick={() => handleColorChange(color)}
+                          />
+                        );
+                      }
+                    )}
+                  </Box>
+                </Box>
+                <Divider sx={{ my: 2 }} />
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Sizes
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                    {["Small", "Medium", "Large", "X-Large"].map((size, i) => (
+                      <Chip
+                        key={i}
+                        label={size}
+                        onClick={() => handleSizeChange(size)}
+                        variant={
+                          filters.size.includes(size) ? "filled" : "outlined"
+                        }
+                        color={
+                          filters.size.includes(size) ? "primary" : "default"
+                        }
+                        sx={{ px: 2, py: 1, fontWeight: 500 }}
+                      />
+                    ))}
+                  </Box>
+                  <Divider sx={{ my: 2 }} />
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                      Price
+                    </Typography>
+                    <Slider
+                      getAriaLabel={() => "Price range"}
+                      value={priceRangeValue}
+                      onChange={handlePriceRangeChange}
+                      valueLabelDisplay="auto"
+                      min={minmin}
+                      max={maxmax}
+                      sx={{ mx: 1 }}
+                    />
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
+          )}
 
           <Box sx={{ flex: 1, overflowY: "auto" }}>
             {products ? (

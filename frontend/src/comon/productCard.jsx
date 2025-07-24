@@ -9,7 +9,7 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getOneproductData } from "../Thunk/productThunk";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { openSnackbar } from "../redux/snackBarSlice";
 import { addToCartData } from "../Thunk/cartThunk";
@@ -17,12 +17,14 @@ import {
   addWishlistData,
   deleteUserWishlistData,
 } from "../Thunk/wishlistThunk";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchUser } from "../redux/authSlice";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [like, setLike] = useState(product.isLiked);
+  const { user } = useSelector((state) => state.auth);
   const handleSelect = async (id) => {
     try {
       await dispatch(getOneproductData(id));
@@ -45,7 +47,9 @@ const ProductCard = ({ product }) => {
       console.log(error);
     }
   };
-
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
   return (
     <Box key={product._id}>
       <Box
@@ -65,25 +69,31 @@ const ProductCard = ({ product }) => {
             src={`http://192.168.2.222:5000/${product.image}`}
             alt=""
           />
-          <Tooltip title={like ? "Remove Like" : "Like"} placement="top" arrow>
-            <IconButton
-              sx={{
-                position: "absolute",
-                top: "15px",
-                right: "15px",
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleChange(product._id);
-              }}
+          {user?.isSubscribe !== "free" && (
+            <Tooltip
+              title={like ? "Remove Like" : "Like"}
+              placement="top"
+              arrow
             >
-              {like ? (
-                <FavoriteIcon color="error" />
-              ) : (
-                <FavoriteBorderIcon sx={{ color: "#000000" }} />
-              )}
-            </IconButton>
-          </Tooltip>
+              <IconButton
+                sx={{
+                  position: "absolute",
+                  top: "15px",
+                  right: "15px",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleChange(product._id);
+                }}
+              >
+                {like ? (
+                  <FavoriteIcon color="error" />
+                ) : (
+                  <FavoriteBorderIcon sx={{ color: "#000000" }} />
+                )}
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
         <Box>
           <Typography variant="h6">{product.name}</Typography>

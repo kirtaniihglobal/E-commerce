@@ -1,11 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchUser } from "../../redux/authSlice";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { handleSubscriptionData } from "../../Thunk/paymentThunk";
 
 function MySubscription() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const subscribId = user?.subscriptionId;
+  const userId = user?._id;
+  const handleManageSubscription = async () => {
+    try {
+      const res = await dispatch(
+        handleSubscriptionData({ subscribId, userId })
+      ).unwrap();
+      window.location.href = res.url;
+    } catch (err) {
+      console.error(err);
+      alert("Failed to open Stripe Portal");
+    }
+  };
   useEffect(() => {
     dispatch(fetchUser());
   }, [dispatch]);
@@ -21,6 +35,21 @@ function MySubscription() {
             <Typography variant="h3" align="center">
               Already Subscribed
             </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                mt: 5,
+              }}
+            >
+              <Button
+                className="white"
+                variant="outlined"
+                onClick={handleManageSubscription}
+              >
+                Manage Subscription
+              </Button>
+            </Box>
           </>
         ) : (
           <stripe-pricing-table
