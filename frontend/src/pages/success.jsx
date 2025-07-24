@@ -1,15 +1,8 @@
-import React, { useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
-  useEffect(() => {
-    const sessionId = new URLSearchParams(location.search).get("session_id");
-    if (sessionId) {
-      console.log("Payment Success:", sessionId);
-    }
-  }, []);
 
   return (
     <Box sx={{ p: 4, textAlign: "center" }}>

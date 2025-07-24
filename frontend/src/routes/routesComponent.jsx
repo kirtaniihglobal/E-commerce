@@ -23,6 +23,7 @@ import MyWishlist from "../components/profile/myWishlist";
 import DashboardCharts from "../admin/dashBoardCharts";
 import NewsLetter from "../admin/newsLetter";
 import SuccessPage from "../pages/success";
+import MySubscription from "../components/profile/mySubscription";
 
 const RoutesComponent = () => {
   return (
@@ -54,6 +55,10 @@ const RoutesComponent = () => {
             <Route path="/profile/myAddress" element={<MyAddress />} />
             <Route path="/profile/myOrders" element={<MyOrders />} />
             <Route path="/profile/myWishlist" element={<MyWishlist />} />
+            <Route
+              path="/profile/mySubscription"
+              element={<MySubscription />}
+            />
           </Route>
         </Route>
       </Routes>
