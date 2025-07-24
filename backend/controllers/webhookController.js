@@ -92,28 +92,65 @@ const webhook = async (req, res) => {
             });
             await transporter.sendMail({
               to: order.userId.email,
-              subject: "Your Order Detail",
-              html: `    <div>
-        <div>
-          <h2>🧾 Thank you for your order, ${order.userId.fullName}!</h2>
-          <p>Order placed on: <strong>${order.createdAt}</strong></p>
-          <p><strong>Shipping to:</strong> ${order.info.address}, ${order.info.city}, ${order.info.pincode}, ${order.info.country}</p>
-          <hr/>
-          ${productList}
-          <hr/>
-          <p><strong>Total:</strong> ₹${order.total}</p>
-          <p>Your Order Status is:<h1 style="color:orange;">${order.status}</h1></p>
-          <p>Your Payment ID is:<h1>${order.paymentDetail.paymentIntentId}</h1></p>
-          <p>Your Payment Status is:<h1 style="color:green;">${order.paymentDetail.paymentStatus}</h1></p>
-          <p>Your Payment Mode is:<h1 style="color:red;">${order.paymentDetail.paymentMode}</h1></p>
+              subject: "🧾 Your Order Details - SHOP.IN",
+              html: `
+  <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f7f7f7; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+      <div style="text-align: center;">
+        <h1 style="color: #A66914;">SHOP.IN</h1>
+        <h2 style="color: #4caf50;">Thank you for your order, ${
+          order.userId.fullName
+        }!</h2>
+        <p style="font-size: 16px; color: #333;">Order placed on: <strong>${new Date(
+          order.createdAt
+        ).toLocaleString()}</strong></p>
+      </div>
 
-          <p>We’ll notify you once your items are shipped.</p>
-          <p>Thank you for shopping with us!</p>
-          <div>
-            This is an automated email. Please do not reply.
-          </div>
-        </div>
-      </div>`,
+      <div style="margin-top: 20px;">
+        <h3 style="color: #555;">📦 Shipping Address</h3>
+        <p style="line-height: 1.6;">
+          ${order.info.address},<br/>
+          ${order.info.city} - ${order.info.pincode},<br/>
+          ${order.info.country}
+        </p>
+      </div>
+
+      <hr style="margin: 30px 0;"/>
+
+      <div>
+        <h3 style="color: #555;">🛒 Order Summary</h3>
+        ${productList}
+      </div>
+
+      <hr style="margin: 30px 0;"/>
+
+      <div style="font-size: 16px; color: #333;">
+        <p><strong>Total:</strong> ₹${order.total}</p>
+        <p><strong>Order Status:</strong> <span style="color: orange; font-weight: bold;">${
+          order.status
+        }</span></p>
+        <p><strong>Payment ID:</strong> ${
+          order.paymentDetail.paymentIntentId
+        }</p>
+        <p><strong>Payment Status:</strong> <span style="color: green; font-weight: bold;">${
+          order.paymentDetail.paymentStatus
+        }</span></p>
+        <p><strong>Payment Mode:</strong> <span style="color: red; font-weight: bold;">${
+          order.paymentDetail.paymentMode
+        }</span></p>
+      </div>
+
+      <div style="margin-top: 30px;">
+        <p style="font-size: 15px;">We'll notify you once your items are shipped. Thank you for shopping with <strong>SHOP.IN</strong>!</p>
+      </div>
+
+      <div style="margin-top: 40px; font-size: 12px; color: #777; text-align: center;">
+        <p>This is an automated message. Please do not reply.</p>
+        <p>&copy; ${new Date().getFullYear()} SHOP.IN</p>
+      </div>
+    </div>
+  </div>
+  `,
             });
           }
         }

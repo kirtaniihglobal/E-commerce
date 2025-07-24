@@ -33,48 +33,65 @@ const updateOrdersAdmin = async (req, res) => {
       "orderData.products.productId userId"
     );
     const pending = order.status == "pending";
-    const productList = order.orderData.products.map((product) => {
-      return `
-             <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
-            <p><strong>${product?.productId?.name}</strong></p>
-            <p>Quantity:<strong> ${product?.quantity}</strong></p>
-            <p>Size: <strong>${product?.size}</strong></p>
-            <p>Color:<strong> ${product?.color}</strong></p>
-            <p>Price: <strong>₹${product?.productId?.price}</strong></p>
-            </div>`;
-    });
+    const productList = order.orderData.products
+      .map((product) => {
+        return `
+      <div style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
+        <p><strong>${product?.productId?.name}</strong></p>
+        <p>Quantity: <strong>${product?.quantity}</strong></p>
+        <p>Size: <strong>${product?.size}</strong></p>
+        <p>Color: <strong>${product?.color}</strong></p>
+        <p>Price: <strong>₹${product?.productId?.price}</strong></p>
+      </div>
+    `;
+      })
+      .join("");
 
+    // ✅ Only run if pending === true (means we are delivering now)
     if (pending) {
       const updateOrder = await Order.findByIdAndUpdate(
         orderId,
         { status: "delivered" },
         { new: true }
       );
+
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // use TLS
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASS,
         },
       });
+
+      const emailHtml = `
+    <div style="font-family: Arial, sans-serif;">
+      <h2>📦 Your order has been <span style="color: green;">Delivered</span>, ${order.userId.fullName}!</h2>
+      
+      <p><strong>Delivered to:</strong> ${order.info.address}, ${order.info.city}, ${order.info.pincode}, ${order.info.country}</p>
+      
+      <hr />
+      ${productList}
+      <hr />
+      
+      <p><strong>Total:</strong> ₹${order.total}</p>
+      <p>Your Order Status is: 
+        <span style="font-size: 20px; font-weight: bold; color: green;">
+          DELIVERED
+        </span>
+      </p>
+      
+      <p>Thank you for shopping with us!</p>
+    </div>
+  `;
+
       await transporter.sendMail({
         to: order.userId.email,
-        subject: "Your Order Detail",
-        html: `<div>
-        <div>
-        <h2>🧾 your order is Delivered, ${order.userId.fullName}!</h2>
-        <p><strong>Delivered to:</strong> ${order.info.address}, ${order.info.city}, ${order.info.pincode}, ${order.info.country}</p>
-        <hr/>
-        ${productList}
-        <hr/>
-        <p><strong>Total:</strong> ₹${order.total}</p>
-        <p>Your Order Status is: <h1 style="color: green; font-weight: bold;">${updateOrder.status}</h1></p>
-
-        <p>We’ll notify you once your items are Delivered.</p>
-        <p>Thank you for shopping with us!</p>
-      </div>
-    </div>`,
+        subject: "✅ Your Order has been Delivered!",
+        html: emailHtml,
       });
+
       return res
         .status(200)
         .json({ status: true, msg: "order updated", updateOrder });
