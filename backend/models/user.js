@@ -12,7 +12,11 @@ const userSchema = new mongoose.Schema(
     image: String,
     subscriptionId: { type: String, default: null },
     isBlocked: { type: Boolean, default: false },
-    isSubscribe: { type: String, enum: ["basic", "premium", ""], default: "" },
+    isSubscribe: {
+      type: String,
+      enum: ["basic", "premium", "free"],
+      default: "free",
+    },
     resetToken: String,
   },
   {

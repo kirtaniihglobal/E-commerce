@@ -258,11 +258,11 @@ const userSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
-    updateUserSubscription(state, action) {
-      if (state.user) {
-        state.user.isSubscribe = action.payload;
-      }
-    },
+    // updateUserSubscription(state, action) {
+    //   if (state.user) {
+    //     state.user.isSubscribe = action.payload;
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     builder
